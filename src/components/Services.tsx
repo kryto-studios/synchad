@@ -40,15 +40,15 @@ export default function Services() {
   ];
 
   return (
-    <section 
-      id="services" 
+    <section
+      id="services"
       className="w-full border-b border-charcoal-brand py-20 px-6 md:px-12 bg-cream-brand"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Heading */}
         <div className="flex items-center justify-between mb-16 border-b border-charcoal-brand/10 pb-4">
-          <h2 className="font-outfit text-3xl font-black uppercase tracking-wider text-charcoal-brand flex items-center gap-2">
-            <span className="w-3.5 h-3.5 bg-emerald-brand border border-charcoal-brand rounded-full inline-block" />
+          <h2 className="font-outfit text-5xl font-black uppercase tracking-wider text-charcoal-brand flex items-center gap-3">
+            <span className="w-4 h-4 bg-emerald-brand border border-charcoal-brand rounded-full inline-block flex-shrink-0" />
             Core Offerings
           </h2>
           <span className="font-mono text-xs text-charcoal-brand/50">WEB | APP | EDITS</span>
@@ -57,8 +57,8 @@ export default function Services() {
         {/* Introductory slogan */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
           <div className="lg:col-span-8">
-            <h3 className="font-outfit text-4xl sm:text-5xl font-black text-charcoal-brand tracking-tight">
-              &ldquo;DIGITALIZING THE LOCAL&rdquo; BY BLENDING WEB ENGINEERING & CREATIVE MEDIA.
+            <h3 className="font-bacley text-5xl sm:text-6xl lg:text-7xl text-charcoal-brand leading-[0.9] tracking-tight">
+              Web Engineering meets Creative Media.
             </h3>
           </div>
           <div className="lg:col-span-4 flex items-end">
@@ -72,9 +72,9 @@ export default function Services() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {serviceCards.map((card, i) => {
             // Map service index to claymorphic icon badge classes
-            const iconClayClass = 
-              card.id === "srv-app" 
-                ? `${CLAY_CLASSES.cardMustard} text-charcoal-brand` 
+            const iconClayClass =
+              card.id === "srv-app"
+                ? `${CLAY_CLASSES.cardMustard} text-charcoal-brand`
                 : `${CLAY_CLASSES.cardEmerald} text-cream-brand`;
 
             return (
@@ -94,20 +94,20 @@ export default function Services() {
                         {card.icon}
                       </div>
                     </Magnetic>
-                    
+
                     <span className="font-mono text-xs font-bold text-charcoal-brand/30">
                       0{i + 1} // 03
                     </span>
                   </div>
 
                   {/* Service Headers */}
-                  <h4 className="font-outfit text-3xl font-black text-charcoal-brand tracking-tight">
+                  <h4 className="font-outfit text-4xl font-black text-charcoal-brand tracking-tight">
                     {card.title}
                   </h4>
                   <p className="font-mono text-xs font-bold text-emerald-brand uppercase tracking-wider mt-1 mb-4">
                     {card.subtitle}
                   </p>
-                  
+
                   <p className="font-inter text-sm text-charcoal-brand/75 leading-relaxed mb-6">
                     {card.description}
                   </p>
@@ -128,17 +128,17 @@ export default function Services() {
                   </div>
                 </div>
 
-              {/* Action Button */}
-              <div className="mt-8 pt-4">
-                <a
-                  href="#contact"
-                  className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-charcoal-brand group-hover:text-emerald-brand group-hover:underline transition-colors"
-                >
-                  Configure setup
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </div>
-            </motion.div>
+                {/* Action Button */}
+                <div className="mt-8 pt-4">
+                  <a
+                    href="#contact"
+                    className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-charcoal-brand group-hover:text-emerald-brand group-hover:underline transition-colors"
+                  >
+                    Configure setup
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </a>
+                </div>
+              </motion.div>
             );
           })}
         </div>

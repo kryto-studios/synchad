@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Magnetic from "./Magnetic";
@@ -8,15 +8,37 @@ import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CLAY_CLASSES } from "./ClayStyles";
 
+const navLinks = [
+  { name: "Services", href: "#services", id: "nav-services", section: "services" },
+  { name: "Packages", href: "#packages", id: "nav-packages", section: "packages" },
+  { name: "Team", href: "#team", id: "nav-team", section: "team" },
+  { name: "FAQ", href: "#faq", id: "nav-faq", section: "faq" },
+  { name: "Contact", href: "#contact", id: "nav-contact", section: "contact" },
+];
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("");
 
-  const navLinks = [
-    { name: "Services", href: "#services", id: "nav-services" },
-    { name: "Team", href: "#team", id: "nav-team" },
-    { name: "Packages", href: "#packages", id: "nav-packages" },
-    { name: "FAQ", href: "#faq", id: "nav-faq" },
-  ];
+  useEffect(() => {
+    const sectionIds = navLinks.map((l) => l.section);
+    const observers: IntersectionObserver[] = [];
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveSection(id);
+        },
+        { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
 
   return (
     <header className="sticky top-0 z-40 w-full bg-cream-brand/85 backdrop-blur-md border-b border-charcoal-brand/10 px-6 py-4 md:px-12">
@@ -41,16 +63,24 @@ export default function Navbar() {
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.id}
-              id={link.id}
-              href={link.href}
-              className="text-sm font-medium tracking-wide text-charcoal-brand/80 hover:text-emerald-brand transition-colors underline-hover"
-            >
-              {link.name}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.section;
+            return (
+              <Link
+                key={link.id}
+                id={link.id}
+                href={link.href}
+                className={[
+                  "text-sm tracking-wide transition-colors underline underline-offset-4 decoration-2",
+                  isActive
+                    ? "font-black text-charcoal-brand decoration-charcoal-brand"
+                    : "font-bold text-charcoal-brand/60 decoration-charcoal-brand/30 hover:text-charcoal-brand hover:decoration-charcoal-brand",
+                ].join(" ")}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Call to Action Button */}
@@ -85,19 +115,27 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className={`${CLAY_CLASSES.cardCream} absolute top-[80px] left-[5%] w-[90%] p-6 flex flex-col gap-6 md:hidden z-30`}
+            className={`${CLAY_CLASSES.cardCream} absolute top-[80px] left-[5%] w-[90%] p-6 flex flex-col gap-4 md:hidden z-30`}
           >
-            {navLinks.map((link) => (
-              <Link
-                key={link.id}
-                id={`${link.id}-mobile`}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="text-lg font-semibold text-charcoal-brand hover:text-emerald-brand py-2 border-b border-charcoal-brand/5"
-              >
-                {link.name}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.section;
+              return (
+                <Link
+                  key={link.id}
+                  id={`${link.id}-mobile`}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className={[
+                    "text-lg py-2 border-b border-charcoal-brand/5 underline underline-offset-4 decoration-2 transition-colors",
+                    isActive
+                      ? "font-black text-charcoal-brand decoration-charcoal-brand"
+                      : "font-bold text-charcoal-brand/60 decoration-charcoal-brand/25 hover:text-charcoal-brand",
+                  ].join(" ")}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
             <Link
               href="#contact"
               id="mobile-nav-contact-cta"

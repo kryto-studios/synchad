@@ -70,8 +70,8 @@ export default function Packages() {
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
         <div className="flex items-center justify-between mb-16 border-b border-charcoal-brand/10 pb-4">
-          <h2 className="font-outfit text-3xl font-black uppercase tracking-wider text-charcoal-brand flex items-center gap-2">
-            <span className="w-3.5 h-3.5 bg-mustard-brand border border-charcoal-brand rounded-full inline-block" />
+          <h2 className="font-outfit text-5xl font-black uppercase tracking-wider text-charcoal-brand flex items-center gap-3">
+            <span className="w-4 h-4 bg-mustard-brand border border-charcoal-brand rounded-full inline-block flex-shrink-0" />
             Service Packages
           </h2>
           <span className="font-mono text-xs text-charcoal-brand/50">Pricing & Scope Configurator</span>
