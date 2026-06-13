@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# custom archives and videos
+*.mp4
+*.zip
+/bacley-demo/
+/gued/
