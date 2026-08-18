@@ -76,7 +76,7 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full min-h-[85vh] sm:min-h-[90vh] lg:min-h-[92vh] flex flex-col items-center justify-center border-b border-charcoal-brand py-10 sm:py-16 px-4 sm:px-6 lg:px-12 overflow-hidden bg-cream-brand select-none"
+      className="relative w-full min-h-[85vh] sm:min-h-[90vh] lg:min-h-[92vh] flex flex-col items-center justify-center border-b border-charcoal-brand py-12 sm:py-20 px-6 sm:px-10 md:px-14 lg:px-16 overflow-hidden bg-cream-brand select-none"
     >
       {/* Decorative Doodles */}
       <GearDoodle />
@@ -301,7 +301,7 @@ export default function Hero() {
           <span className="hidden sm:inline-block absolute -left-8 -top-8 font-outfit text-6xl md:text-9xl text-mustard-brand font-black opacity-30 select-none">
             "
           </span>
-          <h1 className="font-outfit text-[3.8rem] xs:text-[4.5rem] sm:text-8xl md:text-9xl lg:text-[10.5rem] font-black leading-[0.85] text-charcoal-brand tracking-tighter select-none drop-shadow-sm">
+          <h1 className="font-outfit text-[3.8rem] xs:text-[4.5rem] sm:text-8xl md:text-9xl lg:text-[10.5rem] font-black leading-[0.85] text-emerald-brand tracking-tighter select-none drop-shadow-sm">
             synch
             <span className="text-mustard-brand inline-block transform hover:rotate-6 transition-transform cursor-pointer">
               AD.
@@ -341,7 +341,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.25 }}
-          className="mt-6 sm:mt-8 font-inter text-sm sm:text-base md:text-xl text-charcoal-brand/80 max-w-xl leading-relaxed font-medium px-2 sm:px-0"
+          className="mt-6 sm:mt-8 font-inter text-sm sm:text-base md:text-xl text-charcoal-brand/80 max-w-xl leading-relaxed font-medium px-4 sm:px-0"
         >
           We bridge software engineering and creative distribution under one roof. From production-grade web platforms to retention-focused media and growth campaigns.
         </motion.p>
@@ -351,7 +351,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.35 }}
-          className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-5 w-full sm:w-auto z-30 px-4 sm:px-0"
+          className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-5 w-full sm:w-auto z-30 px-6 sm:px-0"
         >
           <Magnetic strength={0.3}>
             <Link
