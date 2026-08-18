@@ -1,6 +1,7 @@
 "use client";
 
-import { Check, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, Sparkles } from "lucide-react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import Magnetic from "./Magnetic";
 import { CLAY_CLASSES } from "./ClayStyles";
@@ -8,55 +9,60 @@ import { CLAY_CLASSES } from "./ClayStyles";
 export default function Packages() {
   const tiers = [
     {
-      name: "Startup Pack",
+      name: "STARTUP",
+      badge: "ESSENTIAL PRESENCE",
       price: "₹19,999",
-      description: "Standard customized landing portal or digital catalog. Excellent for local shops establishing their first solid online presence.",
+      targetAudience: "For local shops & brands establishing a professional digital presence.",
+      solves: "Solves: Weak online credibility & outdated template look.",
       features: [
-        "Responsive Next.js static website",
-        "Branding & asset integrations",
-        "Clean line-work vector icons",
-        "Interactive contact/map module",
-        "Basic SEO setup",
-        "Deployment on Vercel"
+        "Custom high-speed responsive website",
+        "Brand identity & asset integrations",
+        "Interactive lead contact & location map",
+        "Mobile-first responsive architecture",
+        "Search engine SEO indexing foundation",
+        "Vercel production deployment & hosting setup"
       ],
       isPopular: false,
-      cta: "Configure Startup",
+      cta: "Choose Startup",
       themeClass: CLAY_CLASSES.cardCream,
       buttonClass: CLAY_CLASSES.btnCharcoal,
     },
     {
-      name: "Growth Pack",
+      name: "GROWTH",
+      badge: "MOST RECOMMENDED",
       price: "₹49,999",
-      description: "Custom full-stack web application + database integration, plus 1 high-impact motion edit asset. Our most recommended package.",
+      targetAudience: "For growing businesses ready for custom web systems & media distribution.",
+      solves: "Solves: Disconnected web tools, manual data tracking & low audience retention.",
       features: [
-        "Full stack Next.js web platform",
-        "Supabase PostgreSQL database",
-        "Client/Visitor management dashboard",
-        "1 corporate motion graphic video ad (15s)",
-        "Advanced SEO & metadata indexing",
-        "Contact form & automated mail sync",
-        "3 months post-launch tech support"
+        "Full-stack custom web platform & dashboard",
+        "Secure customer data & database management (Supabase SQL)",
+        "Automated lead capture & instant email sync",
+        "1 high-retention promo / video ad edit (Adobe AE)",
+        "Advanced search SEO & social metadata indexing",
+        "Custom domain setup & server performance tuning",
+        "3 months included technical support & updates"
       ],
       isPopular: true,
-      cta: "Initialize Growth",
+      cta: "Get Growth System",
       themeClass: `${CLAY_CLASSES.cardMustard} relative md:scale-105 z-10`,
       buttonClass: CLAY_CLASSES.btnCharcoal,
     },
     {
-      name: "Enterprise Core",
+      name: "ENTERPRISE",
+      badge: "CUSTOM SCALE",
       price: "Custom",
-      description: "Complete localized business digitization framework. Features custom webs, companion apps, and dynamic motion post-production pipelines.",
+      targetAudience: "For established businesses needing custom software, ERPs & multi-channel media.",
+      solves: "Solves: Complex operational bottlenecks & scaling multi-platform marketing.",
       features: [
-        "Tailored web portal + companion mobile app",
-        "Complex database schema & auth policies",
-        "Adobe AE/Premiere video package (3 ads)",
-        "Supabase real-time status feeds",
-        "Custom domain setup & server caching",
-        "Dedicated project developer channel",
-        "12 months ongoing tech maintenance"
+        "Custom web portal & companion mobile app",
+        "Tailored ERP / business management architecture",
+        "3 high-impact video & motion asset package",
+        "Real-time analytics & automated reporting feeds",
+        "Dedicated founder development channel",
+        "12 months ongoing tech maintenance & priority support"
       ],
       isPopular: false,
-      cta: "Consult Strategy",
+      cta: "Consult Enterprise",
       themeClass: CLAY_CLASSES.cardCream,
       buttonClass: CLAY_CLASSES.btnEmerald,
     },
@@ -65,100 +71,127 @@ export default function Packages() {
   return (
     <section 
       id="packages" 
-      className="w-full border-b border-charcoal-brand py-20 px-6 sm:px-10 md:px-14 lg:px-16 bg-cream-brand"
+      className="w-full border-b border-charcoal-brand py-20 px-6 sm:px-10 md:px-14 lg:px-16 bg-cream-brand select-none"
     >
       <div className="max-w-7xl mx-auto">
-        {/* Section Title */}
-        <div className="flex items-center justify-between mb-16 border-b border-charcoal-brand/10 pb-4">
-          <h2 className="font-outfit text-5xl font-black uppercase tracking-wider text-charcoal-brand flex items-center gap-3">
-            <span className="w-4 h-4 bg-mustard-brand border border-charcoal-brand rounded-full inline-block flex-shrink-0" />
-            Service Packages
-          </h2>
-          <span className="font-mono text-xs text-charcoal-brand/50">Pricing & Scope Configurator</span>
+        
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-16 border-b border-charcoal-brand/10 pb-4">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-3 h-3 bg-mustard-brand rounded-full inline-block" />
+              <span className="font-mono text-xs font-bold uppercase tracking-widest text-charcoal-brand/60">
+                // TRANSPARENT MILESTONES
+              </span>
+            </div>
+            <h2 className="font-outfit text-4xl sm:text-5xl font-black uppercase tracking-wider text-charcoal-brand">
+              Service Packages
+            </h2>
+          </div>
+          <span className="font-mono text-xs text-charcoal-brand/50 uppercase tracking-widest hidden sm:inline-block">
+            CLEAR SCOPE & TRANSPARENT PRICING
+          </span>
         </div>
 
         {/* Introduction text */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <p className="font-mono text-xs font-bold text-emerald-brand uppercase tracking-widest mb-3">
-            // TRANSPARENT MILESTONES
-          </p>
-          <h3 className="font-outfit text-4xl font-black text-charcoal-brand tracking-tight">
-            SELECT YOUR PORTAL FRAMEWORK
+          <h3 className="font-outfit text-3xl sm:text-4xl font-black text-charcoal-brand tracking-tight uppercase">
+            CLEAR PRICING. DEFINED SCOPE.
           </h3>
-          <p className="font-inter text-sm text-charcoal-brand/70 mt-3 leading-relaxed">
-            Choose a boilerplate scale or customize your engineering layout. All packages include synchAD’s clean print design language.
+          <p className="font-inter text-xs sm:text-sm text-charcoal-brand/75 mt-3 leading-relaxed font-medium">
+            Choose a fixed package or consult with us for a custom solution. Every tier includes synchAD's clean engineering standards and direct founder execution.
           </p>
         </div>
 
         {/* Pricing Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 lg:gap-12 items-stretch pt-4">
-          {tiers.map((tier, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
-              className={`h-full p-8 flex flex-col justify-between ${tier.themeClass}`}
+          {tiers.map((tier, index) => (
+            <div
+              key={index}
+              className={`${tier.themeClass} p-8 flex flex-col justify-between rounded-[32px] shadow-lg border-2 border-charcoal-brand/20`}
             >
-              {tier.isPopular && (
-                <div className={`absolute top-0 right-6 md:right-8 transform -translate-y-1/2 ${CLAY_CLASSES.cardEmerald} text-cream-brand font-outfit text-[9px] font-black uppercase tracking-widest px-3.5 py-1.5 rotate-2 rounded-full z-20 shadow-md`}>
-                  Best Value Framework
-                </div>
-              )}
-
               <div>
-                {/* Header */}
-                <span className="font-mono text-[11px] uppercase tracking-wider text-charcoal-brand/50 block mb-1">
-                  Scope // 0{i + 1}
-                </span>
-                <h4 className="font-outfit text-2xl font-black text-charcoal-brand tracking-tight mb-2">
+                {/* Popular Badge */}
+                {tier.isPopular && (
+                  <div className={`absolute top-0 right-6 md:right-8 transform -translate-y-1/2 ${CLAY_CLASSES.cardEmerald} text-cream-brand font-outfit text-[9px] font-black uppercase tracking-widest px-3.5 py-1.5 rotate-2 rounded-full z-20 shadow-md flex items-center gap-1`}>
+                    <Sparkles className="w-3 h-3 text-mustard-brand" />
+                    <span>{tier.badge}</span>
+                  </div>
+                )}
+
+                {!tier.isPopular && (
+                  <span className="font-mono text-[9px] font-bold text-charcoal-brand/50 uppercase tracking-widest block mb-1">
+                    {tier.badge}
+                  </span>
+                )}
+
+                {/* Tier Name & Price */}
+                <h3 className="font-outfit text-3xl font-black text-charcoal-brand uppercase">
                   {tier.name}
-                </h4>
-                
-                {/* Price */}
-                <div className="flex items-baseline gap-2 mb-6 border-b border-dashed border-charcoal-brand/10 pb-4">
-                  <span className="font-outfit text-4xl font-black text-charcoal-brand">
+                </h3>
+                <div className="mt-3 mb-4 flex items-baseline gap-1">
+                  <span className="font-outfit text-4xl sm:text-5xl font-black text-charcoal-brand">
                     {tier.price}
                   </span>
-                  <span className="font-mono text-xs text-charcoal-brand/50">
-                    / flat rate
-                  </span>
+                  {tier.price !== "Custom" && (
+                    <span className="font-mono text-xs text-charcoal-brand/60 font-bold">/ project</span>
+                  )}
                 </div>
 
-                <p className="font-inter text-xs text-charcoal-brand/75 leading-relaxed mb-6 min-h-[50px]">
-                  {tier.description}
-                </p>
+                {/* Who It Is For & Solves */}
+                <div className="space-y-2 mb-6 pb-4 border-b border-dashed border-charcoal-brand/20">
+                  <p className="font-inter text-xs text-charcoal-brand/85 font-medium leading-relaxed">
+                    {tier.targetAudience}
+                  </p>
+                  <p className="font-mono text-[10px] font-bold text-emerald-brand uppercase tracking-wider">
+                    {tier.solves}
+                  </p>
+                </div>
 
                 {/* Features List */}
                 <div className="space-y-3 mb-8">
-                  <span className="font-mono text-[9px] uppercase tracking-widest text-charcoal-brand/40 font-black block">
-                    DELIVERABLES SUMMARY:
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-charcoal-brand/50 block font-black">
+                    WHAT YOU GET
                   </span>
-                  {tier.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-start gap-2 text-xs font-inter text-charcoal-brand/90">
-                      <Check className="w-4 h-4 text-emerald-brand flex-shrink-0 mt-0.5" />
-                      <span>{feature}</span>
+                  {tier.features.map((feature, fIndex) => (
+                    <div key={fIndex} className="flex items-start gap-2.5">
+                      <div className="w-4 h-4 rounded-full bg-emerald-brand text-cream-brand flex items-center justify-center text-[10px] flex-shrink-0 mt-0.5 shadow-xs font-bold">
+                        ✓
+                      </div>
+                      <span className="font-inter text-xs text-charcoal-brand font-medium leading-tight">
+                        {feature}
+                      </span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Select Button */}
-              <div className="pt-4 mt-auto">
-                <Magnetic strength={0.25}>
-                  <a
+              {/* Action Button */}
+              <div className="pt-4">
+                <Magnetic strength={0.2}>
+                  <Link
                     href="#contact"
-                    className={`w-full inline-flex items-center justify-center gap-2 py-3.5 font-outfit font-black uppercase tracking-wider text-xs cursor-pointer ${tier.buttonClass}`}
+                    className={`${tier.buttonClass} w-full justify-center px-6 py-3.5 font-outfit font-black uppercase tracking-wider text-xs flex items-center gap-2 shadow-md active:scale-95 transition-all text-center`}
                   >
-                    {tier.cta}
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
+                    <span>{tier.cta}</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
                 </Magnetic>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
+
+        {/* Reassurance Banner */}
+        <div className="mt-14 text-center">
+          <p className="font-inter text-xs text-charcoal-brand/70 font-medium">
+            Need a custom combination of Web Systems, Video Edits, and Marketing?{" "}
+            <Link href="#contact" className="font-bold text-emerald-brand underline">
+              Tell us what you're building &rarr;
+            </Link>
+          </p>
+        </div>
+
       </div>
     </section>
   );

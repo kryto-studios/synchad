@@ -343,10 +343,10 @@ export default function Hero() {
           transition={{ duration: 0.5, delay: 0.25 }}
           className="mt-6 sm:mt-8 font-inter text-sm sm:text-base md:text-xl text-charcoal-brand/80 max-w-xl leading-relaxed font-medium px-4 sm:px-0"
         >
-          We bridge software engineering and creative distribution under one roof. From production-grade web platforms to retention-focused media and growth campaigns.
+          Build a stronger digital presence with custom technology, high-quality creative content, and growth-focused marketing — all under one roof.
         </motion.p>
 
-        {/* ── Action Buttons (Dual CTAs - Optimized for Mobile Touch) ── */}
+        {/* ── Action Buttons (Dual CTAs - High Conversion) ── */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -355,10 +355,10 @@ export default function Hero() {
         >
           <Magnetic strength={0.3}>
             <Link
-              href="#services"
-              className={`${CLAY_CLASSES.btnCharcoal} w-full sm:w-auto justify-center px-7 sm:px-9 py-3.5 sm:py-4 font-outfit font-black uppercase tracking-wider text-xs sm:text-base flex items-center gap-2.5 sm:gap-3 shadow-lg active:scale-95 group`}
+              href="#contact"
+              className={`${CLAY_CLASSES.btnEmerald} w-full sm:w-auto justify-center px-7 sm:px-9 py-3.5 sm:py-4 font-outfit font-black uppercase tracking-wider text-xs sm:text-base flex items-center gap-2.5 sm:gap-3 shadow-lg active:scale-95 group`}
             >
-              <span>View Offerings</span>
+              <span>Start Your Project</span>
               <svg
                 className="w-4 h-4 group-hover:translate-x-1 transition-transform"
                 fill="none"
@@ -373,18 +373,10 @@ export default function Hero() {
 
           <Magnetic strength={0.3}>
             <Link
-              href="#team"
+              href="#work"
               className={`${CLAY_CLASSES.btnMustard} w-full sm:w-auto justify-center px-6 sm:px-8 py-3.5 sm:py-4 font-outfit font-black uppercase tracking-wider text-xs sm:text-base flex items-center gap-2.5 sm:gap-3 shadow-lg active:scale-95`}
             >
-              <div className="flex items-center -space-x-1.5 sm:-space-x-2">
-                <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden border border-charcoal-brand/30">
-                  <Image src="/dewansh_photo_v2.jpeg" alt="Dewansh" fill className="object-cover" />
-                </div>
-                <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden border border-charcoal-brand/30">
-                  <Image src="/aryan_proxy_v2.png" alt="Aryan" fill className="object-cover" />
-                </div>
-              </div>
-              <span>Meet The Founders &rarr;</span>
+              <span>Explore Our Work &rarr;</span>
             </Link>
           </Magnetic>
         </motion.div>
