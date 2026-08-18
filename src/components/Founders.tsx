@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Mail, Phone, Globe } from "lucide-react";
+import { motion } from "framer-motion";
 import { CLAY_CLASSES } from "./ClayStyles";
 
 const InstagramIcon = ({ className }: { className?: string }) => (
@@ -101,34 +102,42 @@ export default function Founders() {
         </div>
 
         {/* Co-founder Profiles Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
           {/* Left Side: Dewansh Chatterjee */}
-          <div className="lg:col-span-6 flex flex-col sm:flex-row gap-6 sm:gap-8 items-stretch h-full">
+          <motion.div
+            whileHover={{ y: -6, scale: 1.015 }}
+            transition={{ type: "spring", stiffness: 280, damping: 20 }}
+            className="group lg:col-span-6 flex flex-col sm:flex-row gap-6 sm:gap-8 items-stretch h-full bg-white/80 border-2 border-charcoal-brand/15 p-6 rounded-[32px] shadow-md hover:shadow-2xl hover:border-emerald-brand transition-all duration-300 cursor-pointer"
+          >
             <div className="relative flex-shrink-0 mx-auto sm:mx-0">
-              <div className={`${CLAY_CLASSES.cardMustard} absolute -inset-2 transform -rotate-3 pointer-events-none rounded-[32px]`} />
-              <div className="relative w-52 sm:w-56 h-64 border border-charcoal-brand/35 rounded-3xl overflow-hidden bg-charcoal-brand shadow-lg">
+              <div className={`${CLAY_CLASSES.cardMustard} absolute -inset-2 transform -rotate-3 group-hover:-rotate-6 transition-transform duration-300 pointer-events-none rounded-[32px]`} />
+              <div className="relative w-52 sm:w-56 h-64 border-2 border-charcoal-brand rounded-3xl overflow-hidden bg-charcoal-brand shadow-lg">
                 <Image
-                  src="/DEWANSH O_O.jpeg"
+                  src="/dewansh_photo_v2.jpeg"
                   alt="Dewansh Chatterjee"
                   fill
                   sizes="(max-width: 768px) 208px, 224px"
-                  className="object-cover object-top contrast-110 brightness-100"
+                  className="object-cover object-top contrast-110 brightness-100 group-hover:scale-108 transition-transform duration-500"
                 />
               </div>
-              <div className="absolute -bottom-3 right-4 bg-charcoal-brand text-cream-brand border border-cream-brand text-[9px] sm:text-[10px] font-mono px-3 py-1 uppercase tracking-widest rounded-full shadow-md z-10">
+              <div className="absolute -bottom-3 right-4 bg-charcoal-brand text-cream-brand border-2 border-cream-brand text-[9px] sm:text-[10px] font-mono px-3 py-1 uppercase tracking-widest rounded-full shadow-md z-10 group-hover:scale-105 transition-transform">
                 Co-Founder
               </div>
             </div>
 
             <div className="flex-grow flex flex-col justify-between">
               <div>
-                <h3 className="font-outfit text-3xl font-black text-charcoal-brand mb-1">
+                {/* Name in Signature Brand Emerald Green */}
+                <h3 className="font-outfit text-3xl sm:text-4xl font-black text-emerald-brand mb-2 group-hover:translate-x-1 transition-transform">
                   Dewansh Chatterjee
                 </h3>
-                <p className="font-mono text-xs font-bold text-emerald-brand uppercase tracking-wider mb-3">
-                  Front-End, Creative Direction, Client Consultation & Idea Conception
-                </p>
+                
+                {/* High Contrast Charcoal + Mustard Role Badge */}
+                <div className="inline-block bg-charcoal-brand text-mustard-brand border border-charcoal-brand font-mono text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-3 py-1.5 rounded-xl mb-3 shadow-sm">
+                  Front-End • Creative Direction • Client Operations
+                </div>
+
                 <p className="font-inter text-sm text-charcoal-brand/85 leading-relaxed font-medium">
                   Drives end-to-end software execution, agile development lifecycles, and client operations to ensure reliable, on-time project delivery.
                 </p>
@@ -142,7 +151,7 @@ export default function Founders() {
                   {["Front-End Architecture", "Creative Direction", "Client Consultation", "Agile Execution"].map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] font-mono font-bold px-2.5 py-1 border border-emerald-brand/20 bg-emerald-brand/10 text-emerald-brand rounded-lg"
+                      className="text-[10px] font-mono font-black px-2.5 py-1 bg-mustard-brand text-charcoal-brand border-2 border-charcoal-brand rounded-xl shadow-[2px_2px_0px_#1a1a1a] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#1a1a1a]"
                     >
                       {tag}
                     </span>
@@ -150,34 +159,42 @@ export default function Founders() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Side: Aryan Gupta */}
-          <div className="lg:col-span-6 flex flex-col sm:flex-row gap-6 sm:gap-8 items-stretch h-full">
+          <motion.div
+            whileHover={{ y: -6, scale: 1.015 }}
+            transition={{ type: "spring", stiffness: 280, damping: 20 }}
+            className="group lg:col-span-6 flex flex-col sm:flex-row gap-6 sm:gap-8 items-stretch h-full bg-white/80 border-2 border-charcoal-brand/15 p-6 rounded-[32px] shadow-md hover:shadow-2xl hover:border-emerald-brand transition-all duration-300 cursor-pointer"
+          >
             <div className="relative flex-shrink-0 mx-auto sm:mx-0">
-              <div className={`${CLAY_CLASSES.cardEmerald} absolute -inset-2 transform rotate-2 pointer-events-none rounded-[32px]`} />
-              <div className="relative w-52 sm:w-56 h-64 border border-charcoal-brand/35 rounded-3xl overflow-hidden bg-charcoal-brand shadow-lg">
+              <div className={`${CLAY_CLASSES.cardEmerald} absolute -inset-2 transform rotate-2 group-hover:rotate-6 transition-transform duration-300 pointer-events-none rounded-[32px]`} />
+              <div className="relative w-52 sm:w-56 h-64 border-2 border-charcoal-brand rounded-3xl overflow-hidden bg-charcoal-brand shadow-lg">
                 <Image
                   src="/aryan_proxy_v2.png"
                   alt="Aryan Gupta"
                   fill
                   sizes="(max-width: 768px) 208px, 224px"
-                  className="object-cover object-top contrast-110 brightness-100"
+                  className="object-cover object-top contrast-110 brightness-100 group-hover:scale-108 transition-transform duration-500"
                 />
               </div>
-              <div className="absolute -bottom-3 right-4 bg-charcoal-brand text-cream-brand border border-cream-brand text-[9px] sm:text-[10px] font-mono px-3 py-1 uppercase tracking-widest rounded-full shadow-md z-10">
+              <div className="absolute -bottom-3 right-4 bg-charcoal-brand text-cream-brand border-2 border-cream-brand text-[9px] sm:text-[10px] font-mono px-3 py-1 uppercase tracking-widest rounded-full shadow-md z-10 group-hover:scale-105 transition-transform">
                 Co-Founder
               </div>
             </div>
 
             <div className="flex-grow flex flex-col justify-between">
               <div>
-                <h3 className="font-outfit text-3xl font-black text-charcoal-brand mb-1">
+                {/* Name in Signature Brand Emerald Green */}
+                <h3 className="font-outfit text-3xl sm:text-4xl font-black text-emerald-brand mb-2 group-hover:translate-x-1 transition-transform">
                   Aryan Gupta
                 </h3>
-                <p className="font-mono text-xs font-bold text-mustard-brand uppercase tracking-wider mb-3">
-                  Database Architecture, Backend Systems & Post-delivery Client Operations
-                </p>
+                
+                {/* High Contrast Charcoal + Mustard Role Badge */}
+                <div className="inline-block bg-charcoal-brand text-mustard-brand border border-charcoal-brand font-mono text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-3 py-1.5 rounded-xl mb-3 shadow-sm">
+                  Database Architecture • Backend • Post-Delivery Ops
+                </div>
+
                 <p className="font-inter text-sm text-charcoal-brand/85 leading-relaxed font-medium">
                   Specializes in architecting scalable database systems, full-stack web platforms, and directing high-conversion visual storytelling workflows.
                 </p>
@@ -191,7 +208,7 @@ export default function Founders() {
                   {["Database Architecture", "Backend Systems", "Post-Delivery Operations", "Supabase SQL"].map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] font-mono font-bold px-2.5 py-1 border border-mustard-brand/30 bg-mustard-brand/10 text-charcoal-brand rounded-lg"
+                      className="text-[10px] font-mono font-black px-2.5 py-1 bg-mustard-brand text-charcoal-brand border-2 border-charcoal-brand rounded-xl shadow-[2px_2px_0px_#1a1a1a] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#1a1a1a]"
                     >
                       {tag}
                     </span>
@@ -199,7 +216,7 @@ export default function Founders() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
         </div>
 

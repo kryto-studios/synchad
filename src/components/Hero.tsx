@@ -224,7 +224,7 @@ export default function Hero() {
           {/* Dual Founder Avatar Stack */}
           <div className="flex items-center -space-x-1.5 sm:-space-x-2 overflow-hidden flex-shrink-0">
             <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white overflow-hidden shadow-sm">
-              <Image src="/DEWANSH O_O.jpeg" alt="Dewansh" fill className="object-cover" />
+              <Image src="/dewansh_photo_v2.jpeg" alt="Dewansh" fill className="object-cover" />
             </div>
             <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white overflow-hidden shadow-sm">
               <Image src="/aryan_proxy_v2.png" alt="Aryan" fill className="object-cover" />
@@ -326,7 +326,7 @@ export default function Hero() {
             >
               <div className="flex items-center -space-x-1.5 sm:-space-x-2">
                 <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden border border-charcoal-brand/30">
-                  <Image src="/DEWANSH O_O.jpeg" alt="Dewansh" fill className="object-cover" />
+                  <Image src="/dewansh_photo_v2.jpeg" alt="Dewansh" fill className="object-cover" />
                 </div>
                 <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden border border-charcoal-brand/30">
                   <Image src="/aryan_proxy_v2.png" alt="Aryan" fill className="object-cover" />
