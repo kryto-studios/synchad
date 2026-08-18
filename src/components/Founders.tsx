@@ -112,7 +112,7 @@ export default function Founders() {
           >
             <div className="relative flex-shrink-0 mx-auto sm:mx-0">
               <div className={`${CLAY_CLASSES.cardMustard} absolute -inset-2 transform -rotate-3 group-hover:-rotate-6 transition-transform duration-300 pointer-events-none rounded-[32px]`} />
-              <div className="relative w-52 sm:w-56 h-64 border-2 border-charcoal-brand rounded-3xl overflow-hidden bg-charcoal-brand shadow-lg">
+              <div className="relative w-52 sm:w-56 h-64 rounded-3xl overflow-hidden bg-charcoal-brand shadow-lg">
                 <Image
                   src="/dewansh_photo_v2.jpeg"
                   alt="Dewansh Chatterjee"
@@ -129,14 +129,20 @@ export default function Founders() {
             <div className="flex-grow flex flex-col justify-between">
               <div>
                 {/* Name in Signature Brand Emerald Green */}
-                <h3 className="font-outfit text-3xl sm:text-4xl font-black text-emerald-brand mb-2 group-hover:translate-x-1 transition-transform">
+                <h3 className="font-outfit text-3xl sm:text-4xl font-black text-emerald-brand mb-1.5 group-hover:translate-x-1 transition-transform">
                   Dewansh Chatterjee
                 </h3>
                 
-                {/* High Contrast Charcoal + Mustard Role Badge */}
-                <div className="inline-block bg-charcoal-brand text-mustard-brand border border-charcoal-brand font-mono text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-3 py-1.5 rounded-xl mb-3 shadow-sm">
-                  Front-End • Creative Direction • Client Operations
-                </div>
+                {/* Mustard Yellow Role Text with Crisp Black Outline (No Black Box) */}
+                <p
+                  style={{
+                    color: "#f5b02e",
+                    textShadow: "1.2px 1.2px 0 #1a1a1a, -1.2px -1.2px 0 #1a1a1a, 1.2px -1.2px 0 #1a1a1a, -1.2px 1.2px 0 #1a1a1a, 0 1px 3px rgba(0,0,0,0.25)",
+                  }}
+                  className="font-mono text-xs font-black uppercase tracking-wider mb-3 leading-snug"
+                >
+                  FRONT-END, CREATIVE DIRECTION, CLIENT CONSULTATION & IDEA CONCEPTION
+                </p>
 
                 <p className="font-inter text-sm text-charcoal-brand/85 leading-relaxed font-medium">
                   Drives end-to-end software execution, agile development lifecycles, and client operations to ensure reliable, on-time project delivery.
@@ -151,7 +157,7 @@ export default function Founders() {
                   {["Front-End Architecture", "Creative Direction", "Client Consultation", "Agile Execution"].map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] font-mono font-black px-2.5 py-1 bg-mustard-brand text-charcoal-brand border-2 border-charcoal-brand rounded-xl shadow-[2px_2px_0px_#1a1a1a] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#1a1a1a]"
+                      className="text-[10px] font-mono font-black px-3 py-1 bg-mustard-brand text-charcoal-brand border-2 border-charcoal-brand rounded-xl shadow-[2px_2px_0px_#1a1a1a] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#1a1a1a]"
                     >
                       {tag}
                     </span>
@@ -169,7 +175,7 @@ export default function Founders() {
           >
             <div className="relative flex-shrink-0 mx-auto sm:mx-0">
               <div className={`${CLAY_CLASSES.cardEmerald} absolute -inset-2 transform rotate-2 group-hover:rotate-6 transition-transform duration-300 pointer-events-none rounded-[32px]`} />
-              <div className="relative w-52 sm:w-56 h-64 border-2 border-charcoal-brand rounded-3xl overflow-hidden bg-charcoal-brand shadow-lg">
+              <div className="relative w-52 sm:w-56 h-64 rounded-3xl overflow-hidden bg-charcoal-brand shadow-lg">
                 <Image
                   src="/aryan_proxy_v2.png"
                   alt="Aryan Gupta"
@@ -186,14 +192,20 @@ export default function Founders() {
             <div className="flex-grow flex flex-col justify-between">
               <div>
                 {/* Name in Signature Brand Emerald Green */}
-                <h3 className="font-outfit text-3xl sm:text-4xl font-black text-emerald-brand mb-2 group-hover:translate-x-1 transition-transform">
+                <h3 className="font-outfit text-3xl sm:text-4xl font-black text-emerald-brand mb-1.5 group-hover:translate-x-1 transition-transform">
                   Aryan Gupta
                 </h3>
                 
-                {/* High Contrast Charcoal + Mustard Role Badge */}
-                <div className="inline-block bg-charcoal-brand text-mustard-brand border border-charcoal-brand font-mono text-[10px] sm:text-[11px] font-black uppercase tracking-wider px-3 py-1.5 rounded-xl mb-3 shadow-sm">
-                  Database Architecture • Backend • Post-Delivery Ops
-                </div>
+                {/* Mustard Yellow Role Text with Crisp Black Outline (No Black Box) */}
+                <p
+                  style={{
+                    color: "#f5b02e",
+                    textShadow: "1.2px 1.2px 0 #1a1a1a, -1.2px -1.2px 0 #1a1a1a, 1.2px -1.2px 0 #1a1a1a, -1.2px 1.2px 0 #1a1a1a, 0 1px 3px rgba(0,0,0,0.25)",
+                  }}
+                  className="font-mono text-xs font-black uppercase tracking-wider mb-3 leading-snug"
+                >
+                  DATABASE ARCHITECTURE, BACKEND SYSTEMS & POST-DELIVERY CLIENT OPERATIONS
+                </p>
 
                 <p className="font-inter text-sm text-charcoal-brand/85 leading-relaxed font-medium">
                   Specializes in architecting scalable database systems, full-stack web platforms, and directing high-conversion visual storytelling workflows.
@@ -208,7 +220,7 @@ export default function Founders() {
                   {["Database Architecture", "Backend Systems", "Post-Delivery Operations", "Supabase SQL"].map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] font-mono font-black px-2.5 py-1 bg-mustard-brand text-charcoal-brand border-2 border-charcoal-brand rounded-xl shadow-[2px_2px_0px_#1a1a1a] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#1a1a1a]"
+                      className="text-[10px] font-mono font-black px-3 py-1 bg-mustard-brand text-charcoal-brand border-2 border-charcoal-brand rounded-xl shadow-[2px_2px_0px_#1a1a1a] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#1a1a1a]"
                     >
                       {tag}
                     </span>

@@ -211,6 +211,68 @@ export default function Hero() {
         </motion.div>
       </Link>
 
+      {/* ── Left Edge Avatar Cutout (Dewansh - Mobile Only) ── */}
+      <Link href="#team" aria-label="Scroll to Dewansh profile in Team section" className="flex lg:hidden">
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          animate={{
+            opacity: 1,
+            x: 0,
+            y: [0, -8, 0, -4, 0],
+            rotate: [0, 1, -1, 0],
+          }}
+          whileTap={{ scale: 0.94 }}
+          transition={{
+            opacity: { duration: 0.8, ease: "easeOut" },
+            x: { duration: 0.8, ease: "easeOut" },
+            y: { duration: 5.5, repeat: Infinity, ease: "easeInOut" },
+            rotate: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+          }}
+          className="absolute bottom-0 left-[-35px] sm:left-[-15px] z-10 pointer-events-auto cursor-pointer select-none max-h-[50vh] flex items-end"
+        >
+          <div className="relative w-[130px] sm:w-[190px] md:w-[240px] aspect-[5/7]">
+            <Image
+              src="/avatar_dew_edge_mobile.png"
+              alt="Dewansh Chatterjee - Co-Founder"
+              fill
+              priority
+              className="object-contain object-bottom filter drop-shadow-lg"
+            />
+          </div>
+        </motion.div>
+      </Link>
+
+      {/* ── Right Edge Avatar Cutout (Aryan - Mobile Only) ── */}
+      <Link href="#team" aria-label="Scroll to Aryan profile in Team section" className="flex lg:hidden">
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          animate={{
+            opacity: 1,
+            x: 0,
+            y: [0, -8, 0, -5, 0],
+            rotate: [0, -1, 1, 0],
+          }}
+          whileTap={{ scale: 0.94 }}
+          transition={{
+            opacity: { duration: 0.8, ease: "easeOut" },
+            x: { duration: 0.8, ease: "easeOut" },
+            y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.2 },
+            rotate: { duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 },
+          }}
+          className="absolute bottom-0 right-[-35px] sm:right-[-15px] z-10 pointer-events-auto cursor-pointer select-none max-h-[50vh] flex items-end"
+        >
+          <div className="relative w-[130px] sm:w-[190px] md:w-[240px] aspect-[5/7]">
+            <Image
+              src="/avatar_ary_edge_mobile.png"
+              alt="Aryan Gupta - Co-Founder"
+              fill
+              priority
+              className="object-contain object-bottom filter drop-shadow-lg"
+            />
+          </div>
+        </motion.div>
+      </Link>
+
       {/* ── Main Centered Kinetic Content Container ───────────── */}
       <div className="max-w-4xl w-full mx-auto flex flex-col items-center text-center z-20 relative">
         
