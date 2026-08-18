@@ -158,7 +158,7 @@ export default function Founders() {
               <div className={`${CLAY_CLASSES.cardEmerald} absolute -inset-2 transform rotate-2 pointer-events-none rounded-[32px]`} />
               <div className="relative w-52 sm:w-56 h-64 border border-charcoal-brand/35 rounded-3xl overflow-hidden bg-charcoal-brand shadow-lg">
                 <Image
-                  src="/aryan_proxy.png"
+                  src="/aryan_proxy_v2.png"
                   alt="Aryan Gupta"
                   fill
                   sizes="(max-width: 768px) 208px, 224px"

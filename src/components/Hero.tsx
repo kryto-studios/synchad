@@ -227,7 +227,7 @@ export default function Hero() {
               <Image src="/DEWANSH O_O.jpeg" alt="Dewansh" fill className="object-cover" />
             </div>
             <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white overflow-hidden shadow-sm">
-              <Image src="/aryan_proxy.png" alt="Aryan" fill className="object-cover" />
+              <Image src="/aryan_proxy_v2.png" alt="Aryan" fill className="object-cover" />
             </div>
           </div>
 
@@ -329,7 +329,7 @@ export default function Hero() {
                   <Image src="/DEWANSH O_O.jpeg" alt="Dewansh" fill className="object-cover" />
                 </div>
                 <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden border border-charcoal-brand/30">
-                  <Image src="/aryan_proxy.png" alt="Aryan" fill className="object-cover" />
+                  <Image src="/aryan_proxy_v2.png" alt="Aryan" fill className="object-cover" />
                 </div>
               </div>
               <span>Meet The Founders &rarr;</span>
