@@ -276,29 +276,19 @@ export default function Hero() {
       {/* ── Main Centered Kinetic Content Container ───────────── */}
       <div className="max-w-4xl w-full mx-auto flex flex-col items-center text-center z-20 relative">
         
-        {/* Top Status Pill: Founder-Led Studio */}
+        {/* Top Header Intro Text */}
         <motion.div
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-4 sm:mb-6 flex items-center gap-2.5 sm:gap-3 bg-white/90 border border-charcoal-brand/12 backdrop-blur-md rounded-full px-3.5 sm:px-5 py-1.5 sm:py-2 shadow-sm hover:border-emerald-brand transition-colors"
+          className="mb-3 sm:mb-5 flex flex-col items-center justify-center text-center"
         >
-          {/* Dual Founder Avatar Stack */}
-          <div className="flex items-center -space-x-1.5 sm:-space-x-2 overflow-hidden flex-shrink-0">
-            <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white overflow-hidden shadow-sm">
-              <Image src="/dewansh_photo_v2.jpeg" alt="Dewansh" fill className="object-cover" />
-            </div>
-            <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white overflow-hidden shadow-sm">
-              <Image src="/aryan_proxy_v2.png" alt="Aryan" fill className="object-cover" />
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-            <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
-            <span className="font-mono text-[10px] sm:text-xs font-black uppercase tracking-wider text-charcoal-brand truncate">
-              FOUNDER-LED STUDIO • DEWANSH & ARYAN
-            </span>
-          </div>
+          <h3 className="font-bacley text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-black text-charcoal-brand tracking-tight">
+            Need Digital Help?
+          </h3>
+          <span className="font-mono text-[10px] xs:text-xs sm:text-sm font-bold uppercase tracking-[0.25em] text-charcoal-brand/50 mt-1 sm:mt-1.5">
+            presenting
+          </span>
         </motion.div>
 
         {/* ── Giant Kinetic Title: synchAD. ─────────────────────── */}
