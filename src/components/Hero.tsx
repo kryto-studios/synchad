@@ -211,7 +211,7 @@ export default function Hero() {
         </motion.div>
       </Link>
 
-      {/* ── Left Edge Avatar Cutout (Dewansh - Mobile Only: Positioned at title level) ── */}
+      {/* ── Left Edge Avatar Cutout (Dewansh - Mobile Only: Fully visible peeking inward) ── */}
       <Link href="#team" aria-label="Scroll to Dewansh profile in Team section" className="flex lg:hidden">
         <motion.div
           initial={{ opacity: 0, x: -50 }}
@@ -228,9 +228,9 @@ export default function Hero() {
             y: { duration: 5.5, repeat: Infinity, ease: "easeInOut" },
             rotate: { duration: 6, repeat: Infinity, ease: "easeInOut" },
           }}
-          className="absolute top-[20%] sm:top-[24%] left-[-28px] xs:left-[-22px] sm:left-[-15px] z-10 pointer-events-auto cursor-pointer select-none flex items-center"
+          className="absolute top-[16%] xs:top-[18%] sm:top-[22%] left-[-5px] xs:left-[0px] sm:left-[10px] z-10 pointer-events-auto cursor-pointer select-none flex items-center"
         >
-          <div className="relative w-[110px] xs:w-[130px] sm:w-[190px] aspect-[5/7]">
+          <div className="relative w-[130px] xs:w-[155px] sm:w-[210px] aspect-[5/7]">
             <Image
               src="/avatar_dew_edge_mobile.png"
               alt="Dewansh Chatterjee - Co-Founder"
@@ -242,7 +242,7 @@ export default function Hero() {
         </motion.div>
       </Link>
 
-      {/* ── Right Edge Avatar Cutout (Aryan - Mobile Only: Positioned at title level) ── */}
+      {/* ── Right Edge Avatar Cutout (Aryan - Mobile Only: Fully visible peeking inward) ── */}
       <Link href="#team" aria-label="Scroll to Aryan profile in Team section" className="flex lg:hidden">
         <motion.div
           initial={{ opacity: 0, x: 50 }}
@@ -259,9 +259,9 @@ export default function Hero() {
             y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.2 },
             rotate: { duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 },
           }}
-          className="absolute top-[20%] sm:top-[24%] right-[-28px] xs:right-[-22px] sm:right-[-15px] z-10 pointer-events-auto cursor-pointer select-none flex items-center"
+          className="absolute top-[16%] xs:top-[18%] sm:top-[22%] right-[-5px] xs:right-[0px] sm:right-[10px] z-10 pointer-events-auto cursor-pointer select-none flex items-center"
         >
-          <div className="relative w-[110px] xs:w-[130px] sm:w-[190px] aspect-[5/7]">
+          <div className="relative w-[130px] xs:w-[155px] sm:w-[210px] aspect-[5/7]">
             <Image
               src="/avatar_ary_edge_mobile_v2.png"
               alt="Aryan Gupta - Co-Founder"
@@ -319,27 +319,27 @@ export default function Hero() {
           </h1>
         </motion.div>
 
-        {/* ── Kinetic Word Cycler Ribbon ───────────────────────── */}
+        {/* ── Kinetic Word Cycler Ribbon (Single Line Seamless Mobile Layout) ── */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="mt-4 sm:mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-sm sm:text-xl md:text-2xl font-outfit font-black uppercase tracking-wide w-full"
+          className="mt-3 sm:mt-6 flex flex-row items-center justify-center gap-1.5 sm:gap-3 text-xs sm:text-xl md:text-2xl font-outfit font-black uppercase tracking-wide w-full"
         >
-          <span className="text-charcoal-brand/70 text-xs sm:text-lg md:text-xl">WE DIGITALIZE</span>
-          <div className="relative h-9 sm:h-11 md:h-12 min-w-[190px] sm:min-w-[280px] md:min-w-[320px] flex items-center justify-center">
+          <span className="text-charcoal-brand/70 text-[11px] xs:text-xs sm:text-lg md:text-xl whitespace-nowrap">WE DIGITALIZE</span>
+          <div className="relative h-8 sm:h-11 md:h-12 min-w-[145px] xs:min-w-[165px] sm:min-w-[280px] md:min-w-[320px] flex items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.span
                 key={currentWord.text}
-                initial={{ y: 18, opacity: 0, scale: 0.92 }}
+                initial={{ y: 14, opacity: 0, scale: 0.92 }}
                 animate={{ y: 0, opacity: 1, scale: 1 }}
-                exit={{ y: -18, opacity: 0, scale: 0.92 }}
+                exit={{ y: -14, opacity: 0, scale: 0.92 }}
                 transition={{ duration: 0.3, ease: "backOut" }}
                 style={{
                   color: currentWord.color,
                   backgroundColor: currentWord.bg,
                 }}
-                className="absolute px-3 sm:px-5 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl shadow-md border border-charcoal-brand/10 font-black tracking-wider text-xs sm:text-base md:text-xl whitespace-nowrap"
+                className="absolute px-2.5 sm:px-5 py-0.5 sm:py-1.5 rounded-lg sm:rounded-2xl shadow-md border border-charcoal-brand/10 font-black tracking-wider text-[10px] xs:text-xs sm:text-base md:text-xl whitespace-nowrap"
               >
                 {currentWord.text}
               </motion.span>
