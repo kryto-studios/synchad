@@ -133,14 +133,8 @@ export default function Founders() {
                   Dewansh Chatterjee
                 </h3>
                 
-                {/* Mustard Yellow Role Text with Crisp Black Outline (No Black Box) */}
-                <p
-                  style={{
-                    color: "#f5b02e",
-                    textShadow: "1.2px 1.2px 0 #1a1a1a, -1.2px -1.2px 0 #1a1a1a, 1.2px -1.2px 0 #1a1a1a, -1.2px 1.2px 0 #1a1a1a, 0 1px 3px rgba(0,0,0,0.25)",
-                  }}
-                  className="font-mono text-xs font-black uppercase tracking-wider mb-3 leading-snug"
-                >
+                {/* Clean Role Subtitle (No stroke/outline) */}
+                <p className="font-mono text-xs font-bold text-charcoal-brand/75 uppercase tracking-wider mb-3 leading-snug">
                   FRONT-END, CREATIVE DIRECTION, CLIENT CONSULTATION & IDEA CONCEPTION
                 </p>
 
@@ -157,7 +151,7 @@ export default function Founders() {
                   {["Front-End Architecture", "Creative Direction", "Client Consultation", "Agile Execution"].map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] font-mono font-black px-3 py-1 bg-mustard-brand text-charcoal-brand border-2 border-charcoal-brand rounded-xl shadow-[2px_2px_0px_#1a1a1a] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#1a1a1a]"
+                      className="text-[10px] font-mono font-bold px-3 py-1 bg-emerald-brand/10 text-emerald-brand border border-emerald-brand/30 rounded-xl shadow-xs transition-all duration-200 hover:-translate-y-0.5"
                     >
                       {tag}
                     </span>
@@ -196,14 +190,8 @@ export default function Founders() {
                   Aryan Gupta
                 </h3>
                 
-                {/* Mustard Yellow Role Text with Crisp Black Outline (No Black Box) */}
-                <p
-                  style={{
-                    color: "#f5b02e",
-                    textShadow: "1.2px 1.2px 0 #1a1a1a, -1.2px -1.2px 0 #1a1a1a, 1.2px -1.2px 0 #1a1a1a, -1.2px 1.2px 0 #1a1a1a, 0 1px 3px rgba(0,0,0,0.25)",
-                  }}
-                  className="font-mono text-xs font-black uppercase tracking-wider mb-3 leading-snug"
-                >
+                {/* Clean Role Subtitle (No stroke/outline) */}
+                <p className="font-mono text-xs font-bold text-charcoal-brand/75 uppercase tracking-wider mb-3 leading-snug">
                   DATABASE ARCHITECTURE, BACKEND SYSTEMS & POST-DELIVERY CLIENT OPERATIONS
                 </p>
 
@@ -220,7 +208,7 @@ export default function Founders() {
                   {["Database Architecture", "Backend Systems", "Post-Delivery Operations", "Supabase SQL"].map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] font-mono font-black px-3 py-1 bg-mustard-brand text-charcoal-brand border-2 border-charcoal-brand rounded-xl shadow-[2px_2px_0px_#1a1a1a] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#1a1a1a]"
+                      className="text-[10px] font-mono font-bold px-3 py-1 bg-mustard-brand/15 text-charcoal-brand border border-mustard-brand/40 rounded-xl shadow-xs transition-all duration-200 hover:-translate-y-0.5"
                     >
                       {tag}
                     </span>
