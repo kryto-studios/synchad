@@ -54,7 +54,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-cream-brand/85 backdrop-blur-md border-b border-charcoal-brand/10 px-6 py-4 md:px-12">
+    <header className="sticky top-0 z-40 w-full bg-cream-brand/85 backdrop-blur-md border-b border-charcoal-brand/10 px-6 sm:px-10 md:px-14 lg:px-16 py-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Brand Logo */}
         <Magnetic strength={0.2}>

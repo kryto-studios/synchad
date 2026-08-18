@@ -87,7 +87,7 @@ export default function Founders() {
   return (
     <section 
       id="team" 
-      className="w-full border-b border-charcoal-brand py-20 px-6 md:px-12 bg-cream-brand select-none"
+      className="w-full border-b border-charcoal-brand py-20 px-6 sm:px-10 md:px-14 lg:px-16 bg-cream-brand select-none"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}

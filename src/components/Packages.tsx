@@ -65,7 +65,7 @@ export default function Packages() {
   return (
     <section 
       id="packages" 
-      className="w-full border-b border-charcoal-brand py-20 px-6 md:px-12 bg-cream-brand"
+      className="w-full border-b border-charcoal-brand py-20 px-6 sm:px-10 md:px-14 lg:px-16 bg-cream-brand"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
