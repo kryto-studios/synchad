@@ -133,8 +133,8 @@ export default function Founders() {
                   Dewansh Chatterjee
                 </h3>
                 
-                {/* Clean Role Subtitle (No stroke/outline) */}
-                <p className="font-mono text-xs font-bold text-charcoal-brand/75 uppercase tracking-wider mb-3 leading-snug">
+                {/* Role Subtitle - Bold Mustard Yellow */}
+                <p className="font-mono text-xs sm:text-sm font-black text-mustard-brand uppercase tracking-wider mb-3 leading-snug">
                   FRONT-END, CREATIVE DIRECTION, CLIENT CONSULTATION & IDEA CONCEPTION
                 </p>
 
@@ -151,7 +151,7 @@ export default function Founders() {
                   {["Front-End Architecture", "Creative Direction", "Client Consultation", "Agile Execution"].map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] font-mono font-bold px-3 py-1 bg-emerald-brand/10 text-emerald-brand border border-emerald-brand/30 rounded-xl shadow-xs transition-all duration-200 hover:-translate-y-0.5"
+                      className="text-[10px] font-mono font-black px-3 py-1 bg-mustard-brand text-charcoal-brand border border-charcoal-brand/25 rounded-xl shadow-xs transition-all duration-200 hover:-translate-y-0.5"
                     >
                       {tag}
                     </span>
@@ -190,8 +190,8 @@ export default function Founders() {
                   Aryan Gupta
                 </h3>
                 
-                {/* Clean Role Subtitle (No stroke/outline) */}
-                <p className="font-mono text-xs font-bold text-charcoal-brand/75 uppercase tracking-wider mb-3 leading-snug">
+                {/* Role Subtitle - Bold Mustard Yellow */}
+                <p className="font-mono text-xs sm:text-sm font-black text-mustard-brand uppercase tracking-wider mb-3 leading-snug">
                   DATABASE ARCHITECTURE, BACKEND SYSTEMS & POST-DELIVERY CLIENT OPERATIONS
                 </p>
 
@@ -208,7 +208,7 @@ export default function Founders() {
                   {["Database Architecture", "Backend Systems", "Post-Delivery Operations", "Supabase SQL"].map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] font-mono font-bold px-3 py-1 bg-mustard-brand/15 text-charcoal-brand border border-mustard-brand/40 rounded-xl shadow-xs transition-all duration-200 hover:-translate-y-0.5"
+                      className="text-[10px] font-mono font-black px-3 py-1 bg-mustard-brand text-charcoal-brand border border-charcoal-brand/25 rounded-xl shadow-xs transition-all duration-200 hover:-translate-y-0.5"
                     >
                       {tag}
                     </span>

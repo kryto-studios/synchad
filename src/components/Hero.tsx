@@ -263,7 +263,7 @@ export default function Hero() {
         >
           <div className="relative w-[130px] sm:w-[190px] md:w-[240px] aspect-[5/7]">
             <Image
-              src="/avatar_ary_edge_mobile.png"
+              src="/avatar_ary_edge_mobile_v2.png"
               alt="Aryan Gupta - Co-Founder"
               fill
               priority
