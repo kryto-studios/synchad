@@ -211,7 +211,7 @@ export default function Hero() {
         </motion.div>
       </Link>
 
-      {/* ── Left Edge Avatar Cutout (Dewansh - Mobile Only) ── */}
+      {/* ── Left Edge Avatar Cutout (Dewansh - Mobile Only: Positioned at title level) ── */}
       <Link href="#team" aria-label="Scroll to Dewansh profile in Team section" className="flex lg:hidden">
         <motion.div
           initial={{ opacity: 0, x: -50 }}
@@ -228,21 +228,21 @@ export default function Hero() {
             y: { duration: 5.5, repeat: Infinity, ease: "easeInOut" },
             rotate: { duration: 6, repeat: Infinity, ease: "easeInOut" },
           }}
-          className="absolute bottom-0 left-[-35px] sm:left-[-15px] z-10 pointer-events-auto cursor-pointer select-none max-h-[50vh] flex items-end"
+          className="absolute top-[20%] sm:top-[24%] left-[-28px] xs:left-[-22px] sm:left-[-15px] z-10 pointer-events-auto cursor-pointer select-none flex items-center"
         >
-          <div className="relative w-[130px] sm:w-[190px] md:w-[240px] aspect-[5/7]">
+          <div className="relative w-[110px] xs:w-[130px] sm:w-[190px] aspect-[5/7]">
             <Image
               src="/avatar_dew_edge_mobile.png"
               alt="Dewansh Chatterjee - Co-Founder"
               fill
               priority
-              className="object-contain object-bottom filter drop-shadow-lg"
+              className="object-contain filter drop-shadow-lg"
             />
           </div>
         </motion.div>
       </Link>
 
-      {/* ── Right Edge Avatar Cutout (Aryan - Mobile Only) ── */}
+      {/* ── Right Edge Avatar Cutout (Aryan - Mobile Only: Positioned at title level) ── */}
       <Link href="#team" aria-label="Scroll to Aryan profile in Team section" className="flex lg:hidden">
         <motion.div
           initial={{ opacity: 0, x: 50 }}
@@ -259,15 +259,15 @@ export default function Hero() {
             y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.2 },
             rotate: { duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 },
           }}
-          className="absolute bottom-0 right-[-35px] sm:right-[-15px] z-10 pointer-events-auto cursor-pointer select-none max-h-[50vh] flex items-end"
+          className="absolute top-[20%] sm:top-[24%] right-[-28px] xs:right-[-22px] sm:right-[-15px] z-10 pointer-events-auto cursor-pointer select-none flex items-center"
         >
-          <div className="relative w-[130px] sm:w-[190px] md:w-[240px] aspect-[5/7]">
+          <div className="relative w-[110px] xs:w-[130px] sm:w-[190px] aspect-[5/7]">
             <Image
               src="/avatar_ary_edge_mobile_v2.png"
               alt="Aryan Gupta - Co-Founder"
               fill
               priority
-              className="object-contain object-bottom filter drop-shadow-lg"
+              className="object-contain filter drop-shadow-lg"
             />
           </div>
         </motion.div>
@@ -311,7 +311,7 @@ export default function Hero() {
           <span className="hidden sm:inline-block absolute -left-8 -top-8 font-outfit text-6xl md:text-9xl text-mustard-brand font-black opacity-30 select-none">
             "
           </span>
-          <h1 className="font-outfit text-5xl sm:text-8xl md:text-9xl lg:text-[10.5rem] font-black leading-[0.85] text-charcoal-brand tracking-tighter select-none drop-shadow-sm">
+          <h1 className="font-outfit text-[3.8rem] xs:text-[4.5rem] sm:text-8xl md:text-9xl lg:text-[10.5rem] font-black leading-[0.85] text-charcoal-brand tracking-tighter select-none drop-shadow-sm">
             synch
             <span className="text-mustard-brand inline-block transform hover:rotate-6 transition-transform cursor-pointer">
               AD.
