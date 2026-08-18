@@ -159,7 +159,7 @@ export default function Contact() {
                         <option value="edits">EDITS (Motion Graphics / Video Production)</option>
                         <option value="hybrid">HYBRID (Combined Scope)</option>
                       </select>
-                      <ChevronDown className="absolute right-5 top-3.5 w-4 h-4 text-charcoal-brand pointer-events-none" />
+                      <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-brand pointer-events-none" />
                     </div>
                   </div>
                 </div>

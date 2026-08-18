@@ -1,610 +1,363 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Magnetic from "./Magnetic";
 import Link from "next/link";
 import Image from "next/image";
 import { CLAY_CLASSES } from "./ClayStyles";
 
-/* ─── Slide Data ─────────────────────────────────────────────── */
-const SLIDES = [
-  {
-    id: "dewansh",
-    bg: "#062c21", // emerald green (Dewansh's Card is Green)
-    textColor: "#fff6e8", // cream text
-    name: "DEWANSH CHATTERJEE",
-    designation: "Co-Founder",
-    photo: "/DEWANSH O_O.jpeg",
-    photoAlt: "Dewansh Chatterjee",
-    features: [
-      {
-        type: "vertical",
-        title: "Figma Wireframe",
-        subtitle: "figma.com",
-        image: "/dewansh_ui_ux.png",
-        pos: { top: "4%", left: "-20%" },
-        actionLabel: "Open View",
-      },
-      {
-        type: "horizontal",
-        title: "Active Timeline",
-        subtitle: "Gantt Sprint Planner",
-        image: "/dewansh_planner.png",
-        pos: { top: "10%", right: "-26%" },
-      },
-      {
-        type: "vertical",
-        title: "React Core UI",
-        subtitle: "github.com",
-        image: "/dewansh_frontend.png",
-        pos: { bottom: "32%", left: "-18%" },
-        actionLabel: "Source",
-      },
-    ],
-  },
-  {
-    id: "aryan",
-    bg: "#f5b02e", // mustard yellow (Aryan's Card is Yellow)
-    textColor: "#1a1a1a", // charcoal text
-    name: "ARYAN GUPTA",
-    designation: "CO-FOUNDER",
-    photo: "/aryan_proxy.png",
-    photoAlt: "Aryan Gupta",
-    features: [
-      {
-        type: "vertical",
-        title: "Supabase DB",
-        subtitle: "supabase.co",
-        image: "/aryan_backend.png",
-        pos: { top: "4%", left: "-20%" },
-        actionLabel: "Query",
-      },
-      {
-        type: "horizontal",
-        title: "CRM Graph",
-        subtitle: "User Analytics Portal",
-        image: "/aryan_crm.png",
-        pos: { top: "10%", right: "-26%" },
-      },
-      {
-        type: "vertical",
-        title: "App Refiner",
-        subtitle: "refine.app",
-        image: "/aryan_refiner.png",
-        pos: { bottom: "34%", left: "-18%" },
-        actionLabel: "Review",
-      },
-      {
-        type: "vertical",
-        title: "Motion VFX",
-        subtitle: "premiere.pro",
-        image: "/aryan_video.png",
-        pos: { bottom: "30%", right: "-20%" },
-        actionLabel: "Render",
-      },
-    ],
-  },
+/* ─── Cycling Words Data ────────────────────────────────────── */
+const DYNAMIC_WORDS = [
+  { text: "LOCAL BUSINESSES", color: "#f5b02e", bg: "#1a1a1a" },
+  { text: "FUTURE BRANDS", color: "#fff6e8", bg: "#062c21" },
+  { text: "ENTERPRISE SAAS", color: "#1a1a1a", bg: "#f5b02e" },
+  { text: "HIGH-IMPACT EDITS", color: "#fff6e8", bg: "#1a1a1a" },
+  { text: "CUSTOM MOBILE APPS", color: "#f5b02e", bg: "#062c21" },
 ];
 
-/* ─── Floating Feature Card Component ────────────────────────── */
-interface FeatureCardProps {
-  feature: (typeof SLIDES)[0]["features"][0];
-  slideBg: string;
-  isActive: boolean;
-  delay: number;
-}
+/* ─── SVG Doodles ───────────────────────────────────────────── */
+const GearDoodle = () => (
+  <svg
+    className="absolute top-6 left-6 md:top-10 md:left-12 w-10 h-10 md:w-14 md:h-14 text-charcoal-brand/15 animate-[spin_25s_linear_infinite] pointer-events-none"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={1.5}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.43l1.004-.827c.292-.24.437-.613.43-.991a6.936 6.936 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"
+    />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+  </svg>
+);
 
-function FloatingFeatureCard({ feature, slideBg, isActive, delay }: FeatureCardProps) {
-  const isVertical = feature.type === "vertical";
-  
-  return (
-    <motion.div
-      animate={isActive ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
-      transition={isActive ? { type: "spring", stiffness: 280, damping: 20, delay } : { duration: 0.15 }}
-      style={{
-        position: "absolute",
-        ...feature.pos,
-        transform: "translateZ(55px)", // Elevates mockups in 3D space
-        transformStyle: "preserve-3d",
-        backfaceVisibility: "hidden",
-        WebkitBackfaceVisibility: "hidden",
-      }}
-      className="z-10 cursor-default"
-    >
-      {isVertical ? (
-        // Vertical Mockup Card
-        <div
-          style={{
-            background: "rgba(255, 255, 255, 0.95)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
-            border: "1.5px solid rgba(26, 26, 26, 0.12)",
-            borderRadius: "20px",
-            padding: "8px",
-            width: "115px",
-            boxShadow: "0 16px 36px rgba(0,0,0,0.15)",
-            display: "flex",
-            flexDirection: "column",
-            gap: "5px",
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
-          }}
-        >
-          <div className="relative w-full h-[65px] rounded-xl overflow-hidden border border-charcoal-brand/5">
-            <Image
-              src={feature.image}
-              alt={feature.title}
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div className="flex flex-col min-w-0 px-0.5">
-            <span
-              style={{
-                fontFamily: "var(--font-outfit), sans-serif",
-                fontSize: "9.5px",
-                fontWeight: 900,
-                color: "#1a1a1a",
-                lineHeight: 1.2,
-              }}
-              className="truncate"
-            >
-              {feature.title}
-            </span>
-            <span
-              style={{
-                fontFamily: "var(--font-inter), sans-serif",
-                fontSize: "7.5px",
-                color: "rgba(26, 26, 26, 0.5)",
-              }}
-              className="truncate font-semibold mt-0.5"
-            >
-              {feature.subtitle}
-            </span>
-          </div>
-          {feature.actionLabel && (
-            <span
-              style={{
-                background: slideBg === "#f5b02e" ? "#1a1a1a" : "#062c21",
-                color: slideBg === "#f5b02e" ? "#f5b02e" : "#fff6e8",
-                fontSize: "7px",
-                fontFamily: "var(--font-outfit), sans-serif",
-                fontWeight: 900,
-                letterSpacing: "0.05em",
-                borderRadius: "100px",
-                padding: "3px 6px",
-                textAlign: "center",
-              }}
-              className="uppercase mt-1 inline-block"
-            >
-              {feature.actionLabel}
-            </span>
-          )}
-        </div>
-      ) : (
-        // Horizontal Mockup Card
-        <div
-          style={{
-            background: "rgba(255, 255, 255, 0.95)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
-            border: "1.5px solid rgba(26, 26, 26, 0.12)",
-            borderRadius: "16px",
-            padding: "6px",
-            width: "155px",
-            boxShadow: "0 16px 36px rgba(0,0,0,0.15)",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
-          }}
-        >
-          <div className="relative w-[34px] h-[34px] rounded-lg overflow-hidden border border-charcoal-brand/5 flex-shrink-0">
-            <Image
-              src={feature.image}
-              alt={feature.title}
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div className="flex flex-col min-w-0">
-            <span
-              style={{
-                fontFamily: "var(--font-outfit), sans-serif",
-                fontSize: "9.5px",
-                fontWeight: 900,
-                color: "#1a1a1a",
-                lineHeight: 1.2,
-              }}
-              className="truncate"
-            >
-              {feature.title}
-            </span>
-            <span
-              style={{
-                fontFamily: "var(--font-inter), sans-serif",
-                fontSize: "7px",
-                color: "rgba(26, 26, 26, 0.5)",
-              }}
-              className="truncate font-semibold mt-0.5"
-            >
-              {feature.subtitle}
-            </span>
-          </div>
-        </div>
-      )}
-    </motion.div>
-  );
-}
+const CodeBracketDoodle = () => (
+  <svg
+    className="absolute bottom-12 left-6 md:bottom-20 md:left-16 w-8 h-8 md:w-12 md:h-12 text-charcoal-brand/15 pointer-events-none"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={1.5}
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+  </svg>
+);
 
-/* ─── Card Face Component ────────────────────────────────────── */
-interface CardFaceProps {
-  slide: (typeof SLIDES)[0];
-  isActive: boolean;
-}
+const SparkleDoodle = () => (
+  <svg
+    className="absolute top-8 right-6 md:top-14 md:right-14 w-8 h-8 md:w-12 md:h-12 text-mustard-brand/35 animate-pulse pointer-events-none"
+    fill="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+  </svg>
+);
 
-function CardFace({ slide, isActive }: CardFaceProps) {
-  return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "100%",
-        borderRadius: "36px",
-        background: slide.bg,
-        boxShadow: "0 24px 64px rgba(0,0,0,0.18)",
-        transformStyle: "preserve-3d",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "32px 24px",
-      }}
-      className="w-full h-full select-none"
-    >
-      {/* ── Center Photo Cutout (3D popping with sequence zoom) ── */}
-      <motion.div
-        animate={isActive ? { scale: [0.85, 1.35, 1], opacity: 1 } : { scale: 0.85, opacity: 0 }}
-        transition={isActive ? { duration: 0.7, times: [0, 0.45, 1], ease: "easeInOut", delay: 0.1 } : { duration: 0.15 }}
-        style={{
-          transform: "translateZ(45px)", // 3D pop depth
-          width: "190px",
-          height: "190px",
-          borderRadius: "50%",
-          border: `4px solid ${slide.textColor}`,
-          boxShadow: `0 8px 32px rgba(0,0,0,0.25)`,
-          zIndex: 5,
-          position: "relative",
-          overflow: "hidden",
-          backfaceVisibility: "hidden",
-          WebkitBackfaceVisibility: "hidden",
-        }}
-        className="mb-8"
-      >
-        <Image
-          src={slide.photo}
-          alt={slide.photoAlt}
-          fill
-          className="object-cover object-top rounded-full"
-        />
-      </motion.div>
-
-      {/* ── Name & Designation below photo (pops after photo zoom) ── */}
-      <motion.div
-        animate={isActive ? { scale: 1, opacity: 1, y: 0 } : { scale: 0.5, opacity: 0, y: 15 }}
-        transition={isActive ? { type: "spring", stiffness: 180, damping: 14, delay: 0.75 } : { duration: 0.15 }}
-        style={{
-          transform: "translateZ(30px)", // Moderate pop depth
-          textAlign: "center",
-          backfaceVisibility: "hidden",
-          WebkitBackfaceVisibility: "hidden",
-        }}
-        className="flex flex-col items-center justify-center mt-auto"
-      >
-        <h3
-          style={{
-            fontFamily: "var(--font-outfit), sans-serif",
-            fontSize: "28px",
-            fontWeight: 900,
-            color: slide.textColor,
-            lineHeight: 1.1,
-            letterSpacing: "-0.01em",
-          }}
-          className="mb-1 uppercase tracking-tight"
-        >
-          {slide.name}
-        </h3>
-        <span
-          style={{
-            fontFamily: "var(--font-gued), sans-serif",
-            fontSize: "12px",
-            fontWeight: 800,
-            color: slide.textColor,
-            opacity: 0.35,
-            letterSpacing: "0.15em",
-          }}
-          className="uppercase"
-        >
-          {slide.designation}
-        </span>
-      </motion.div>
-
-      {/* ── Floating feature cards (pops up after Name/Designation) ── */}
-      {slide.features.map((feature, i) => (
-        <FloatingFeatureCard
-          key={feature.title}
-          feature={feature}
-          slideBg={slide.bg}
-          isActive={isActive}
-          delay={0.95 + i * 0.1}
-        />
-      ))}
-    </div>
-  );
-}
-
-/* ─── 3D Flip Card Flipper ──────────────────────────────────── */
-interface FlipCardProps {
-  activeSlide: number;
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
-}
-
-function FlipCard({ activeSlide, onMouseEnter, onMouseLeave }: FlipCardProps) {
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left - width / 2;
-    const mouseY = e.clientY - rect.top - height / 2;
-    
-    // Scale tilt to be subtle (max 12 degrees)
-    const tiltX = -(mouseY / (height / 2)) * 12;
-    const tiltY = (mouseX / (width / 2)) * 12;
-    setTilt({ x: tiltX, y: tiltY });
-  };
-
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
-    onMouseLeave();
-  };
-
-  const baseRotateY = activeSlide === 0 ? 0 : 180;
-  
-  // Inverse tilt directions based on rotation to keep interactive pop intuitive
-  const currentRotateY = activeSlide === 0 ? baseRotateY + tilt.y : baseRotateY - tilt.y;
-  const currentRotateX = activeSlide === 0 ? tilt.x : -tilt.x;
-
-  return (
-    <div
-      style={{
-        perspective: "1500px",
-        width: "360px",
-        height: "480px",
-      }}
-      className="relative flex items-center justify-center"
-      onMouseEnter={onMouseEnter}
-    >
-      <motion.div
-        animate={{
-          rotateY: currentRotateY,
-          rotateX: currentRotateX,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 100,
-          damping: 18,
-        }}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          width: "100%",
-          height: "100%",
-          transformStyle: "preserve-3d",
-          position: "relative",
-          cursor: "pointer",
-        }}
-        className="w-full h-full relative"
-      >
-        {/* Front Face (Dewansh) */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
-            transformStyle: "preserve-3d",
-            // Fully hide inactive card face using display/opacity/pointer-events transitions
-            opacity: activeSlide === 0 ? 1 : 0,
-            pointerEvents: activeSlide === 0 ? "auto" : "none",
-            visibility: activeSlide === 0 ? "visible" : "hidden",
-            transition: "opacity 0.25s, visibility 0.25s ease",
-            zIndex: activeSlide === 0 ? 2 : 1,
-          }}
-        >
-          <CardFace slide={SLIDES[0]} isActive={activeSlide === 0} />
-        </div>
-
-        {/* Back Face (Aryan) */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
-            transform: "rotateY(180deg)",
-            transformStyle: "preserve-3d",
-            // Fully hide inactive card face using display/opacity/pointer-events transitions
-            opacity: activeSlide === 1 ? 1 : 0,
-            pointerEvents: activeSlide === 1 ? "auto" : "none",
-            visibility: activeSlide === 1 ? "visible" : "hidden",
-            transition: "opacity 0.25s, visibility 0.25s ease",
-            zIndex: activeSlide === 1 ? 2 : 1,
-          }}
-        >
-          <CardFace slide={SLIDES[1]} isActive={activeSlide === 1} />
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
-/* ─── Hero ───────────────────────────────────────────────────── */
+/* ─── Hero Component ─────────────────────────────────────────── */
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [activeSlide, setActiveSlide] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const [wordIndex, setWordIndex] = useState(0);
+  const [isDewHovered, setIsDewHovered] = useState(false);
+  const [isAryHovered, setIsAryHovered] = useState(false);
 
-  // Auto-cycle slides unless paused by mouse hover
+  // Auto-cycle kinetic words
   useEffect(() => {
-    if (isPaused) return;
     const interval = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % SLIDES.length);
-    }, 4500);
+      setWordIndex((prev) => (prev + 1) % DYNAMIC_WORDS.length);
+    }, 2800);
     return () => clearInterval(interval);
-  }, [isPaused]);
+  }, []);
 
-  // Doodles
-  const GearDoodle = () => (
-    <svg className="absolute top-12 left-16 w-12 h-12 text-charcoal-brand opacity-60 animate-[spin_20s_linear_infinite]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.43l1.004-.827c.292-.24.437-.613.43-.991a6.936 6.936 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-    </svg>
-  );
-
-  const BracketDoodle = () => (
-    <svg className="absolute bottom-16 left-24 w-10 h-10 text-charcoal-brand opacity-60 hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
-    </svg>
-  );
-
-  const FilmDoodle = () => (
-    <svg className="absolute top-8 right-32 w-12 h-12 text-charcoal-brand opacity-60 -rotate-12 hover:rotate-12 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
-    </svg>
-  );
+  const currentWord = DYNAMIC_WORDS[wordIndex];
 
   return (
     <section
       ref={containerRef}
-      className="relative w-full min-h-screen flex flex-col items-center justify-center border-b border-charcoal-brand py-12 px-6 md:px-12 overflow-hidden bg-cream-brand"
+      className="relative w-full min-h-[85vh] sm:min-h-[90vh] lg:min-h-[92vh] flex flex-col items-center justify-center border-b border-charcoal-brand py-10 sm:py-16 px-4 sm:px-6 lg:px-12 overflow-hidden bg-cream-brand select-none"
     >
-      {/* Doodles */}
+      {/* Decorative Doodles */}
       <GearDoodle />
-      <BracketDoodle />
-      <FilmDoodle />
+      <CodeBracketDoodle />
+      <SparkleDoodle />
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-12 hidden lg:flex flex-col items-center gap-2">
-        <span className="font-mono text-xs uppercase tracking-widest text-charcoal-brand/60 [writing-mode:vertical-lr]">SCROLL TO DISCOVER</span>
-        <svg className="w-6 h-12 text-charcoal-brand animate-bounce" fill="none" viewBox="0 0 24 48" stroke="currentColor" strokeWidth={1.5}>
+      {/* ── Scroll Indicator (Desktop Left Sidebar) ──────────────── */}
+      <div className="absolute bottom-8 left-10 hidden xl:flex flex-col items-center gap-2 z-20">
+        <span className="font-mono text-xs uppercase tracking-widest text-charcoal-brand/50 [writing-mode:vertical-lr]">
+          SCROLL TO DISCOVER
+        </span>
+        <svg
+          className="w-5 h-10 text-charcoal-brand animate-bounce"
+          fill="none"
+          viewBox="0 0 24 48"
+          stroke="currentColor"
+          strokeWidth={1.5}
+        >
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 44V4M12 44l-6-6m6 6 6-6" />
         </svg>
       </div>
 
-      <div className="max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-4 items-center">
+      {/* ── Left Edge Avatar Cutout (Dewansh - Desktop/Large Tablet Only) ── */}
+      <Link href="#team" aria-label="Scroll to Dewansh profile in Team section" className="hidden lg:flex">
+        <motion.div
+          onMouseEnter={() => setIsDewHovered(true)}
+          onMouseLeave={() => setIsDewHovered(false)}
+          initial={{ opacity: 0, x: -80 }}
+          animate={{
+            opacity: 1,
+            x: 0,
+            y: [0, -10, 0, -14, 0],
+            rotate: [0, 1.5, -1, 0.5, 0],
+          }}
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.94 }}
+          transition={{
+            opacity: { duration: 0.8, ease: "easeOut" },
+            x: { duration: 0.8, ease: "easeOut" },
+            y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+            rotate: { duration: 6.5, repeat: Infinity, ease: "easeInOut" },
+          }}
+          className="absolute bottom-0 left-[-30px] lg:left-[10px] xl:left-[40px] z-20 pointer-events-auto cursor-pointer select-none max-h-[80vh] items-end"
+        >
+          <div className="relative lg:w-[380px] xl:w-[440px] aspect-[5/7]">
+            {/* Default Avatar */}
+            <motion.div
+              animate={{ opacity: isDewHovered ? 0 : 1 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="absolute inset-0"
+            >
+              <Image
+                src="/avatar_dew_full_v2.png"
+                alt="Dewansh Chatterjee - Co-Founder"
+                fill
+                priority
+                className="object-contain object-bottom filter drop-shadow-xl"
+              />
+            </motion.div>
 
-        {/* ── Left Column ───────────────────────────────────────── */}
-        <div className="lg:col-span-1 flex flex-col items-start text-left z-10">
-          <div className="relative mb-2">
-            <span className="absolute -left-10 -top-8 font-outfit text-7xl text-mustard-brand font-black opacity-80">"</span>
-            <div className={`${CLAY_CLASSES.cardMustard} px-5 py-2 font-outfit text-xs font-black uppercase tracking-wider transform -rotate-2`}>
-              Creative Digitalizing
+            {/* Hover Intro Avatar */}
+            <motion.div
+              animate={{ opacity: isDewHovered ? 1 : 0 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="absolute inset-0"
+            >
+              <Image
+                src="/avatar_dew_intro_v2.png"
+                alt="Dewansh Chatterjee - Intro"
+                fill
+                priority
+                className="object-contain object-bottom filter drop-shadow-xl"
+              />
+            </motion.div>
+          </div>
+        </motion.div>
+      </Link>
+
+      {/* ── Right Edge Avatar Cutout (Aryan - Desktop/Large Tablet Only) ── */}
+      <Link href="#team" aria-label="Scroll to Aryan profile in Team section" className="hidden lg:flex">
+        <motion.div
+          onMouseEnter={() => setIsAryHovered(true)}
+          onMouseLeave={() => setIsAryHovered(false)}
+          initial={{ opacity: 0, x: 80 }}
+          animate={{
+            opacity: 1,
+            x: 0,
+            y: [0, -12, 0, -6, 0],
+            rotate: [0, -1.5, 1, -0.5, 0],
+          }}
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.94 }}
+          transition={{
+            opacity: { duration: 0.8, ease: "easeOut" },
+            x: { duration: 0.8, ease: "easeOut" },
+            y: { duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 },
+            rotate: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.3 },
+          }}
+          className="absolute bottom-0 right-[-30px] lg:right-[10px] xl:right-[40px] z-20 pointer-events-auto cursor-pointer select-none max-h-[80vh] items-end"
+        >
+          <div className="relative lg:w-[380px] xl:w-[440px] aspect-[5/7]">
+            {/* Default Avatar */}
+            <motion.div
+              animate={{ opacity: isAryHovered ? 0 : 1 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="absolute inset-0"
+            >
+              <Image
+                src="/avatar_ary_left_full.png"
+                alt="Aryan Gupta - Co-Founder"
+                fill
+                priority
+                className="object-contain object-bottom filter drop-shadow-xl"
+              />
+            </motion.div>
+
+            {/* Hover Intro Avatar */}
+            <motion.div
+              animate={{ opacity: isAryHovered ? 1 : 0 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="absolute inset-0"
+            >
+              <Image
+                src="/avatar_ary_intro.png"
+                alt="Aryan Gupta - Intro"
+                fill
+                priority
+                className="object-contain object-bottom filter drop-shadow-xl"
+              />
+            </motion.div>
+          </div>
+        </motion.div>
+      </Link>
+
+      {/* ── Main Centered Kinetic Content Container ───────────── */}
+      <div className="max-w-4xl w-full mx-auto flex flex-col items-center text-center z-20 relative">
+        
+        {/* Top Status Pill: Founder-Led Studio */}
+        <motion.div
+          initial={{ opacity: 0, y: -15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-4 sm:mb-6 flex items-center gap-2.5 sm:gap-3 bg-white/90 border border-charcoal-brand/12 backdrop-blur-md rounded-full px-3.5 sm:px-5 py-1.5 sm:py-2 shadow-sm hover:border-emerald-brand transition-colors"
+        >
+          {/* Dual Founder Avatar Stack */}
+          <div className="flex items-center -space-x-1.5 sm:-space-x-2 overflow-hidden flex-shrink-0">
+            <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white overflow-hidden shadow-sm">
+              <Image src="/DEWANSH O_O.jpeg" alt="Dewansh" fill className="object-cover" />
+            </div>
+            <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-white overflow-hidden shadow-sm">
+              <Image src="/aryan_proxy.png" alt="Aryan" fill className="object-cover" />
             </div>
           </div>
 
-          <h1 className="font-outfit text-7xl sm:text-8xl lg:text-[10rem] font-black leading-[0.85] text-charcoal-brand tracking-tighter select-none">
+          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+            <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
+            <span className="font-mono text-[10px] sm:text-xs font-black uppercase tracking-wider text-charcoal-brand truncate">
+              FOUNDER-LED STUDIO • DEWANSH & ARYAN
+            </span>
+          </div>
+        </motion.div>
+
+        {/* ── Giant Kinetic Title: synchAD. ─────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.94 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="relative inline-block w-full"
+        >
+          <span className="hidden sm:inline-block absolute -left-8 -top-8 font-outfit text-6xl md:text-9xl text-mustard-brand font-black opacity-30 select-none">
+            "
+          </span>
+          <h1 className="font-outfit text-5xl sm:text-8xl md:text-9xl lg:text-[10.5rem] font-black leading-[0.85] text-charcoal-brand tracking-tighter select-none drop-shadow-sm">
             synch
-            <span className="block text-mustard-brand">AD.</span>
+            <span className="text-mustard-brand inline-block transform hover:rotate-6 transition-transform cursor-pointer">
+              AD.
+            </span>
           </h1>
+        </motion.div>
 
-          <div className="mt-6 flex items-center gap-4 flex-wrap">
-            <div className="border border-dashed border-charcoal-brand/30 rounded-2xl px-4 py-3 bg-cream-brand/50 shadow-inner flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-brand animate-pulse" />
-              <span className="font-mono text-sm font-bold uppercase tracking-wider text-charcoal-brand">
-                WEB • APP • EDITS
-              </span>
-            </div>
-            <div className={`${CLAY_CLASSES.cardEmerald} px-6 py-3 font-outfit text-xs font-black tracking-widest uppercase transform hover:rotate-1 transition-transform`}>
-              Digitalizing The Local
-            </div>
-          </div>
-
-          <p className="mt-6 font-inter text-lg md:text-xl text-charcoal-brand/80 max-w-xl leading-relaxed">
-            We bridge the gap between global technology and local businesses. From customized enterprise software setup to immersive editing, we digitalize what matters.
-          </p>
-
-          <div className="mt-10 flex items-center gap-6">
-            <Magnetic strength={0.3}>
-              <Link
-                href="#services"
-                className={`${CLAY_CLASSES.btnCharcoal} px-8 py-4 font-outfit font-black uppercase tracking-wider text-sm cursor-pointer`}
+        {/* ── Kinetic Word Cycler Ribbon ───────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="mt-4 sm:mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-sm sm:text-xl md:text-2xl font-outfit font-black uppercase tracking-wide w-full"
+        >
+          <span className="text-charcoal-brand/70 text-xs sm:text-lg md:text-xl">WE DIGITALIZE</span>
+          <div className="relative h-9 sm:h-11 md:h-12 min-w-[190px] sm:min-w-[280px] md:min-w-[320px] flex items-center justify-center">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={currentWord.text}
+                initial={{ y: 18, opacity: 0, scale: 0.92 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                exit={{ y: -18, opacity: 0, scale: 0.92 }}
+                transition={{ duration: 0.3, ease: "backOut" }}
+                style={{
+                  color: currentWord.color,
+                  backgroundColor: currentWord.bg,
+                }}
+                className="absolute px-3 sm:px-5 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl shadow-md border border-charcoal-brand/10 font-black tracking-wider text-xs sm:text-base md:text-xl whitespace-nowrap"
               >
-                View Offerings
-              </Link>
-            </Magnetic>
+                {currentWord.text}
+              </motion.span>
+            </AnimatePresence>
+          </div>
+        </motion.div>
+
+        {/* ── Subtitle Description ─────────────────────────────── */}
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.25 }}
+          className="mt-6 sm:mt-8 font-inter text-sm sm:text-base md:text-xl text-charcoal-brand/80 max-w-xl leading-relaxed font-medium px-2 sm:px-0"
+        >
+          We bridge the gap between global technology and local businesses. From customized enterprise software setup to immersive editing, we digitalize what matters.
+        </motion.p>
+
+        {/* ── Action Buttons (Dual CTAs - Optimized for Mobile Touch) ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.35 }}
+          className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-5 w-full sm:w-auto z-30 px-4 sm:px-0"
+        >
+          <Magnetic strength={0.3}>
+            <Link
+              href="#services"
+              className={`${CLAY_CLASSES.btnCharcoal} w-full sm:w-auto justify-center px-7 sm:px-9 py-3.5 sm:py-4 font-outfit font-black uppercase tracking-wider text-xs sm:text-base flex items-center gap-2.5 sm:gap-3 shadow-lg active:scale-95 group`}
+            >
+              <span>View Offerings</span>
+              <svg
+                className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            </Link>
+          </Magnetic>
+
+          <Magnetic strength={0.3}>
             <Link
               href="#team"
-              className="text-sm font-bold uppercase tracking-wider text-charcoal-brand hover:text-emerald-brand underline underline-offset-4 decoration-2 decoration-mustard-brand transition-colors"
+              className={`${CLAY_CLASSES.btnMustard} w-full sm:w-auto justify-center px-6 sm:px-8 py-3.5 sm:py-4 font-outfit font-black uppercase tracking-wider text-xs sm:text-base flex items-center gap-2.5 sm:gap-3 shadow-lg active:scale-95`}
             >
-              Meet The Founders &rarr;
+              <div className="flex items-center -space-x-1.5 sm:-space-x-2">
+                <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden border border-charcoal-brand/30">
+                  <Image src="/DEWANSH O_O.jpeg" alt="Dewansh" fill className="object-cover" />
+                </div>
+                <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden border border-charcoal-brand/30">
+                  <Image src="/aryan_proxy.png" alt="Aryan" fill className="object-cover" />
+                </div>
+              </div>
+              <span>Meet The Founders &rarr;</span>
             </Link>
+          </Magnetic>
+        </motion.div>
+
+        {/* ── Studio Power Ribbon Footer Bar ────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.45 }}
+          className="mt-10 sm:mt-14 pt-6 sm:pt-8 border-t border-charcoal-brand/15 w-full flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-8 md:gap-10 text-[11px] sm:text-xs md:text-sm font-outfit font-black uppercase tracking-wider text-charcoal-brand/70"
+        >
+          <div className="flex items-center gap-1.5 sm:gap-2 hover:text-emerald-brand transition-colors cursor-default">
+            <span className="text-emerald-brand text-xs sm:text-base">✦</span>
+            <span>100% Custom Code Stack</span>
           </div>
-        </div>
-
-        {/* ── Right Column: 3D Flip Card Carousel ─────────────────── */}
-        <div className="lg:col-span-1 flex flex-col items-center justify-center gap-6 select-none px-8">
-
-          {/* Scale stage responsively to prevent horizontal scroll issues on mobile */}
-          <div className="relative transform scale-80 sm:scale-90 md:scale-100 transition-transform duration-300">
-            {/* Card stage */}
-            <div
-              style={{
-                position: "relative",
-                width: "min(360px, 90vw)",
-                height: "480px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <FlipCard
-                activeSlide={activeSlide}
-                onMouseEnter={() => setIsPaused(true)}
-                onMouseLeave={() => setIsPaused(false)}
-              />
-            </div>
+          <div className="flex items-center gap-1.5 sm:gap-2 hover:text-mustard-brand transition-colors cursor-default">
+            <span className="text-mustard-brand text-xs sm:text-base">✦</span>
+            <span>Zero Template Constraints</span>
           </div>
-
-          {/* Dot pagination */}
-          <div style={{ display: "flex", gap: "10px", alignItems: "center" }} className="mt-4">
-            {SLIDES.map((s, i) => (
-              <motion.button
-                key={s.id}
-                onClick={() => setActiveSlide(i)}
-                animate={{
-                  width: i === activeSlide ? 28 : 10,
-                  height: 10,
-                  backgroundColor:
-                    i === activeSlide ? SLIDES[activeSlide].bg : "#1a1a1a",
-                  opacity: i === activeSlide ? 1 : 0.28,
-                }}
-                transition={{ duration: 0.35 }}
-                style={{
-                  borderRadius: "100px",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: 0,
-                }}
-                aria-label={`Go to slide ${i + 1}`}
-              />
-            ))}
+          <div className="flex items-center gap-1.5 sm:gap-2 hover:text-emerald-brand transition-colors cursor-default">
+            <span className="text-emerald-brand text-xs sm:text-base">✦</span>
+            <span>Direct Founder Execution</span>
           </div>
-
-        </div>
+        </motion.div>
 
       </div>
     </section>

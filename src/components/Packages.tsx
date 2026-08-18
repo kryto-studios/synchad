@@ -39,7 +39,7 @@ export default function Packages() {
       ],
       isPopular: true,
       cta: "Initialize Growth",
-      themeClass: `${CLAY_CLASSES.cardMustard} relative scale-105 z-10`,
+      themeClass: `${CLAY_CLASSES.cardMustard} relative md:scale-105 z-10`,
       buttonClass: CLAY_CLASSES.btnCharcoal,
     },
     {
@@ -102,7 +102,7 @@ export default function Packages() {
               className={`h-full p-8 flex flex-col justify-between ${tier.themeClass}`}
             >
               {tier.isPopular && (
-                <div className={`absolute top-0 right-8 transform -translate-y-1/2 ${CLAY_CLASSES.cardEmerald} text-cream-brand font-outfit text-[9px] font-black uppercase tracking-widest px-3.5 py-1.5 rotate-2 rounded-full`}>
+                <div className={`absolute top-0 right-6 md:right-8 transform -translate-y-1/2 ${CLAY_CLASSES.cardEmerald} text-cream-brand font-outfit text-[9px] font-black uppercase tracking-widest px-3.5 py-1.5 rotate-2 rounded-full z-20 shadow-md`}>
                   Best Value Framework
                 </div>
               )}

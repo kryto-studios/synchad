@@ -21,6 +21,14 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>("");
 
   useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY < 100) {
+        setActiveSection("");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
     const sectionIds = navLinks.map((l) => l.section);
     const observers: IntersectionObserver[] = [];
 
@@ -29,15 +37,20 @@ export default function Navbar() {
       if (!el) return;
       const obs = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) setActiveSection(id);
+          if (entry.isIntersecting && window.scrollY >= 100) {
+            setActiveSection(id);
+          }
         },
-        { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+        { rootMargin: "-30% 0px -45% 0px", threshold: 0 }
       );
       obs.observe(el);
       observers.push(obs);
     });
 
-    return () => observers.forEach((o) => o.disconnect());
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observers.forEach((o) => o.disconnect());
+    };
   }, []);
 
   return (

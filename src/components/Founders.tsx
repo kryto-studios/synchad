@@ -120,10 +120,11 @@ export default function Founders() {
                   src="/DEWANSH O_O.jpeg"
                   alt="Dewansh Chatterjee"
                   fill
-                  className="object-cover object-top grayscale contrast-125 brightness-95"
+                  sizes="(max-width: 768px) 224px, 224px"
+                  className="object-cover object-top contrast-110 brightness-100"
                 />
               </div>
-              <div className="absolute -bottom-3 right-4 bg-charcoal-brand text-cream-brand border border-cream-brand text-[10px] font-mono px-3 py-1 uppercase tracking-widest rounded-full shadow-md">
+              <div className="absolute -bottom-3 right-4 bg-charcoal-brand text-cream-brand border border-cream-brand text-[10px] font-mono px-3 py-1 uppercase tracking-widest rounded-full shadow-md z-10">
                 Co-Founder & CEO
               </div>
             </div>
@@ -164,10 +165,11 @@ export default function Founders() {
                   src="/aryan_proxy.png"
                   alt="Aryan Gupta"
                   fill
-                  className="object-cover object-top grayscale contrast-125"
+                  sizes="(max-width: 768px) 224px, 224px"
+                  className="object-cover object-top contrast-110 brightness-100"
                 />
               </div>
-              <div className="absolute -bottom-3 right-4 bg-charcoal-brand text-cream-brand border border-cream-brand text-[10px] font-mono px-3 py-1 uppercase tracking-widest rounded-full shadow-md">
+              <div className="absolute -bottom-3 right-4 bg-charcoal-brand text-cream-brand border border-cream-brand text-[10px] font-mono px-3 py-1 uppercase tracking-widest rounded-full shadow-md z-10">
                 Co-Founder & COO
               </div>
             </div>
