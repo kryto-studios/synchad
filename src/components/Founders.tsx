@@ -2,8 +2,6 @@
 
 import Image from "next/image";
 import { Mail, Phone, Globe } from "lucide-react";
-import { motion } from "framer-motion";
-import Magnetic from "./Magnetic";
 import { CLAY_CLASSES } from "./ClayStyles";
 
 const InstagramIcon = ({ className }: { className?: string }) => (
@@ -14,52 +12,45 @@ const InstagramIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-
 export default function Founders() {
   const skills = [
-    { name: "Figma", color: "bg-mustard-brand/10 text-charcoal-brand border-mustard-brand/30 shadow-[inset_-2px_-2px_6px_rgba(245,176,46,0.06),_inset_2px_2px_6px_rgba(255,255,255,0.75),_2px_2px_6px_rgba(245,176,46,0.08)]" },
-    { name: "Next.js", color: "bg-emerald-brand/10 text-emerald-brand border-emerald-brand/20 shadow-[inset_-2px_-2px_6px_rgba(6,44,33,0.06),_inset_2px_2px_6px_rgba(255,255,255,0.75),_2px_2px_6px_rgba(6,44,33,0.08)]" },
-    { name: "Supabase", color: "bg-emerald-brand/10 text-emerald-brand border-emerald-brand/20 shadow-[inset_-2px_-2px_6px_rgba(6,44,33,0.06),_inset_2px_2px_6px_rgba(255,255,255,0.75),_2px_2px_6px_rgba(6,44,33,0.08)]" },
-    { name: "Python", color: "bg-emerald-brand/10 text-emerald-brand border-emerald-brand/20 shadow-[inset_-2px_-2px_6px_rgba(6,44,33,0.06),_inset_2px_2px_6px_rgba(255,255,255,0.75),_2px_2px_6px_rgba(6,44,33,0.08)]" },
-    { name: "Premiere Pro", color: "bg-mustard-brand/10 text-charcoal-brand border-mustard-brand/30 shadow-[inset_-2px_-2px_6px_rgba(245,176,46,0.06),_inset_2px_2px_6px_rgba(255,255,255,0.75),_2px_2px_6px_rgba(245,176,46,0.08)]" },
-    { name: "After Effects", color: "bg-mustard-brand/10 text-charcoal-brand border-mustard-brand/30 shadow-[inset_-2px_-2px_6px_rgba(245,176,46,0.06),_inset_2px_2px_6px_rgba(255,255,255,0.75),_2px_2px_6px_rgba(245,176,46,0.08)]" },
-    { name: "DaVinci Resolve", color: "bg-mustard-brand/10 text-charcoal-brand border-mustard-brand/30 shadow-[inset_-2px_-2px_6px_rgba(245,176,46,0.06),_inset_2px_2px_6px_rgba(255,255,255,0.75),_2px_2px_6px_rgba(245,176,46,0.08)]" },
+    { name: "React & Next.js", color: "bg-emerald-brand/10 text-emerald-brand border-emerald-brand/20 shadow-sm" },
+    { name: "Django & Python", color: "bg-emerald-brand/10 text-emerald-brand border-emerald-brand/20 shadow-sm" },
+    { name: "Supabase & SQL", color: "bg-emerald-brand/10 text-emerald-brand border-emerald-brand/20 shadow-sm" },
+    { name: "Node.js & APIs", color: "bg-emerald-brand/10 text-emerald-brand border-emerald-brand/20 shadow-sm" },
+    { name: "Premiere Pro", color: "bg-mustard-brand/10 text-charcoal-brand border-mustard-brand/30 shadow-sm" },
+    { name: "After Effects", color: "bg-mustard-brand/10 text-charcoal-brand border-mustard-brand/30 shadow-sm" },
+    { name: "DaVinci Resolve", color: "bg-mustard-brand/10 text-charcoal-brand border-mustard-brand/30 shadow-sm" },
+    { name: "Meta Ads & SEO", color: "bg-mustard-brand/10 text-charcoal-brand border-mustard-brand/30 shadow-sm" },
   ];
 
-  const projects = [
+  const valuePillars = [
     {
-      role: "Eklavya Library App",
-      company: "Next.js & Supabase portal deployed on Vercel.",
-      period: "Production Setup",
+      title: "End-to-End Execution",
+      desc: "Code and content under one roof. No separate agencies needed.",
+      tag: "FULL STACK + MEDIA",
     },
     {
-      role: "Krishna LMS",
-      company: "Library visitor portal and administrative control system.",
-      period: "Management Dashboard",
+      title: "Modern & Scalable Codebases",
+      desc: "Clean architecture, robust security, and fast load speeds.",
+      tag: "PERFORMANCE",
     },
     {
-      role: "Collaborative: medibuddy",
-      company: "Full stack digital medical scheduling solution.",
-      period: "Co-developer",
-    },
-    {
-      role: "Collaborative: neuronest",
-      company: "Localized AI utility interface for text generation.",
-      period: "Co-developer",
+      title: "Retention-Focused Media",
+      desc: "Edits and campaigns engineered to hold viewer attention and convert.",
+      tag: "HIGH RETENTION",
     },
   ];
 
   // Draw a premium mockup QR Code in SVG
   const QRCodeSVG = () => (
     <svg viewBox="0 0 100 100" className="w-20 h-20 text-charcoal-brand">
-      {/* Corner Anchors */}
       <rect x="5" y="5" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="4" />
       <rect x="9" y="9" width="14" height="14" fill="currentColor" />
       <rect x="73" y="5" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="4" />
       <rect x="77" y="9" width="14" height="14" fill="currentColor" />
       <rect x="5" y="73" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="4" />
       <rect x="9" y="77" width="14" height="14" fill="currentColor" />
-      {/* Grid Dotted Pattern */}
       <rect x="35" y="5" width="6" height="6" fill="currentColor" />
       <rect x="47" y="11" width="12" height="6" fill="currentColor" />
       <rect x="35" y="23" width="6" height="6" fill="currentColor" />
@@ -88,7 +79,6 @@ export default function Founders() {
       <rect x="65" y="71" width="6" height="18" fill="currentColor" />
       <rect x="77" y="77" width="12" height="6" fill="currentColor" />
       <rect x="89" y="83" width="6" height="12" fill="currentColor" />
-      {/* Tiny Center Dot */}
       <rect x="47" y="47" width="6" height="6" fill="currentColor" />
     </svg>
   );
@@ -96,56 +86,63 @@ export default function Founders() {
   return (
     <section 
       id="team" 
-      className="w-full border-b border-charcoal-brand py-20 px-6 md:px-12 bg-cream-brand"
+      className="w-full border-b border-charcoal-brand py-20 px-6 md:px-12 bg-cream-brand select-none"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="flex items-center justify-between mb-16 border-b border-charcoal-brand/10 pb-4">
-          <h2 className="font-outfit text-5xl font-black uppercase tracking-wider text-charcoal-brand flex items-center gap-3">
+          <h2 className="font-outfit text-4xl sm:text-5xl font-black uppercase tracking-wider text-charcoal-brand flex items-center gap-3">
             <span className="w-4 h-4 bg-mustard-brand border border-charcoal-brand rounded-full inline-block flex-shrink-0" />
-            Co-Founders & Team
+            About The Founders
           </h2>
-          <span className="font-mono text-xs text-charcoal-brand/50">synchAD Profile // 2026</span>
+          <span className="font-mono text-xs text-charcoal-brand/50 uppercase tracking-widest hidden sm:inline-block">
+            DIRECT FOUNDER EXECUTION
+          </span>
         </div>
 
-        {/* Co-founder Portraits & Zine Layout Grid */}
+        {/* Co-founder Profiles Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
-          {/* Left Side: Dewansh Portrait & Info */}
-          <div className="lg:col-span-6 flex flex-col md:flex-row gap-8 items-stretch h-full">
-            {/* High contrast Dewansh portrait frame */}
-            <div className="relative flex-shrink-0 mx-auto md:mx-0">
+          
+          {/* Left Side: Dewansh Chatterjee */}
+          <div className="lg:col-span-6 flex flex-col sm:flex-row gap-6 sm:gap-8 items-stretch h-full">
+            <div className="relative flex-shrink-0 mx-auto sm:mx-0">
               <div className={`${CLAY_CLASSES.cardMustard} absolute -inset-2 transform -rotate-3 pointer-events-none rounded-[32px]`} />
-              <div className="relative w-56 h-64 border border-charcoal-brand/35 rounded-3xl overflow-hidden bg-charcoal-brand shadow-lg">
+              <div className="relative w-52 sm:w-56 h-64 border border-charcoal-brand/35 rounded-3xl overflow-hidden bg-charcoal-brand shadow-lg">
                 <Image
                   src="/DEWANSH O_O.jpeg"
                   alt="Dewansh Chatterjee"
                   fill
-                  sizes="(max-width: 768px) 224px, 224px"
+                  sizes="(max-width: 768px) 208px, 224px"
                   className="object-cover object-top contrast-110 brightness-100"
                 />
               </div>
-              <div className="absolute -bottom-3 right-4 bg-charcoal-brand text-cream-brand border border-cream-brand text-[10px] font-mono px-3 py-1 uppercase tracking-widest rounded-full shadow-md z-10">
-                Co-Founder & CEO
+              <div className="absolute -bottom-3 right-4 bg-charcoal-brand text-cream-brand border border-cream-brand text-[9px] sm:text-[10px] font-mono px-3 py-1 uppercase tracking-widest rounded-full shadow-md z-10">
+                Co-Founder
               </div>
             </div>
 
-            {/* Dewansh Bio info */}
-            <div className="flex-grow">
-              <div className="relative mb-2">
-                <span className="absolute -left-6 -top-5 font-outfit text-4xl text-mustard-brand font-black opacity-80">“</span>
-                <h3 className="font-outfit text-3xl font-black text-charcoal-brand relative">HELLO.</h3>
+            <div className="flex-grow flex flex-col justify-between">
+              <div>
+                <h3 className="font-outfit text-3xl font-black text-charcoal-brand mb-1">
+                  Dewansh Chatterjee
+                </h3>
+                <p className="font-mono text-xs font-bold text-emerald-brand uppercase tracking-wider mb-3">
+                  Front-End, Creative Direction, Client Consultation & Idea Conception
+                </p>
+                <p className="font-inter text-sm text-charcoal-brand/85 leading-relaxed font-medium">
+                  Drives end-to-end software execution, agile development lifecycles, and client operations to ensure reliable, on-time project delivery.
+                </p>
               </div>
-              <p className="font-inter text-sm text-charcoal-brand/85 leading-relaxed">
-                I am <strong className="text-emerald-brand font-bold">Dewansh Chatterjee</strong>. I focus on backend architectures, Supabase databases, and responsive full-stack applications. My goal is to build digital infrastructure that local merchants can rely on to grow, bringing modern tech solutions to local markets.
-              </p>
               
-              <div className="mt-6 border-t border-dashed border-charcoal-brand/10 pt-4">
-                <span className="font-mono text-[11px] uppercase tracking-wider text-charcoal-brand/50 block mb-2">Focus Areas</span>
-                <div className="flex flex-wrap gap-2">
-                  {["Next.js Framework", "Supabase Schema Design", "Python API Automation"].map((tag) => (
+              <div className="mt-6 border-t border-dashed border-charcoal-brand/15 pt-4">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-charcoal-brand/50 block mb-2 font-black">
+                  Core Focus
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {["Front-End Architecture", "Creative Direction", "Client Consultation", "Agile Execution"].map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] font-mono font-black px-3 py-1.5 border border-emerald-brand/20 bg-emerald-brand/10 text-emerald-brand rounded-xl shadow-[inset_-2px_-2px_6px_rgba(6,44,33,0.06),_inset_2px_2px_6px_rgba(255,255,255,0.75),_2px_2px_6px_rgba(6,44,33,0.08)] transition-all duration-300 hover:-translate-y-0.5 cursor-default"
+                      className="text-[10px] font-mono font-bold px-2.5 py-1 border border-emerald-brand/20 bg-emerald-brand/10 text-emerald-brand rounded-lg"
                     >
                       {tag}
                     </span>
@@ -155,42 +152,46 @@ export default function Founders() {
             </div>
           </div>
 
-          {/* Right Side: Aryan Portrait & Info */}
-          <div className="lg:col-span-6 flex flex-col md:flex-row gap-8 items-stretch h-full">
-            {/* High contrast Aryan portrait frame */}
-            <div className="relative flex-shrink-0 mx-auto md:mx-0">
+          {/* Right Side: Aryan Gupta */}
+          <div className="lg:col-span-6 flex flex-col sm:flex-row gap-6 sm:gap-8 items-stretch h-full">
+            <div className="relative flex-shrink-0 mx-auto sm:mx-0">
               <div className={`${CLAY_CLASSES.cardEmerald} absolute -inset-2 transform rotate-2 pointer-events-none rounded-[32px]`} />
-              <div className="relative w-56 h-64 border border-charcoal-brand/35 rounded-3xl overflow-hidden bg-charcoal-brand shadow-lg">
+              <div className="relative w-52 sm:w-56 h-64 border border-charcoal-brand/35 rounded-3xl overflow-hidden bg-charcoal-brand shadow-lg">
                 <Image
                   src="/aryan_proxy.png"
                   alt="Aryan Gupta"
                   fill
-                  sizes="(max-width: 768px) 224px, 224px"
+                  sizes="(max-width: 768px) 208px, 224px"
                   className="object-cover object-top contrast-110 brightness-100"
                 />
               </div>
-              <div className="absolute -bottom-3 right-4 bg-charcoal-brand text-cream-brand border border-cream-brand text-[10px] font-mono px-3 py-1 uppercase tracking-widest rounded-full shadow-md z-10">
-                Co-Founder & COO
+              <div className="absolute -bottom-3 right-4 bg-charcoal-brand text-cream-brand border border-cream-brand text-[9px] sm:text-[10px] font-mono px-3 py-1 uppercase tracking-widest rounded-full shadow-md z-10">
+                Co-Founder
               </div>
             </div>
 
-            {/* Aryan Bio info */}
-            <div className="flex-grow">
-              <div className="relative mb-2">
-                <span className="absolute -left-6 -top-5 font-outfit text-4xl text-mustard-brand font-black opacity-80">“</span>
-                <h3 className="font-outfit text-3xl font-black text-charcoal-brand relative">NAMASTE.</h3>
+            <div className="flex-grow flex flex-col justify-between">
+              <div>
+                <h3 className="font-outfit text-3xl font-black text-charcoal-brand mb-1">
+                  Aryan Gupta
+                </h3>
+                <p className="font-mono text-xs font-bold text-mustard-brand uppercase tracking-wider mb-3">
+                  Database Architecture, Backend Systems & Post-delivery Client Operations
+                </p>
+                <p className="font-inter text-sm text-charcoal-brand/85 leading-relaxed font-medium">
+                  Specializes in architecting scalable database systems, full-stack web platforms, and directing high-conversion visual storytelling workflows.
+                </p>
               </div>
-              <p className="font-inter text-sm text-charcoal-brand/85 leading-relaxed">
-                I am <strong className="text-mustard-brand font-bold">Aryan Gupta</strong>. I lead our creative post-production pipelines, motion assets creation, and client engagement. Together with Dewansh, we ensure that synchAD combines bleeding-edge web engineering with premium video and application visual designs.
-              </p>
               
-              <div className="mt-6 border-t border-dashed border-charcoal-brand/10 pt-4">
-                <span className="font-mono text-[11px] uppercase tracking-wider text-charcoal-brand/50 block mb-2">Creative Tools</span>
-                <div className="flex flex-wrap gap-2">
-                  {["Figma Visual Layouts", "After Effects Motion", "DaVinci Resolve timelines"].map((tag) => (
+              <div className="mt-6 border-t border-dashed border-charcoal-brand/15 pt-4">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-charcoal-brand/50 block mb-2 font-black">
+                  Core Focus
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {["Database Architecture", "Backend Systems", "Post-Delivery Operations", "Supabase SQL"].map((tag) => (
                     <span
                       key={tag}
-                      className="text-[10px] font-mono font-black px-3 py-1.5 border border-mustard-brand/30 bg-mustard-brand/10 text-charcoal-brand rounded-xl shadow-[inset_-2px_-2px_6px_rgba(245,176,46,0.06),_inset_2px_2px_6px_rgba(255,255,255,0.75),_2px_2px_6px_rgba(245,176,46,0.08)] transition-all duration-300 hover:-translate-y-0.5 cursor-default"
+                      className="text-[10px] font-mono font-bold px-2.5 py-1 border border-mustard-brand/30 bg-mustard-brand/10 text-charcoal-brand rounded-lg"
                     >
                       {tag}
                     </span>
@@ -199,18 +200,20 @@ export default function Founders() {
               </div>
             </div>
           </div>
+
         </div>
 
-        {/* Lower row: QR Code card & Skills/Projects section */}
+        {/* Lower Row: Contact Card & Tech Ecosystem */}
         <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* Card 1: Interactive Let's Work Together QR card */}
-          <div className={`lg:col-span-4 h-full ${CLAY_CLASSES.cardCream} p-6 flex flex-col md:flex-row lg:flex-col items-center justify-between gap-6`}>
-            <div className="flex-grow text-center md:text-left lg:text-center">
+          
+          {/* Card 1: Direct Contact Card */}
+          <div className={`lg:col-span-4 h-full ${CLAY_CLASSES.cardCream} p-6 flex flex-col justify-between gap-6`}>
+            <div>
               <h4 className="font-outfit text-xl font-bold uppercase text-charcoal-brand border-b border-dashed border-charcoal-brand/20 pb-2 mb-4">
-                Let&apos;s Work Together :
+                Direct Contact :
               </h4>
               
-              <div className="flex flex-col gap-2.5 items-center md:items-start lg:items-center text-xs font-mono text-charcoal-brand/80">
+              <div className="flex flex-col gap-3 text-xs font-mono text-charcoal-brand/85 font-semibold">
                 <a href="mailto:synchad.studio@gmail.com" className="flex items-center gap-2 hover:text-emerald-brand transition-colors">
                   <Mail className="w-4 h-4 text-emerald-brand" />
                   synchad.studio@gmail.com
@@ -225,13 +228,12 @@ export default function Founders() {
                 </a>
                 <span className="flex items-center gap-2">
                   <Globe className="w-4 h-4 text-mustard-brand" />
-                  synchad.vercel.app
+                  synchad.com
                 </span>
               </div>
             </div>
 
-            {/* Styled QR Code Box */}
-            <div className={`relative ${CLAY_CLASSES.cardMustard} p-3 flex-shrink-0 flex items-center justify-center rounded-2xl`}>
+            <div className={`relative ${CLAY_CLASSES.cardMustard} p-3 flex items-center justify-center rounded-2xl self-start`}>
               <QRCodeSVG />
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-cream-brand border border-charcoal-brand flex items-center justify-center p-0.5 rounded-md">
                 <span className="font-outfit text-[6px] font-black text-charcoal-brand">sAD</span>
@@ -239,22 +241,22 @@ export default function Founders() {
             </div>
           </div>
 
-          {/* Card 2: Software Skills & Tech stack */}
+          {/* Card 2: Combined Tech Ecosystem Stack */}
           <div className={`lg:col-span-4 h-full ${CLAY_CLASSES.cardCream} p-6 flex flex-col justify-between`}>
             <div>
               <h4 className="font-outfit text-xl font-bold uppercase text-charcoal-brand border-b border-dashed border-charcoal-brand/20 pb-2 mb-4">
-                Tech Ecosystem :
+                Unified Tech Stack :
               </h4>
-              <p className="text-xs text-charcoal-brand/70 mb-4 leading-relaxed">
-                We design, program, and edit within a highly structured stack, matching raw technical speed with custom motion design layouts.
+              <p className="text-xs text-charcoal-brand/75 mb-4 leading-relaxed font-medium">
+                Engineered with production-ready software tools and post-production creative software.
               </p>
             </div>
             
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 pt-2">
               {skills.map((skill, i) => (
                 <span
                   key={i}
-                  className={`text-xs font-mono font-bold px-3 py-1.5 border rounded-xl transition-all duration-300 hover:-translate-y-0.5 cursor-default ${skill.color}`}
+                  className={`text-xs font-mono font-bold px-3 py-1.5 border rounded-xl cursor-default ${skill.color}`}
                 >
                   {skill.name}
                 </span>
@@ -262,32 +264,33 @@ export default function Founders() {
             </div>
           </div>
 
-          {/* Card 3: Active reference projects list */}
+          {/* Card 3: Core Value Propositions */}
           <div className={`lg:col-span-4 h-full ${CLAY_CLASSES.cardCream} p-6 flex flex-col justify-between`}>
             <div>
               <h4 className="font-outfit text-xl font-bold uppercase text-charcoal-brand border-b border-dashed border-charcoal-brand/20 pb-2 mb-4">
-                Active Projects Portfolio :
+                Our Value Props :
               </h4>
               
               <div className="flex flex-col gap-4">
-                {projects.map((proj, i) => (
-                  <div key={i} className="flex justify-between items-start gap-4">
+                {valuePillars.map((vp, i) => (
+                  <div key={i} className="flex justify-between items-start gap-3">
                     <div>
                       <span className="font-inter text-xs font-bold text-charcoal-brand block">
-                        {proj.role}
+                        {vp.title}
                       </span>
-                      <span className="font-inter text-[11px] text-charcoal-brand/60 block">
-                        {proj.company}
+                      <span className="font-inter text-[11px] text-charcoal-brand/70 block mt-0.5 leading-tight">
+                        {vp.desc}
                       </span>
                     </div>
-                    <span className={`${CLAY_CLASSES.cardEmerald} font-mono text-[9px] uppercase font-bold text-cream-brand px-2.5 py-0.5 rounded-full flex-shrink-0`}>
-                      {proj.period}
+                    <span className={`${CLAY_CLASSES.cardEmerald} font-mono text-[8px] uppercase font-bold text-cream-brand px-2 py-0.5 rounded-full flex-shrink-0`}>
+                      {vp.tag}
                     </span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>

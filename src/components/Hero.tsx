@@ -285,14 +285,13 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* ── Subtitle Description ─────────────────────────────── */}
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.25 }}
           className="mt-6 sm:mt-8 font-inter text-sm sm:text-base md:text-xl text-charcoal-brand/80 max-w-xl leading-relaxed font-medium px-2 sm:px-0"
         >
-          We bridge the gap between global technology and local businesses. From customized enterprise software setup to immersive editing, we digitalize what matters.
+          We bridge software engineering and creative distribution under one roof. From production-grade web platforms to retention-focused media and growth campaigns.
         </motion.p>
 
         {/* ── Action Buttons (Dual CTAs - Optimized for Mobile Touch) ── */}
