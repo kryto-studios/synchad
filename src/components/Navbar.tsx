@@ -10,10 +10,10 @@ import { CLAY_CLASSES } from "./ClayStyles";
 
 const navLinks = [
   { name: "Services", href: "#services", id: "nav-services", section: "services" },
-  { name: "Work", href: "#work", id: "nav-work", section: "work" },
-  { name: "Process", href: "#process", id: "nav-process", section: "process" },
+  { name: "Projects", href: "#projects", id: "nav-projects", section: "projects" },
+  { name: "Packages", href: "#packages", id: "nav-packages", section: "packages" },
   { name: "Team", href: "#team", id: "nav-team", section: "team" },
-  { name: "Pricing", href: "#packages", id: "nav-pricing", section: "packages" },
+  { name: "FAQ", href: "#faq", id: "nav-faq", section: "faq" },
   { name: "Contact", href: "#contact", id: "nav-contact", section: "contact" },
 ];
 

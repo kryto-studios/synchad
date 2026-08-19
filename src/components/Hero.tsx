@@ -62,6 +62,7 @@ export default function Hero() {
   const [wordIndex, setWordIndex] = useState(0);
   const [isDewHovered, setIsDewHovered] = useState(false);
   const [isAryHovered, setIsAryHovered] = useState(false);
+  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
 
   // Auto-cycle kinetic words
   useEffect(() => {
@@ -71,11 +72,20 @@ export default function Hero() {
     return () => clearInterval(interval);
   }, []);
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setMouseOffset({ x, y });
+  };
+
   const currentWord = DYNAMIC_WORDS[wordIndex];
 
   return (
     <section
       ref={containerRef}
+      onMouseMove={handleMouseMove}
       className="relative w-full min-h-[85vh] sm:min-h-[90vh] lg:min-h-[92vh] flex flex-col items-center justify-center border-b border-charcoal-brand py-12 sm:py-20 px-6 sm:px-10 md:px-14 lg:px-16 overflow-hidden bg-cream-brand select-none"
     >
       {/* Decorative Doodles */}
@@ -107,48 +117,48 @@ export default function Hero() {
           initial={{ opacity: 0, x: -80 }}
           animate={{
             opacity: 1,
-            x: 0,
-            y: [0, -10, 0, -14, 0],
+            x: mouseOffset.x * -28,
+            y: [mouseOffset.y * -15, mouseOffset.y * -15 - 16, mouseOffset.y * -15, mouseOffset.y * -15 - 10, mouseOffset.y * -15],
             rotate: [0, 1.5, -1, 0.5, 0],
           }}
-          whileHover={{ scale: 1.04 }}
+          whileHover={{ scale: 1.06, y: -24 }}
           whileTap={{ scale: 0.94 }}
           transition={{
             opacity: { duration: 0.8, ease: "easeOut" },
-            x: { duration: 0.8, ease: "easeOut" },
-            y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
-            rotate: { duration: 6.5, repeat: Infinity, ease: "easeInOut" },
+            x: { duration: 0.2, ease: "easeOut" },
+            y: { duration: 5.2, repeat: Infinity, ease: "easeInOut" },
+            rotate: { duration: 6, repeat: Infinity, ease: "easeInOut" },
           }}
-          className="absolute bottom-0 left-[-30px] lg:left-[10px] xl:left-[40px] z-20 pointer-events-auto cursor-pointer select-none max-h-[80vh] items-end"
+          className="absolute top-[4%] lg:top-[6%] bottom-[8%] lg:bottom-[12%] left-[-10px] lg:left-[0px] xl:left-[15px] 2xl:left-[35px] z-20 pointer-events-auto cursor-pointer select-none flex items-center justify-center py-2"
         >
-          <div className="relative lg:w-[380px] xl:w-[440px] aspect-[5/7]">
+          <div className="relative lg:w-[410px] xl:w-[480px] 2xl:w-[540px] h-full max-h-[78vh] aspect-[5/7]">
             {/* Default Avatar */}
             <motion.div
               animate={{ opacity: isDewHovered ? 0 : 1 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="absolute inset-0"
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="absolute inset-0 flex items-center justify-center"
             >
               <Image
                 src="/avatar_dew_full_v2.png"
                 alt="Dewansh Chatterjee - Co-Founder"
                 fill
                 priority
-                className="object-contain object-bottom filter drop-shadow-xl"
+                className="object-contain filter drop-shadow-2xl"
               />
             </motion.div>
 
             {/* Hover Intro Avatar */}
             <motion.div
               animate={{ opacity: isDewHovered ? 1 : 0 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="absolute inset-0"
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="absolute inset-0 flex items-center justify-center"
             >
               <Image
                 src="/avatar_dew_intro_v2.png"
                 alt="Dewansh Chatterjee - Intro"
                 fill
                 priority
-                className="object-contain object-bottom filter drop-shadow-xl"
+                className="object-contain filter drop-shadow-2xl"
               />
             </motion.div>
           </div>
@@ -163,48 +173,48 @@ export default function Hero() {
           initial={{ opacity: 0, x: 80 }}
           animate={{
             opacity: 1,
-            x: 0,
-            y: [0, -12, 0, -6, 0],
+            x: mouseOffset.x * 28,
+            y: [mouseOffset.y * -15, mouseOffset.y * -15 - 14, mouseOffset.y * -15, mouseOffset.y * -15 - 18, mouseOffset.y * -15],
             rotate: [0, -1.5, 1, -0.5, 0],
           }}
-          whileHover={{ scale: 1.04 }}
+          whileHover={{ scale: 1.06, y: -24 }}
           whileTap={{ scale: 0.94 }}
           transition={{
             opacity: { duration: 0.8, ease: "easeOut" },
-            x: { duration: 0.8, ease: "easeOut" },
-            y: { duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 },
-            rotate: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.3 },
+            x: { duration: 0.2, ease: "easeOut" },
+            y: { duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 0.3 },
+            rotate: { duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 },
           }}
-          className="absolute bottom-0 right-[-30px] lg:right-[10px] xl:right-[40px] z-20 pointer-events-auto cursor-pointer select-none max-h-[80vh] items-end"
+          className="absolute top-[6%] lg:top-[8%] bottom-[12%] lg:bottom-[16%] right-[0px] lg:right-[5px] xl:right-[25px] 2xl:right-[45px] z-20 pointer-events-auto cursor-pointer select-none flex items-center justify-center py-2"
         >
-          <div className="relative lg:w-[380px] xl:w-[440px] aspect-[5/7]">
+          <div className="relative lg:w-[325px] xl:w-[385px] 2xl:w-[430px] h-full max-h-[75vh] aspect-[5/7]">
             {/* Default Avatar */}
             <motion.div
               animate={{ opacity: isAryHovered ? 0 : 1 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="absolute inset-0"
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="absolute inset-0 flex items-center justify-center"
             >
               <Image
-                src="/avatar_ary_left_full.png"
+                src="/avatar_ary_full_v3.png"
                 alt="Aryan Gupta - Co-Founder"
                 fill
                 priority
-                className="object-contain object-bottom filter drop-shadow-xl"
+                className="object-contain filter drop-shadow-2xl"
               />
             </motion.div>
 
             {/* Hover Intro Avatar */}
             <motion.div
               animate={{ opacity: isAryHovered ? 1 : 0 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="absolute inset-0"
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="absolute inset-0 flex items-center justify-center"
             >
               <Image
-                src="/avatar_ary_intro.png"
+                src="/avatar_ary_intro_v4.png"
                 alt="Aryan Gupta - Intro"
                 fill
                 priority
-                className="object-contain object-bottom filter drop-shadow-xl"
+                className="object-contain filter drop-shadow-2xl"
               />
             </motion.div>
           </div>
@@ -218,19 +228,19 @@ export default function Hero() {
           animate={{
             opacity: 1,
             x: 0,
-            y: [0, -8, 0, -4, 0],
-            rotate: [0, 1, -1, 0],
+            y: [0, -12, 0, -6, 0],
+            rotate: [0, 1.5, -1, 0],
           }}
           whileTap={{ scale: 0.94 }}
           transition={{
             opacity: { duration: 0.8, ease: "easeOut" },
             x: { duration: 0.8, ease: "easeOut" },
-            y: { duration: 5.5, repeat: Infinity, ease: "easeInOut" },
-            rotate: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+            y: { duration: 4.8, repeat: Infinity, ease: "easeInOut" },
+            rotate: { duration: 5.4, repeat: Infinity, ease: "easeInOut" },
           }}
-          className="absolute top-[16%] xs:top-[18%] sm:top-[22%] left-[-5px] xs:left-[0px] sm:left-[10px] z-10 pointer-events-auto cursor-pointer select-none flex items-center"
+          className="absolute top-[8%] xs:top-[10%] sm:top-[12%] left-[0px] sm:left-[15px] z-10 pointer-events-auto cursor-pointer select-none flex items-center"
         >
-          <div className="relative w-[130px] xs:w-[155px] sm:w-[210px] aspect-[5/7]">
+          <div className="relative w-[140px] xs:w-[170px] sm:w-[225px] aspect-[5/7]">
             <Image
               src="/avatar_dew_edge_mobile.png"
               alt="Dewansh Chatterjee - Co-Founder"
@@ -249,21 +259,21 @@ export default function Hero() {
           animate={{
             opacity: 1,
             x: 0,
-            y: [0, -8, 0, -5, 0],
-            rotate: [0, -1, 1, 0],
+            y: [0, -10, 0, -14, 0],
+            rotate: [0, -1.5, 1, 0],
           }}
           whileTap={{ scale: 0.94 }}
           transition={{
             opacity: { duration: 0.8, ease: "easeOut" },
             x: { duration: 0.8, ease: "easeOut" },
-            y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.2 },
-            rotate: { duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 },
+            y: { duration: 4.4, repeat: Infinity, ease: "easeInOut", delay: 0.3 },
+            rotate: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.3 },
           }}
-          className="absolute top-[16%] xs:top-[18%] sm:top-[22%] right-[-5px] xs:right-[0px] sm:right-[10px] z-10 pointer-events-auto cursor-pointer select-none flex items-center"
+          className="absolute top-[8%] xs:top-[10%] sm:top-[12%] right-[0px] sm:right-[15px] z-10 pointer-events-auto cursor-pointer select-none flex items-center"
         >
           <div className="relative w-[130px] xs:w-[155px] sm:w-[210px] aspect-[5/7]">
             <Image
-              src="/avatar_ary_edge_mobile_v2.png"
+              src="/avatar_ary_full_v3.png"
               alt="Aryan Gupta - Co-Founder"
               fill
               priority
@@ -274,7 +284,13 @@ export default function Hero() {
       </Link>
 
       {/* ── Main Centered Kinetic Content Container ───────────── */}
-      <div className="max-w-4xl w-full mx-auto flex flex-col items-center text-center z-20 relative">
+      <motion.div
+        style={{
+          transform: `translate(${mouseOffset.x * 12}px, ${mouseOffset.y * 8}px)`,
+          transition: "transform 0.15s ease-out"
+        }}
+        className="max-w-4xl w-full mx-auto flex flex-col items-center text-center z-20 relative"
+      >
         
         {/* Top Header Intro Text */}
         <motion.div
@@ -343,10 +359,10 @@ export default function Hero() {
           transition={{ duration: 0.5, delay: 0.25 }}
           className="mt-6 sm:mt-8 font-inter text-sm sm:text-base md:text-xl text-charcoal-brand/80 max-w-xl leading-relaxed font-medium px-4 sm:px-0"
         >
-          Build a stronger digital presence with custom technology, high-quality creative content, and growth-focused marketing — all under one roof.
+          We bridge software engineering and creative distribution under one roof. From production-grade web platforms to retention-focused media and growth campaigns.
         </motion.p>
 
-        {/* ── Action Buttons (Dual CTAs - High Conversion) ── */}
+        {/* ── Action Buttons (Dual CTAs - Optimized for Mobile Touch) ── */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -355,10 +371,10 @@ export default function Hero() {
         >
           <Magnetic strength={0.3}>
             <Link
-              href="#contact"
-              className={`${CLAY_CLASSES.btnEmerald} w-full sm:w-auto justify-center px-7 sm:px-9 py-3.5 sm:py-4 font-outfit font-black uppercase tracking-wider text-xs sm:text-base flex items-center gap-2.5 sm:gap-3 shadow-lg active:scale-95 group`}
+              href="#services"
+              className={`${CLAY_CLASSES.btnCharcoal} w-full sm:w-auto justify-center px-7 sm:px-9 py-3.5 sm:py-4 font-outfit font-black uppercase tracking-wider text-xs sm:text-base flex items-center gap-2.5 sm:gap-3 shadow-lg active:scale-95 group`}
             >
-              <span>Start Your Project</span>
+              <span>View Offerings</span>
               <svg
                 className="w-4 h-4 group-hover:translate-x-1 transition-transform"
                 fill="none"
@@ -373,10 +389,18 @@ export default function Hero() {
 
           <Magnetic strength={0.3}>
             <Link
-              href="#work"
+              href="#team"
               className={`${CLAY_CLASSES.btnMustard} w-full sm:w-auto justify-center px-6 sm:px-8 py-3.5 sm:py-4 font-outfit font-black uppercase tracking-wider text-xs sm:text-base flex items-center gap-2.5 sm:gap-3 shadow-lg active:scale-95`}
             >
-              <span>Explore Our Work &rarr;</span>
+              <div className="flex items-center -space-x-1.5 sm:-space-x-2">
+                <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden border border-charcoal-brand/30">
+                  <Image src="/dewansh_photo_v2.jpeg" alt="Dewansh" fill className="object-cover" />
+                </div>
+                <div className="relative w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden border border-charcoal-brand/30">
+                  <Image src="/aryan_proxy_v2.png" alt="Aryan" fill className="object-cover" />
+                </div>
+              </div>
+              <span>Meet The Founders &rarr;</span>
             </Link>
           </Magnetic>
         </motion.div>
@@ -402,7 +426,7 @@ export default function Hero() {
           </div>
         </motion.div>
 
-      </div>
+      </motion.div>
     </section>
   );
 }

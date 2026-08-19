@@ -66,7 +66,7 @@ export default function CustomCursor() {
     <>
       {/* Outer Spring Ring */}
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-mustard-brand pointer-events-none z-[9999] mix-blend-difference hidden md:block"
+        className="fixed top-0 left-0 w-9 h-9 rounded-full border-2 border-mustard-brand pointer-events-none z-[9999] mix-blend-difference hidden md:block"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
@@ -74,15 +74,16 @@ export default function CustomCursor() {
           translateY: "-50%",
         }}
         animate={{
-          scale: isHovered ? 1.8 : isClicked ? 0.8 : 1,
-          backgroundColor: isHovered ? "rgba(245, 176, 46, 0.15)" : "rgba(245, 176, 46, 0)",
+          scale: isHovered ? 2.2 : isClicked ? 0.75 : 1,
+          backgroundColor: isHovered ? "rgba(245, 176, 46, 0.2)" : "rgba(245, 176, 46, 0)",
           borderColor: isHovered ? "#f5b02e" : "#062c21",
         }}
-        transition={{ type: "tween", duration: 0.15 }}
+        transition={{ type: "spring", stiffness: 450, damping: 25 }}
       />
-      {/* Inner Dot */}
+
+      {/* Inner Glowing Core */}
       <motion.div
-        className="fixed top-0 left-0 w-2 h-2 bg-emerald-brand rounded-full pointer-events-none z-[9999] hidden md:block"
+        className="fixed top-0 left-0 w-2.5 h-2.5 bg-emerald-brand rounded-full pointer-events-none z-[9999] hidden md:block shadow-[0_0_10px_#062c21]"
         style={{
           x: cursorX,
           y: cursorY,
@@ -90,7 +91,7 @@ export default function CustomCursor() {
           translateY: "-50%",
         }}
         animate={{
-          scale: isHovered ? 0.5 : isClicked ? 1.5 : 1,
+          scale: isHovered ? 0.4 : isClicked ? 2 : 1,
           backgroundColor: isHovered ? "#f5b02e" : "#062c21",
         }}
         transition={{ type: "tween", duration: 0.1 }}
