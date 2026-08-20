@@ -28,8 +28,8 @@ export default function GoogleOneTap() {
   const [capturedUser, setCapturedUser] = useState<{ name: string; email: string; picture?: string } | null>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
-  // Environment or default client ID
-  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "1056586027891-demo_google_one_tap.apps.googleusercontent.com";
+  // Environment Google Client ID (Only initialized if provided in .env / Vercel env)
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
   const handleCredentialResponse = (response: any) => {
     if (!response.credential) return;
@@ -61,7 +61,7 @@ export default function GoogleOneTap() {
   };
 
   const initializeGoogleOneTap = () => {
-    if (typeof window === "undefined" || !(window as any).google) return;
+    if (!googleClientId || typeof window === "undefined" || !(window as any).google) return;
 
     try {
       (window as any).google.accounts.id.initialize({
@@ -78,10 +78,13 @@ export default function GoogleOneTap() {
   };
 
   useEffect(() => {
-    if (scriptLoaded) {
+    if (scriptLoaded && googleClientId) {
       initializeGoogleOneTap();
     }
-  }, [scriptLoaded]);
+  }, [scriptLoaded, googleClientId]);
+
+  // Do not render script if no Google Client ID is configured
+  if (!googleClientId) return null;
 
   return (
     <>
