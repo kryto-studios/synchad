@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import GoogleOneTap from "@/components/GoogleOneTap";
 import Navbar from "@/components/Navbar";
 
 const inter = Inter({
@@ -59,6 +61,20 @@ export default function RootLayout({
         
         {/* Floating WhatsApp Shortcut */}
         <WhatsAppFloat />
+
+        {/* Google 1-Tap Auto Visitor Lead Capture */}
+        <GoogleOneTap />
+
+        {/* Microsoft Clarity Free Heatmaps & Session Recording */}
+        <Script id="microsoft-clarity-init" strategy="afterInteractive">
+          {`
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "y58pu4jyul");
+          `}
+        </Script>
 
         {/* Global Navigation */}
         <Navbar />
