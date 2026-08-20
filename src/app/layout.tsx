@@ -33,6 +33,9 @@ export const metadata: Metadata = {
   description: "Official portfolio of synchAD. Co-founded by Dewansh Chatterjee & Aryan Gupta. Premium full-stack web systems, custom mobile apps, and post-production creative/motion asset creation. Digitalizing The Local.",
   keywords: ["synchAD", "Kryto Studios", "Dewansh Chatterjee", "Aryan Gupta", "Web Development", "App Development", "Video Editing", "Motion Graphics", "Digitalizing The Local"],
   authors: [{ name: "Dewansh Chatterjee" }, { name: "Aryan Gupta" }],
+  verification: {
+    google: "WwpCXfiYdIaHH5uXCAmLB1H6PInsV1ZwBJPT-iPd4MQ",
+  },
   openGraph: {
     title: "synchAD | WEB • APP • EDITS",
     description: "Digitalizing The Local — Custom full-stack platforms, client apps, and high-fidelity motion graphic assets by Dewansh Chatterjee & Aryan Gupta.",
