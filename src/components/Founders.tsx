@@ -13,6 +13,14 @@ const InstagramIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const LinkedInIcon = ({ className }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect x="2" y="9" width="4" height="12" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+);
+
 export default function Founders() {
   const skills = [
     { name: "React & Next.js", color: "bg-emerald-brand/10 text-emerald-brand border-emerald-brand/20 shadow-sm" },
@@ -232,19 +240,27 @@ export default function Founders() {
               
               <div className="flex flex-col gap-3 text-xs font-mono text-charcoal-brand/85 font-semibold">
                 <a href="mailto:synchad.studio@gmail.com" className="flex items-center gap-2 hover:text-emerald-brand transition-colors">
-                  <Mail className="w-4 h-4 text-emerald-brand" />
+                  <Mail className="w-4 h-4 text-emerald-brand shrink-0" />
                   synchad.studio@gmail.com
                 </a>
-                <span className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-emerald-brand" />
-                  +91 82234 40812
-                </span>
-                <a href="https://instagram.com/synch.ad" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-emerald-brand transition-colors">
-                  <InstagramIcon className="w-4 h-4 text-mustard-brand" />
-                  @synch.ad
+                <a href="tel:+919294625866" className="flex items-center gap-2 hover:text-emerald-brand transition-colors">
+                  <Phone className="w-4 h-4 text-emerald-brand shrink-0" />
+                  +91 92946 25866 (Dewansh)
+                </a>
+                <a href="tel:+919340411838" className="flex items-center gap-2 hover:text-emerald-brand transition-colors">
+                  <Phone className="w-4 h-4 text-emerald-brand shrink-0" />
+                  +91 93404 11838 (Aryan)
+                </a>
+                <a href="https://instagram.com/synchad_tech" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-emerald-brand transition-colors">
+                  <InstagramIcon className="w-4 h-4 text-mustard-brand shrink-0" />
+                  @synchad_tech (Instagram)
+                </a>
+                <a href="https://linkedin.com/company/synchad_tech" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-emerald-brand transition-colors">
+                  <LinkedInIcon className="w-4 h-4 text-mustard-brand shrink-0" />
+                  synchad_tech (LinkedIn)
                 </a>
                 <span className="flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-mustard-brand" />
+                  <Globe className="w-4 h-4 text-mustard-brand shrink-0" />
                   synchad.com
                 </span>
               </div>

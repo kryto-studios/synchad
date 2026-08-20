@@ -58,6 +58,10 @@ export default function Home() {
             <a href="#faq" className="hover:text-mustard-brand transition-colors">FAQ</a>
             <span className="text-cream-brand/20">•</span>
             <a href="#contact" className="hover:text-mustard-brand transition-colors">Contact</a>
+            <span className="text-cream-brand/20">•</span>
+            <a href="https://instagram.com/synchad_tech" target="_blank" rel="noopener noreferrer" className="text-mustard-brand hover:underline transition-colors font-mono">Instagram 📸</a>
+            <span className="text-cream-brand/20">•</span>
+            <a href="https://linkedin.com/company/synchad_tech" target="_blank" rel="noopener noreferrer" className="text-mustard-brand hover:underline transition-colors font-mono">LinkedIn 💼</a>
           </div>
 
           {/* Tech Badges */}

@@ -6,8 +6,8 @@ import { motion } from "framer-motion";
 import { CLAY_CLASSES } from "./ClayStyles";
 
 export default function WhatsAppFloat() {
-  // Replace with synchAD official phone number or generic wa.me link
-  const whatsappUrl = "https://wa.me/9182234408123"; // Using the phone number from the portfolio image reference
+  // synchAD official WhatsApp link (+91 92946 25866)
+  const whatsappUrl = "https://wa.me/919294625866?text=Namaste%20synchAD!%20I%20want%20to%20discuss%20a%20website%2Fwebapp%20project.";
 
   return (
     <div className="fixed bottom-6 right-6 z-50 hidden md:block">
