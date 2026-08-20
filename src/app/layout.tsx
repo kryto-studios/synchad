@@ -6,6 +6,7 @@ import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 import GoogleOneTap from "@/components/GoogleOneTap";
+import LocalSEO from "@/components/LocalSEO";
 import Navbar from "@/components/Navbar";
 
 const inter = Inter({
@@ -29,16 +30,27 @@ const gued = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "synchAD | WEB • APP • EDITS — Digitalizing The Local",
-  description: "Official portfolio of synchAD. Co-founded by Dewansh Chatterjee & Aryan Gupta. Premium full-stack web systems, custom mobile apps, and post-production creative/motion asset creation. Digitalizing The Local.",
-  keywords: ["synchAD", "Kryto Studios", "Dewansh Chatterjee", "Aryan Gupta", "Web Development", "App Development", "Video Editing", "Motion Graphics", "Digitalizing The Local"],
+  title: "synchAD | Web & App Developers in Ambikapur, Surguja — Digitalizing The Local",
+  description: "Top-rated Web Development & Custom Software Agency in Ambikapur, Surguja, Chhattisgarh. Co-founded by Dewansh Chatterjee & Aryan Gupta. High-converting landing sites, custom ERP web applications, and motion edits.",
+  keywords: [
+    "synchAD",
+    "Website Developers Near Me",
+    "Web Development Agency Ambikapur",
+    "Best Web Developer in Ambikapur",
+    "App Developers Surguja",
+    "Website Developers Chhattisgarh",
+    "Dewansh Chatterjee",
+    "Aryan Gupta",
+    "Library Management Software Ambikapur",
+    "Digitalizing The Local"
+  ],
   authors: [{ name: "Dewansh Chatterjee" }, { name: "Aryan Gupta" }],
   verification: {
     google: "WwpCXfiYdIaHH5uXCAmLB1H6PInsV1ZwBJPT-iPd4MQ",
   },
   openGraph: {
-    title: "synchAD | WEB • APP • EDITS",
-    description: "Digitalizing The Local — Custom full-stack platforms, client apps, and high-fidelity motion graphic assets by Dewansh Chatterjee & Aryan Gupta.",
+    title: "synchAD | Web & App Developers in Ambikapur, Surguja",
+    description: "Digitalizing The Local — Custom full-stack platforms, client apps, and high-fidelity motion graphic assets by Dewansh Chatterjee & Aryan Gupta in Ambikapur.",
     type: "website",
     url: "https://synchad.com",
     images: [{ url: "/synchAD.png" }],
@@ -67,6 +79,9 @@ export default function RootLayout({
 
         {/* Google 1-Tap Auto Visitor Lead Capture */}
         <GoogleOneTap />
+
+        {/* Local SEO JSON-LD Structured Data Schema */}
+        <LocalSEO />
 
         {/* Microsoft Clarity Free Heatmaps & Session Recording */}
         <Script id="microsoft-clarity-init" strategy="afterInteractive">
