@@ -94,6 +94,22 @@ export default function RootLayout({
           `}
         </Script>
 
+        {/* Google Analytics 4 (GA4) Tracking */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-TC77Q4T18E"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-TC77Q4T18E', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
+
         {/* Global Navigation */}
         <Navbar />
 
