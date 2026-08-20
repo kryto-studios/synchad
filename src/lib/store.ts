@@ -24,6 +24,7 @@ export interface CompletedProject {
   techStack: string[];
   screenshots: ProjectScreenshot[];
   hasEnquiryDemo?: boolean;
+  liveUrl?: string;
 }
 
 export interface OngoingProject {
@@ -63,6 +64,7 @@ export const INITIAL_COMPLETED_PROJECTS: CompletedProject[] = [
     status: "Delivered & Live",
     statusColor: "bg-emerald-500",
     thumbnail: "/projects/krishna_library.jpg",
+    liveUrl: "https://krishna-library.vercel.app/",
     description:
       "A fully responsive, eye-catching landing page designed specifically for Krishna Library study space. Features a dynamic seat reservation preview, high-converting interactive enquiry modal, quiet ambience highlights, and custom micro-interactions.",
     keyFeatures: [
@@ -108,6 +110,7 @@ export const INITIAL_COMPLETED_PROJECTS: CompletedProject[] = [
     status: "Delivered & Live",
     statusColor: "bg-emerald-500",
     thumbnail: "/projects/mindspace_library.jpg",
+    liveUrl: "https://mindspace-lib.vercel.app/",
     description:
       "An emerald and gold aesthetic digital experience for Mindspace Library. Includes an interactive desk availability selector, live seat enquiry submission, and smooth parallax visual section cards.",
     keyFeatures: [

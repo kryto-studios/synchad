@@ -192,20 +192,20 @@ export default function Founders() {
                 
                 {/* Role Subtitle - Compact Mustard Yellow */}
                 <p className="font-mono text-[10px] sm:text-xs font-bold text-mustard-brand uppercase tracking-wider mb-2.5 leading-snug">
-                  DATABASE ARCHITECTURE, BACKEND SYSTEMS & POST-DELIVERY CLIENT OPERATIONS
+                  DATABASE ARCHITECTURE, BACKEND SYSTEMS & POST-DELIVERY BUG FIXING / CLIENT SUPPORT *
                 </p>
 
                 <p className="font-inter text-sm text-charcoal-brand/85 leading-relaxed font-medium">
-                  Specializes in architecting scalable database systems, full-stack web platforms, and directing high-conversion visual storytelling workflows.
+                  Specializes in database architecture, full-stack backend systems, and handles <strong className="text-emerald-brand font-black underline decoration-mustard-brand decoration-2">post-delivery client support &amp; bug fixing operations</strong> to guarantee zero-downtime platform reliability.
                 </p>
               </div>
               
               <div className="mt-6 border-t border-dashed border-charcoal-brand/15 pt-4">
                 <span className="font-mono text-[10px] uppercase tracking-wider text-charcoal-brand/50 block mb-2 font-black">
-                  Core Focus
+                  Core Focus & Operations
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {["Database Architecture", "Backend Systems", "Post-Delivery Operations", "Supabase SQL"].map((tag) => (
+                  {["Post-Delivery Support *", "Bug Fixing & Maintenance", "Database Architecture", "Backend Systems", "Supabase SQL"].map((tag) => (
                     <span
                       key={tag}
                       className="text-[9px] sm:text-[10px] font-mono font-bold px-2.5 py-0.5 bg-mustard-brand/20 text-charcoal-brand border border-mustard-brand/50 rounded-lg shadow-2xs transition-all duration-200 hover:-translate-y-1 hover:bg-mustard-brand/40"
@@ -220,7 +220,7 @@ export default function Founders() {
 
         </div>
 
-        {/* Lower Row: Contact Card & Tech Ecosystem */}
+        {/* Lower Row: Contact Card, Highlighted Unified Service Stack & Value Props */}
         <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
           {/* Card 1: Direct Contact Card */}
@@ -258,22 +258,29 @@ export default function Founders() {
             </div>
           </div>
 
-          {/* Card 2: Combined Tech Ecosystem Stack */}
-          <div className={`lg:col-span-4 h-full ${CLAY_CLASSES.cardCream} p-6 flex flex-col justify-between`}>
+          {/* Card 2: HIGHLIGHTED Unified Service Stack (Joint Founder Execution) */}
+          <div className={`lg:col-span-4 h-full ${CLAY_CLASSES.cardMustard} p-6.5 flex flex-col justify-between relative overflow-hidden shadow-xl border-2 border-charcoal-brand/30 rounded-[32px]`}>
+            <div className="absolute top-4 right-4 bg-charcoal-brand text-cream-brand font-mono text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full flex items-center gap-1 shadow-md border border-white/20">
+              🤝 JOINT FOUNDER EXECUTION
+            </div>
+
             <div>
-              <h4 className="font-outfit text-xl font-bold uppercase text-charcoal-brand border-b border-dashed border-charcoal-brand/20 pb-2 mb-4">
-                Unified Tech Stack :
+              <span className="font-mono text-[10px] font-bold text-charcoal-brand/60 uppercase tracking-widest block mb-1">
+                COMBINED SERVICE SUITE
+              </span>
+              <h4 className="font-outfit text-2xl font-black uppercase text-charcoal-brand border-b border-dashed border-charcoal-brand/30 pb-2 mb-3">
+                UNIFIED SERVICE STACK ⭐
               </h4>
-              <p className="text-xs text-charcoal-brand/75 mb-4 leading-relaxed font-medium">
-                Engineered with production-ready software tools and post-production creative software.
+              <p className="font-inter text-xs text-charcoal-brand/90 mb-4 leading-relaxed font-bold">
+                Dewansh &amp; Aryan execute both code and content together — delivering end-to-end Web/App Development, Database Systems, Video Motion Edits, and Post-Delivery Bug Fixing under one roof.
               </p>
             </div>
             
-            <div className="flex flex-wrap gap-2 pt-2">
+            <div className="flex flex-wrap gap-1.5 pt-2">
               {skills.map((skill, i) => (
                 <span
                   key={i}
-                  className={`text-xs font-mono font-bold px-3 py-1.5 border rounded-xl cursor-default ${skill.color}`}
+                  className="text-[11px] font-mono font-bold px-2.5 py-1.5 bg-white text-charcoal-brand border border-charcoal-brand/20 rounded-xl shadow-2xs transition-all duration-200 hover:scale-105"
                 >
                   {skill.name}
                 </span>

@@ -441,7 +441,19 @@ export default function Projects() {
                     </div>
                   </div>
 
-                  <div className="space-y-2 pt-2">
+                  <div className="space-y-2.5 pt-2">
+                    {selectedProject.liveUrl && (
+                      <a
+                        href={selectedProject.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${CLAY_CLASSES.btnEmerald} w-full py-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-md`}
+                      >
+                        <ExternalLink className="w-4 h-4 text-mustard-brand" />
+                        <span>Visit Live Website 🌐</span>
+                      </a>
+                    )}
+
                     {selectedProject.hasEnquiryDemo && (
                       <button
                         onClick={(e) => {
@@ -699,22 +711,32 @@ function ProjectCard({
 
       {/* Card Footer Actions */}
       <div className="mt-6 pt-4 border-t border-charcoal-brand/10 flex items-center justify-between gap-2">
-        {project.hasEnquiryDemo ? (
-          <button
-            onClick={onOpenEnquiryDemo}
-            className="px-3.5 py-1.5 rounded-full bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-mono text-xs font-bold transition-all flex items-center gap-1.5"
-          >
-            <MessageSquareCheck className="w-3.5 h-3.5" />
-            <span>Test Enquiry</span>
-          </button>
-        ) : (
-          <span className="text-[11px] font-mono text-charcoal-brand/50 font-bold">
-            Full ERP Suite
-          </span>
-        )}
+        <div className="flex items-center gap-1.5">
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="px-3 py-1.5 rounded-full bg-emerald-brand/15 hover:bg-emerald-brand text-emerald-brand hover:text-white font-mono text-xs font-bold transition-all flex items-center gap-1 shadow-2xs border border-emerald-brand/30"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span>Live Site 🌐</span>
+            </a>
+          )}
+          {project.hasEnquiryDemo && (
+            <button
+              onClick={onOpenEnquiryDemo}
+              className="px-3 py-1.5 rounded-full bg-mustard-brand/15 hover:bg-mustard-brand text-charcoal-brand font-mono text-xs font-bold transition-all flex items-center gap-1 border border-mustard-brand/30"
+            >
+              <MessageSquareCheck className="w-3.5 h-3.5" />
+              <span>Demo</span>
+            </button>
+          )}
+        </div>
 
         <div className="flex items-center gap-1 text-xs font-bold text-charcoal-brand group-hover:translate-x-1 transition-transform">
-          <span>Explore Work</span>
+          <span>Explore</span>
           <ChevronRight className="w-4 h-4 text-mustard-brand" />
         </div>
       </div>

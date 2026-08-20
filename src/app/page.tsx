@@ -20,67 +20,74 @@ export default function Home() {
       <FAQ />
       <Contact />
 
-      {/* Zine Styled Editorial Footer */}
-      <footer className="w-full bg-charcoal-brand text-cream-brand border-t border-charcoal-brand py-12 px-6 md:px-12 mt-auto">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+      {/* Premium Centered Editorial Footer */}
+      <footer className="w-full bg-[#161616] text-cream-brand border-t border-charcoal-brand/30 py-16 px-6 sm:px-10 md:px-16 mt-auto">
+        <div className="max-w-6xl mx-auto flex flex-col items-center justify-center text-center gap-8">
           
           {/* Logo & Tagline */}
-          <div className="flex flex-col items-center md:items-start gap-2">
+          <div className="flex flex-col items-center justify-center gap-3">
             <div className="flex items-center gap-3">
-              <div className="relative w-9 h-9 rounded-full bg-cream-brand flex items-center justify-center p-1.5 shadow-inner">
+              <div className="relative w-11 h-11 rounded-full bg-cream-brand flex items-center justify-center p-2 shadow-inner border border-white/20">
                 <Image
                   src="/logo.png"
                   alt="synchAD logo"
-                  width={22}
-                  height={22}
+                  width={26}
+                  height={26}
                   className="object-contain"
                 />
               </div>
-              <span className="font-outfit text-lg font-bold tracking-tight text-cream-brand">
+              <span className="font-outfit text-2xl font-black tracking-tight text-cream-brand">
                 synch<span className="text-mustard-brand font-black">AD</span>
               </span>
             </div>
-            <p className="font-mono text-[10px] text-cream-brand/50 uppercase tracking-widest mt-1">
-              WEB | APP | EDITS &mdash; Digitalizing The Local
+            <p className="font-mono text-xs text-cream-brand/70 uppercase tracking-widest max-w-md">
+              WEBS | APPS | EDITS &mdash; Digitalizing Local Businesses in Ambikapur &amp; Beyond
             </p>
           </div>
 
-          {/* Center: Tech tags */}
-          <div className="flex flex-wrap justify-center gap-3">
-            <span className="font-mono text-[9px] uppercase tracking-wider text-cream-brand/50 border border-cream-brand/20 px-3 py-1 rounded-full bg-charcoal-brand/30">
-              Next.js
-            </span>
-            <span className="font-mono text-[9px] uppercase tracking-wider text-cream-brand/50 border border-cream-brand/20 px-3 py-1 rounded-full bg-charcoal-brand/30">
-              Supabase SQL
-            </span>
-            <span className="font-mono text-[9px] uppercase tracking-wider text-cream-brand/50 border border-cream-brand/20 px-3 py-1 rounded-full bg-charcoal-brand/30">
-              Python API
-            </span>
-            <span className="font-mono text-[9px] uppercase tracking-wider text-cream-brand/50 border border-cream-brand/20 px-3 py-1 rounded-full bg-charcoal-brand/30">
-              Figma Design
-            </span>
-            <span className="font-mono text-[9px] uppercase tracking-wider text-cream-brand/50 border border-cream-brand/20 px-3 py-1 rounded-full bg-charcoal-brand/30">
-              After Effects
-            </span>
+          {/* Quick Nav Links */}
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 font-outfit text-xs font-bold uppercase tracking-wider text-cream-brand/80">
+            <a href="#services" className="hover:text-mustard-brand transition-colors">Services</a>
+            <span className="text-cream-brand/20">•</span>
+            <a href="#projects" className="hover:text-mustard-brand transition-colors">Projects</a>
+            <span className="text-cream-brand/20">•</span>
+            <a href="#packages" className="hover:text-mustard-brand transition-colors">Packages</a>
+            <span className="text-cream-brand/20">•</span>
+            <a href="#founders" className="hover:text-mustard-brand transition-colors">Founders</a>
+            <span className="text-cream-brand/20">•</span>
+            <a href="#faq" className="hover:text-mustard-brand transition-colors">FAQ</a>
+            <span className="text-cream-brand/20">•</span>
+            <a href="#contact" className="hover:text-mustard-brand transition-colors">Contact</a>
           </div>
 
-          {/* Right: Copyright and navigation */}
-          <div className="flex flex-col items-center md:items-end gap-1.5 text-xs text-cream-brand/60 font-inter">
-            <span>
-              &copy; {new Date().getFullYear()} synchAD. All Rights Reserved.
-            </span>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono text-cream-brand/35">
-                Built by Dewansh Chatterjee &amp; Aryan Gupta
+          {/* Tech Badges */}
+          <div className="flex flex-wrap justify-center gap-2.5 max-w-2xl">
+            {["Next.js 15", "Supabase PostgreSQL", "Tailwind CSS", "Figma Design", "Adobe Motion Graphics", "Local SEO & Analytics"].map((tech, idx) => (
+              <span key={idx} className="font-mono text-[10px] uppercase tracking-wider text-cream-brand/60 border border-cream-brand/15 px-3 py-1.5 rounded-full bg-white/5">
+                {tech}
               </span>
-              <span className="text-cream-brand/20">&bull;</span>
-              <Link
-                href="/admin"
-                className="text-[10px] font-mono text-mustard-brand hover:underline font-bold"
-              >
-                Admin Portal 🔒
-              </Link>
-            </div>
+            ))}
+          </div>
+
+          {/* Divider */}
+          <div className="w-full max-w-md h-px bg-gradient-to-r from-transparent via-cream-brand/20 to-transparent" />
+
+          {/* Copyright and Admin */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-xs text-cream-brand/60 font-inter">
+            <span>
+              &copy; {new Date().getFullYear()} <strong className="text-cream-brand">synchAD Studios</strong>. All Rights Reserved.
+            </span>
+            <span className="hidden sm:inline text-cream-brand/20">•</span>
+            <span className="text-xs font-mono text-cream-brand/50">
+              Created with ❤️ by Dewansh Chatterjee &amp; Aryan Gupta
+            </span>
+            <span className="hidden sm:inline text-cream-brand/20">•</span>
+            <Link
+              href="/admin"
+              className="text-xs font-mono text-mustard-brand hover:underline font-bold bg-mustard-brand/10 px-3.5 py-1.5 rounded-full border border-mustard-brand/30 transition-colors"
+            >
+              Admin Portal 🔒
+            </Link>
           </div>
 
         </div>

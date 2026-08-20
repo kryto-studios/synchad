@@ -6,6 +6,7 @@ import Magnetic from "./Magnetic";
 import Link from "next/link";
 import Image from "next/image";
 import { CLAY_CLASSES } from "./ClayStyles";
+import { Sparkles } from "lucide-react";
 
 /* ─── Cycling Words Data ────────────────────────────────────── */
 const DYNAMIC_WORDS = [
@@ -86,7 +87,7 @@ export default function Hero() {
     <section
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      className="relative w-full min-h-[85vh] sm:min-h-[90vh] lg:min-h-[92vh] flex flex-col items-center justify-center border-b border-charcoal-brand py-12 sm:py-20 px-6 sm:px-10 md:px-14 lg:px-16 overflow-hidden bg-cream-brand select-none"
+      className="relative w-full min-h-[85vh] sm:min-h-[90vh] lg:min-h-[92vh] flex flex-col items-center justify-center border-b border-charcoal-brand py-10 sm:py-16 px-6 sm:px-10 md:px-14 lg:px-16 overflow-hidden bg-cream-brand select-none"
     >
       {/* Decorative Doodles */}
       <GearDoodle />
@@ -174,7 +175,7 @@ export default function Hero() {
           animate={{
             opacity: 1,
             x: mouseOffset.x * 28,
-            y: [mouseOffset.y * -15, mouseOffset.y * -15 - 14, mouseOffset.y * -15, mouseOffset.y * -15 - 18, mouseOffset.y * -15],
+            y: [mouseOffset.y * -15, mouseOffset.y * -15 + 16, mouseOffset.y * -15, mouseOffset.y * -15 + 10, mouseOffset.y * -15],
             rotate: [0, -1.5, 1, -0.5, 0],
           }}
           whileHover={{ scale: 1.06, y: -24 }}
@@ -182,12 +183,12 @@ export default function Hero() {
           transition={{
             opacity: { duration: 0.8, ease: "easeOut" },
             x: { duration: 0.2, ease: "easeOut" },
-            y: { duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 0.3 },
-            rotate: { duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 },
+            y: { duration: 5.8, repeat: Infinity, ease: "easeInOut" },
+            rotate: { duration: 6.4, repeat: Infinity, ease: "easeInOut" },
           }}
-          className="absolute top-[6%] lg:top-[8%] bottom-[12%] lg:bottom-[16%] right-[0px] lg:right-[5px] xl:right-[25px] 2xl:right-[45px] z-20 pointer-events-auto cursor-pointer select-none flex items-center justify-center py-2"
+          className="absolute top-[4%] lg:top-[6%] bottom-[8%] lg:bottom-[12%] right-[-10px] lg:right-[0px] xl:right-[15px] 2xl:right-[35px] z-20 pointer-events-auto cursor-pointer select-none flex items-center justify-center py-2"
         >
-          <div className="relative lg:w-[325px] xl:w-[385px] 2xl:w-[430px] h-full max-h-[75vh] aspect-[5/7]">
+          <div className="relative lg:w-[410px] xl:w-[480px] 2xl:w-[540px] h-full max-h-[78vh] aspect-[5/7]">
             {/* Default Avatar */}
             <motion.div
               animate={{ opacity: isAryHovered ? 0 : 1 }}
@@ -297,7 +298,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-3 sm:mb-5 flex flex-col items-center justify-center text-center"
+          className="mb-2 sm:mb-3 flex flex-col items-center justify-center text-center"
         >
           <h3 className="font-bacley text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-black text-charcoal-brand tracking-tight">
             Need Digital Help?
@@ -330,7 +331,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="mt-3 sm:mt-6 flex flex-row items-center justify-center gap-1.5 sm:gap-3 text-xs sm:text-xl md:text-2xl font-outfit font-black uppercase tracking-wide w-full"
+          className="mt-3 sm:mt-5 flex flex-row items-center justify-center gap-1.5 sm:gap-3 text-xs sm:text-xl md:text-2xl font-outfit font-black uppercase tracking-wide w-full"
         >
           <span className="text-charcoal-brand/70 text-[11px] xs:text-xs sm:text-lg md:text-xl whitespace-nowrap">WE DIGITALIZE</span>
           <div className="relative h-8 sm:h-11 md:h-12 min-w-[145px] xs:min-w-[165px] sm:min-w-[280px] md:min-w-[320px] flex items-center justify-center">
@@ -353,21 +354,61 @@ export default function Hero() {
           </div>
         </motion.div>
 
+        {/* Motto Paragraph */}
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.25 }}
-          className="mt-6 sm:mt-8 font-inter text-sm sm:text-base md:text-xl text-charcoal-brand/80 max-w-xl leading-relaxed font-medium px-4 sm:px-0"
+          className="mt-5 sm:mt-6 font-inter text-xs sm:text-base md:text-lg text-charcoal-brand/80 max-w-xl leading-relaxed font-medium px-4 sm:px-0"
         >
           We bridge software engineering and creative distribution under one roof. From production-grade web platforms to retention-focused media and growth campaigns.
         </motion.p>
+
+        {/* ── Catchy Claymorphic Pricing Offer Ticket (Placed directly after Motto) ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 15, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.32 }}
+          className="mt-6 w-full max-w-lg"
+        >
+          <Link
+            href="#packages"
+            className="group relative flex items-center justify-between gap-3 p-3 sm:p-3.5 rounded-2xl bg-white border-2 border-charcoal-brand/15 shadow-[6px_6px_16px_rgba(26,26,26,0.06),_inset_-4px_-4px_8px_rgba(26,26,26,0.04),_inset_4px_4px_8px_rgba(255,255,255,0.95)] hover:border-emerald-brand hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer"
+          >
+            {/* Left side icon & pricing info */}
+            <div className="flex items-center gap-3 text-left">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-mustard-brand border border-charcoal-brand/20 flex items-center justify-center text-charcoal-brand shadow-sm flex-shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[9px] font-black uppercase tracking-widest text-emerald-brand bg-emerald-brand/10 px-2 py-0.5 rounded-full border border-emerald-brand/20">
+                    SPECIAL LOCAL OFFER
+                  </span>
+                  <span className="font-mono text-[9px] font-bold text-charcoal-brand/50 uppercase hidden sm:inline">
+                    Ambikapur / Surguja
+                  </span>
+                </div>
+                <h4 className="font-outfit text-sm sm:text-base font-black text-charcoal-brand tracking-tight mt-0.5">
+                  START AS LOW AS <span className="text-emerald-brand underline decoration-mustard-brand decoration-wavy">₹5,879/-</span> *
+                </h4>
+              </div>
+            </div>
+
+            {/* Right side negotiable action badge */}
+            <div className="flex items-center gap-1.5 bg-charcoal-brand text-cream-brand font-outfit text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-xl group-hover:bg-emerald-brand transition-colors flex-shrink-0 shadow-sm">
+              <span>Negotiable Rate!</span>
+              <span className="text-mustard-brand font-bold">&rarr;</span>
+            </div>
+          </Link>
+        </motion.div>
 
         {/* ── Action Buttons (Dual CTAs - Optimized for Mobile Touch) ── */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.35 }}
-          className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-5 w-full sm:w-auto z-30 px-6 sm:px-0"
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-5 w-full sm:w-auto z-30 px-6 sm:px-0"
         >
           <Magnetic strength={0.3}>
             <Link
