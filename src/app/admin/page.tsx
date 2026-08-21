@@ -48,8 +48,8 @@ import {
 import {
   getAdminCredentials,
   updateAdminCredentials,
-  generateEmailOTP,
-  verifyEmailOTP,
+  requestServerOTP,
+  verifyServerOTPCode,
   saveAdminSession,
   getValidAdminSession,
   logoutAdmin,
@@ -70,7 +70,7 @@ export default function AdminPage() {
   
   // OTP Verification State
   const [otpInput, setOtpInput] = useState("");
-  const [generatedOTPCode, setGeneratedOTPCode] = useState<string | null>(null);
+  const [isLoadingAuth, setIsLoadingAuth] = useState(false);
   
   // Feedback Messages for Login
   const [authError, setAuthError] = useState("");
@@ -154,56 +154,78 @@ export default function AdminPage() {
   }, []);
 
   // Step 1: Handle Email & Passcode Submission
-  const handleCredentialsSubmit = (e: React.FormEvent) => {
+  const handleCredentialsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError("");
     setAuthSuccessMsg("");
+    setIsLoadingAuth(true);
 
-    const storedCreds = getAdminCredentials();
-    const cleanEmailInput = emailInput.trim().toLowerCase();
-    const cleanStoredEmail = storedCreds.email.trim().toLowerCase();
+    try {
+      const storedCreds = getAdminCredentials();
+      const cleanEmailInput = emailInput.trim().toLowerCase();
+      const cleanStoredEmail = storedCreds.email.trim().toLowerCase();
 
-    const isEmailValid = cleanEmailInput === cleanStoredEmail || cleanEmailInput === DEFAULT_ADMIN_EMAIL;
-    const isPasswordValid = pinInput === storedCreds.password || pinInput === "synchad2026" || pinInput === "admin";
+      const isEmailValid = cleanEmailInput === cleanStoredEmail || cleanEmailInput === DEFAULT_ADMIN_EMAIL;
+      const isPasswordValid = pinInput === storedCreds.password || pinInput === "synchad2026" || pinInput === "admin";
 
-    if (isEmailValid && isPasswordValid) {
-      // Credentials valid -> trigger Email OTP verification step
-      const otpObj = generateEmailOTP(cleanEmailInput);
-      setGeneratedOTPCode(otpObj.code);
-      setAuthStep("otp");
-      setAuthSuccessMsg(`6-Digit Verification code sent to ${cleanEmailInput}`);
-    } else {
-      if (!isEmailValid) {
-        setAuthError(`Invalid Admin Email. Registered email: ${storedCreds.email}`);
+      if (isEmailValid && isPasswordValid) {
+        // Credentials valid -> trigger real server email OTP via Resend
+        const result = await requestServerOTP(cleanEmailInput);
+        if (result.success) {
+          setAuthStep("otp");
+          setAuthSuccessMsg(`🔒 Real 6-Digit Verification Code sent via Email to ${cleanEmailInput}. Please check your inbox.`);
+        } else {
+          setAuthError(result.message);
+        }
       } else {
-        setAuthError("Invalid Passcode. Enter your updated password or default PIN (synchad2026)");
+        if (!isEmailValid) {
+          setAuthError(`Invalid Admin Email. Authorized email: ${storedCreds.email}`);
+        } else {
+          setAuthError("Invalid Passcode. Enter your updated password or default PIN (synchad2026)");
+        }
       }
+    } finally {
+      setIsLoadingAuth(false);
     }
   };
 
-  // Step 2: Handle OTP Verification
-  const handleOTPSubmit = (e: React.FormEvent) => {
+  // Step 2: Handle OTP Verification against Server
+  const handleOTPSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError("");
+    setIsLoadingAuth(true);
 
-    const result = verifyEmailOTP(otpInput);
-    if (result.success) {
-      saveAdminSession(emailInput, rememberMe);
-      setIsAuthenticated(true);
-      setCurrentAdminEmail(emailInput);
-      setPinInput("");
-      setOtpInput("");
-      setAuthStep("credentials");
-    } else {
-      setAuthError(result.message);
+    try {
+      const result = await verifyServerOTPCode(emailInput, otpInput);
+      if (result.success) {
+        saveAdminSession(emailInput, rememberMe);
+        setIsAuthenticated(true);
+        setCurrentAdminEmail(emailInput);
+        setPinInput("");
+        setOtpInput("");
+        setAuthStep("credentials");
+      } else {
+        setAuthError(result.message);
+      }
+    } finally {
+      setIsLoadingAuth(false);
     }
   };
 
-  const handleResendOTP = () => {
-    const otpObj = generateEmailOTP(emailInput);
-    setGeneratedOTPCode(otpObj.code);
-    setAuthSuccessMsg(`New 6-digit code sent to ${emailInput}`);
+  const handleResendOTP = async () => {
     setAuthError("");
+    setAuthSuccessMsg("");
+    setIsLoadingAuth(true);
+    try {
+      const result = await requestServerOTP(emailInput);
+      if (result.success) {
+        setAuthSuccessMsg(`🔒 New 6-Digit Verification Code sent to ${emailInput}`);
+      } else {
+        setAuthError(result.message);
+      }
+    } finally {
+      setIsLoadingAuth(false);
+    }
   };
 
   const handleLogout = () => {
@@ -539,45 +561,31 @@ export default function AdminPage() {
 
               <button
                 type="submit"
-                className={`${CLAY_CLASSES.btnCharcoal} w-full py-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer mt-2`}
+                disabled={isLoadingAuth}
+                className={`${CLAY_CLASSES.btnCharcoal} w-full py-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer mt-2 disabled:opacity-50`}
               >
-                <Unlock className="w-4 h-4 text-mustard-brand" />
-                <span>Verify Credentials &amp; Get OTP</span>
+                {isLoadingAuth ? (
+                  <RefreshCw className="w-4 h-4 text-mustard-brand animate-spin" />
+                ) : (
+                  <Unlock className="w-4 h-4 text-mustard-brand" />
+                )}
+                <span>{isLoadingAuth ? "Sending Email OTP..." : "Verify Credentials & Send OTP"}</span>
               </button>
             </form>
           ) : (
             /* STEP 2: EMAIL OTP AUTHENTICATION */
             <form onSubmit={handleOTPSubmit} className="w-full mt-6 space-y-4 text-left">
               {authSuccessMsg && (
-                <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl font-mono flex flex-col items-center text-center gap-1">
-                  <div className="flex items-center gap-1.5 font-bold">
-                    <Mail className="w-4 h-4 text-emerald-600" />
-                    <span>OTP Sent to {emailInput}</span>
-                  </div>
-                  {generatedOTPCode && (
-                    <div className="mt-1 bg-white px-3 py-1 rounded-lg border border-emerald-300 shadow-sm text-center">
-                      <span className="text-[10px] text-gray-500 uppercase tracking-wider block">Demo Verification OTP Code:</span>
-                      <span className="text-base font-extrabold font-mono text-emerald-700 tracking-widest">{generatedOTPCode}</span>
-                    </div>
-                  )}
+                <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl font-mono flex items-center justify-center text-center gap-2 font-bold">
+                  <Mail className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>{authSuccessMsg}</span>
                 </div>
               )}
 
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-[11px] font-mono font-bold text-charcoal-brand/70 uppercase">
-                    Enter 6-Digit Verification Code
-                  </label>
-                  {generatedOTPCode && (
-                    <button
-                      type="button"
-                      onClick={() => setOtpInput(generatedOTPCode)}
-                      className="text-[10px] font-mono text-mustard-brand hover:underline font-bold"
-                    >
-                      Auto-fill Code
-                    </button>
-                  )}
-                </div>
+                <label className="block text-[11px] font-mono font-bold text-charcoal-brand/70 uppercase mb-1">
+                  Enter 6-Digit Verification Code
+                </label>
                 <input
                   type="text"
                   required
@@ -597,10 +605,15 @@ export default function AdminPage() {
 
               <button
                 type="submit"
-                className={`${CLAY_CLASSES.btnMustard} w-full py-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer`}
+                disabled={isLoadingAuth}
+                className={`${CLAY_CLASSES.btnMustard} w-full py-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50`}
               >
-                <ShieldCheck className="w-4 h-4" />
-                <span>Verify Email &amp; Unlock Panel</span>
+                {isLoadingAuth ? (
+                  <RefreshCw className="w-4 h-4 animate-spin" />
+                ) : (
+                  <ShieldCheck className="w-4 h-4" />
+                )}
+                <span>{isLoadingAuth ? "Verifying Code..." : "Verify Email & Unlock Panel"}</span>
               </button>
 
               <div className="flex items-center justify-between pt-2">
@@ -613,8 +626,9 @@ export default function AdminPage() {
                 </button>
                 <button
                   type="button"
+                  disabled={isLoadingAuth}
                   onClick={handleResendOTP}
-                  className="text-xs font-mono font-bold text-mustard-brand hover:underline"
+                  className="text-xs font-mono font-bold text-mustard-brand hover:underline disabled:opacity-50"
                 >
                   Resend Code
                 </button>

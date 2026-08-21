@@ -70,73 +70,47 @@ export function updateAdminCredentials(newEmail: string, newPassword: string): b
 }
 
 /**
- * Generate a 6-digit OTP verification code valid for 5 minutes and attempt real email delivery
+ * Request real 6-digit OTP code sent via server (Resend API) to email
  */
-export function generateEmailOTP(email: string): PendingOTP {
-  const code = Math.floor(100000 + Math.random() * 900000).toString();
-  const cleanEmail = email.trim().toLowerCase();
-  const pendingOTP: PendingOTP = {
-    code,
-    email: cleanEmail,
-    expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes
-  };
-
-  if (typeof window !== "undefined") {
-    try {
-      sessionStorage.setItem(STORAGE_KEYS.PENDING_OTP, JSON.stringify(pendingOTP));
-
-      // Asynchronously call API endpoint to attempt sending real email via Nodemailer
-      fetch("/api/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: cleanEmail, code })
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success) {
-            console.log("Real OTP email delivered:", data.message);
-          } else if (data.demoMode) {
-            console.log("Demo Mode active (Configure GMAIL_APP_PASSWORD in .env.local for real emails)");
-          }
-        })
-        .catch((err) => console.error("Error triggering OTP email route:", err));
-    } catch (e) {
-      console.error("Error saving OTP:", e);
+export async function requestServerOTP(email: string): Promise<{ success: boolean; message: string }> {
+  try {
+    const res = await fetch("/api/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.trim().toLowerCase() })
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      return { success: true, message: data.message || "Verification code sent to your email." };
+    } else {
+      return { success: false, message: data.error || "Failed to send verification code." };
     }
+  } catch (e: any) {
+    return { success: false, message: e?.message || "Network error requesting verification code." };
   }
-
-  return pendingOTP;
 }
-
 
 /**
- * Verify OTP entered by admin
+ * Verify 6-digit OTP code against server
  */
-export function verifyEmailOTP(inputCode: string): { success: boolean; message: string } {
-  if (typeof window === "undefined") return { success: false, message: "Window unavailable" };
-
+export async function verifyServerOTPCode(email: string, inputCode: string): Promise<{ success: boolean; message: string }> {
   try {
-    const item = sessionStorage.getItem(STORAGE_KEYS.PENDING_OTP);
-    if (!item) {
-      return { success: false, message: "OTP expired or not requested yet." };
-    }
-
-    const pending: PendingOTP = JSON.parse(item);
-    if (Date.now() > pending.expiresAt) {
-      sessionStorage.removeItem(STORAGE_KEYS.PENDING_OTP);
-      return { success: false, message: "OTP has expired. Please request a new code." };
-    }
-
-    if (pending.code.trim() === inputCode.trim()) {
-      sessionStorage.removeItem(STORAGE_KEYS.PENDING_OTP);
+    const res = await fetch("/api/verify-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.trim().toLowerCase(), code: inputCode.trim() })
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
       return { success: true, message: "Email verified successfully!" };
     } else {
-      return { success: false, message: "Invalid 6-digit verification code." };
+      return { success: false, message: data.error || "Invalid verification code." };
     }
-  } catch (e) {
-    return { success: false, message: "Error verifying code." };
+  } catch (e: any) {
+    return { success: false, message: e?.message || "Network error verifying code." };
   }
 }
+
 
 /**
  * Save logged-in session (Remember Me in localStorage, non-Remember Me in sessionStorage)

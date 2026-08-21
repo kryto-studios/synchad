@@ -1,14 +1,21 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import nodemailer from "nodemailer";
+import { setServerOTP } from "@/lib/otp-store";
 
 export async function POST(req: Request) {
   try {
-    const { email, code } = await req.json();
+    const { email } = await req.json();
 
-    if (!email || !code) {
-      return NextResponse.json({ success: false, error: "Email and OTP code are required" }, { status: 400 });
+    if (!email) {
+      return NextResponse.json({ success: false, error: "Email is required" }, { status: 400 });
     }
+
+    const cleanEmail = email.trim().toLowerCase();
+
+    // Generate secure 6-digit OTP code on the server
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    setServerOTP(cleanEmail, code);
 
     const resendApiKey = process.env.RESEND_API_KEY;
     const gmailAppPass = process.env.GMAIL_APP_PASSWORD;
@@ -30,12 +37,12 @@ export async function POST(req: Request) {
       </div>
     `;
 
-    // OPTION 1: Resend API Delivery (Recommended - Free 3,000 emails/mo)
+    // OPTION 1: Resend API Delivery (Recommended)
     if (resendApiKey) {
       const resend = new Resend(resendApiKey);
       const resendData = await resend.emails.send({
         from: "synchAD Security <onboarding@resend.dev>",
-        to: [email],
+        to: [cleanEmail],
         subject: emailSubject,
         html: emailHtml
       });
@@ -45,7 +52,10 @@ export async function POST(req: Request) {
         return NextResponse.json({ success: false, error: resendData.error.message }, { status: 500 });
       }
 
-      return NextResponse.json({ success: true, provider: "resend", message: `Real OTP email sent via Resend to ${email}` });
+      return NextResponse.json({
+        success: true,
+        message: `Real 6-digit verification code sent via Resend to ${cleanEmail}`
+      });
     }
 
     // OPTION 2: Gmail SMTP Delivery via Nodemailer
@@ -60,20 +70,21 @@ export async function POST(req: Request) {
 
       await transporter.sendMail({
         from: `"synchAD Security" <${gmailUser}>`,
-        to: email,
+        to: cleanEmail,
         subject: emailSubject,
         html: emailHtml
       });
 
-      return NextResponse.json({ success: true, provider: "gmail", message: `Real OTP email sent via Gmail to ${email}` });
+      return NextResponse.json({
+        success: true,
+        message: `Real 6-digit verification code sent via Gmail to ${cleanEmail}`
+      });
     }
 
-    // Fallback: Neither API key configured -> Return notice
     return NextResponse.json({
       success: false,
-      error: "Neither RESEND_API_KEY nor GMAIL_APP_PASSWORD configured in .env.local",
-      demoMode: true
-    });
+      error: "RESEND_API_KEY environment variable is missing in .env.local"
+    }, { status: 500 });
   } catch (error: any) {
     console.error("Error sending OTP email:", error);
     return NextResponse.json({ success: false, error: error?.message || "Failed to send email" }, { status: 500 });
