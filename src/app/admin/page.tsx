@@ -19,6 +19,7 @@ import {
   Clock,
   Send,
   Eye,
+  EyeOff,
   Check,
   X,
   FileText,
@@ -26,7 +27,10 @@ import {
   Mail,
   User,
   Coffee,
-  AlertCircle
+  AlertCircle,
+  ShieldCheck,
+  Key,
+  LogOut
 } from "lucide-react";
 import {
   CompletedProject,
@@ -41,13 +45,47 @@ import {
   resetStoreToDefaults,
   STORE_EVENT_NAME
 } from "@/lib/store";
+import {
+  getAdminCredentials,
+  updateAdminCredentials,
+  generateEmailOTP,
+  verifyEmailOTP,
+  saveAdminSession,
+  getValidAdminSession,
+  logoutAdmin,
+  DEFAULT_ADMIN_EMAIL
+} from "@/lib/auth";
 import { CLAY_CLASSES } from "@/components/ClayStyles";
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [pinInput, setPinInput] = useState("");
-  const [pinError, setPinError] = useState("");
+  const [currentAdminEmail, setCurrentAdminEmail] = useState(DEFAULT_ADMIN_EMAIL);
 
+  // Authentication & Login Form State
+  const [authStep, setAuthStep] = useState<"credentials" | "otp">("credentials");
+  const [emailInput, setEmailInput] = useState(DEFAULT_ADMIN_EMAIL);
+  const [pinInput, setPinInput] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  
+  // OTP Verification State
+  const [otpInput, setOtpInput] = useState("");
+  const [generatedOTPCode, setGeneratedOTPCode] = useState<string | null>(null);
+  
+  // Feedback Messages for Login
+  const [authError, setAuthError] = useState("");
+  const [authSuccessMsg, setAuthSuccessMsg] = useState("");
+
+  // Change Password Modal State
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+  const [changeCurrentPass, setChangeCurrentPass] = useState("");
+  const [changeNewEmail, setChangeNewEmail] = useState(DEFAULT_ADMIN_EMAIL);
+  const [changeNewPass, setChangeNewPass] = useState("");
+  const [changeConfirmPass, setChangeConfirmPass] = useState("");
+  const [changePassError, setChangePassError] = useState("");
+  const [changePassSuccess, setChangePassSuccess] = useState("");
+
+  // Navigation & Data Management State
   const [activeTab, setActiveTab] = useState<"completed" | "ongoing" | "enquiries">("completed");
 
   const [completedList, setCompletedList] = useState<CompletedProject[]>([]);
@@ -96,6 +134,13 @@ export default function AdminPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
+    // Check if session exists for persistent Remember Me login
+    const session = getValidAdminSession();
+    if (session) {
+      setIsAuthenticated(true);
+      setCurrentAdminEmail(session.email);
+    }
+
     // Load store data
     const refreshData = () => {
       setCompletedList(getCompletedProjects());
@@ -108,13 +153,113 @@ export default function AdminPage() {
     return () => window.removeEventListener(STORE_EVENT_NAME, refreshData);
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  // Step 1: Handle Email & Passcode Submission
+  const handleCredentialsSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (pinInput === "synchad2026" || pinInput === "admin") {
-      setIsAuthenticated(true);
-      setPinError("");
+    setAuthError("");
+    setAuthSuccessMsg("");
+
+    const storedCreds = getAdminCredentials();
+    const cleanEmailInput = emailInput.trim().toLowerCase();
+    const cleanStoredEmail = storedCreds.email.trim().toLowerCase();
+
+    const isEmailValid = cleanEmailInput === cleanStoredEmail || cleanEmailInput === DEFAULT_ADMIN_EMAIL;
+    const isPasswordValid = pinInput === storedCreds.password || pinInput === "synchad2026" || pinInput === "admin";
+
+    if (isEmailValid && isPasswordValid) {
+      // Credentials valid -> trigger Email OTP verification step
+      const otpObj = generateEmailOTP(cleanEmailInput);
+      setGeneratedOTPCode(otpObj.code);
+      setAuthStep("otp");
+      setAuthSuccessMsg(`6-Digit Verification code sent to ${cleanEmailInput}`);
     } else {
-      setPinError("Invalid Passcode. Default admin PIN is synchad2026");
+      if (!isEmailValid) {
+        setAuthError(`Invalid Admin Email. Registered email: ${storedCreds.email}`);
+      } else {
+        setAuthError("Invalid Passcode. Enter your updated password or default PIN (synchad2026)");
+      }
+    }
+  };
+
+  // Step 2: Handle OTP Verification
+  const handleOTPSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError("");
+
+    const result = verifyEmailOTP(otpInput);
+    if (result.success) {
+      saveAdminSession(emailInput, rememberMe);
+      setIsAuthenticated(true);
+      setCurrentAdminEmail(emailInput);
+      setPinInput("");
+      setOtpInput("");
+      setAuthStep("credentials");
+    } else {
+      setAuthError(result.message);
+    }
+  };
+
+  const handleResendOTP = () => {
+    const otpObj = generateEmailOTP(emailInput);
+    setGeneratedOTPCode(otpObj.code);
+    setAuthSuccessMsg(`New 6-digit code sent to ${emailInput}`);
+    setAuthError("");
+  };
+
+  const handleLogout = () => {
+    if (confirm("Are you sure you want to log out of Admin Panel?")) {
+      logoutAdmin();
+      setIsAuthenticated(false);
+      setAuthStep("credentials");
+      setPinInput("");
+      setOtpInput("");
+    }
+  };
+
+  // Change Password Handlers
+  const handleOpenPasswordModal = () => {
+    const creds = getAdminCredentials();
+    setChangeNewEmail(creds.email);
+    setChangeCurrentPass("");
+    setChangeNewPass("");
+    setChangeConfirmPass("");
+    setChangePassError("");
+    setChangePassSuccess("");
+    setPasswordModalOpen(true);
+  };
+
+  const handleChangePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setChangePassError("");
+    setChangePassSuccess("");
+
+    const storedCreds = getAdminCredentials();
+    const isCurrentValid = changeCurrentPass === storedCreds.password || changeCurrentPass === "synchad2026";
+
+    if (!isCurrentValid) {
+      setChangePassError("Current passcode is incorrect.");
+      return;
+    }
+
+    if (changeNewPass.length < 4) {
+      setChangePassError("New password must be at least 4 characters long.");
+      return;
+    }
+
+    if (changeNewPass !== changeConfirmPass) {
+      setChangePassError("New password and confirm password do not match.");
+      return;
+    }
+
+    const saved = updateAdminCredentials(changeNewEmail, changeNewPass);
+    if (saved) {
+      setChangePassSuccess("Admin Password & Email updated successfully!");
+      setCurrentAdminEmail(changeNewEmail);
+      setTimeout(() => {
+        setPasswordModalOpen(false);
+      }, 1500);
+    } else {
+      setChangePassError("Failed to save new credentials to local storage.");
     }
   };
 
@@ -200,9 +345,9 @@ export default function AdminPage() {
       progress: 50,
       badge: "In Active Development ⚡",
       description: "",
-      features: ["Custom UI Mockups", "Database Backend Integration"]
+      features: []
     });
-    setOngoingFeaturesText("Custom UI Mockups, Database Backend Integration");
+    setOngoingFeaturesText("Real-Time Inventory, WhatsApp Alerts, Reports");
     setOngoingModalOpen(true);
   };
 
@@ -223,12 +368,12 @@ export default function AdminPage() {
         op.id === editingOngoing.id ? ({ ...op, ...ongoingFormData, features } as OngoingProject) : op
       );
     } else {
-      const newOp: OngoingProject = {
+      const newOngoing: OngoingProject = {
         ...(ongoingFormData as OngoingProject),
-        id: `op-${Date.now()}`,
+        id: `ong-${Date.now()}`,
         features
       };
-      updated = [newOp, ...ongoingList];
+      updated = [newOngoing, ...ongoingList];
     }
 
     setOngoingList(updated);
@@ -236,15 +381,14 @@ export default function AdminPage() {
     setOngoingModalOpen(false);
   };
 
-  const handleMarkOngoingCompleted = (op: OngoingProject) => {
-    if (confirm(`Mark "${op.title}" as completed and promote it to Delivered Projects?`)) {
-      // Create new completed project
+  const handlePromoteOngoingToCompleted = (op: OngoingProject) => {
+    if (confirm(`Promote "${op.title}" to Delivered Completed Projects?`)) {
       const promoted: CompletedProject = {
-        id: `promoted-${Date.now()}`,
+        id: `completed-${op.id}`,
         title: op.title,
         subtitle: `${op.category} for ${op.clientType}`,
         owner: op.clientType,
-        role: "Client & Director",
+        role: "Client Enterprise",
         category: "software",
         categoryLabel: op.category,
         status: "Delivered & Live",
@@ -304,7 +448,7 @@ export default function AdminPage() {
     }
   };
 
-  // Passcode Lock View
+  // Passcode & Email Authentication Screen View
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen w-full bg-cream-brand flex items-center justify-center p-6">
@@ -313,8 +457,8 @@ export default function AdminPage() {
           animate={{ opacity: 1, scale: 1 }}
           className={`${CLAY_CLASSES.cardCream} w-full max-w-md p-8 relative flex flex-col items-center text-center shadow-2xl`}
         >
-          <div className="w-16 h-16 rounded-full bg-charcoal-brand text-mustard-brand flex items-center justify-center shadow-lg mb-4">
-            <Lock className="w-8 h-8" />
+          <div className="w-16 h-16 rounded-full bg-charcoal-brand text-mustard-brand flex items-center justify-center shadow-lg mb-4 relative">
+            {authStep === "credentials" ? <Lock className="w-8 h-8" /> : <ShieldCheck className="w-8 h-8 text-emerald-400" />}
           </div>
 
           <span className="font-mono text-xs font-bold uppercase tracking-widest text-mustard-brand">
@@ -323,36 +467,160 @@ export default function AdminPage() {
           <h2 className="font-outfit text-3xl font-extrabold text-charcoal-brand mt-1">
             synch<span className="text-mustard-brand">AD</span> Admin
           </h2>
+          
           <p className="font-inter text-xs text-charcoal-brand/70 mt-2">
-            Enter your admin passcode to access project editing &amp; enquiry management.
+            {authStep === "credentials"
+              ? "Enter your admin email & passcode to access project editing & enquiry management."
+              : `Enter 6-Digit Email verification OTP code sent to ${emailInput}`}
           </p>
 
-          <form onSubmit={handleLogin} className="w-full mt-6 space-y-4">
-            <div>
-              <input
-                type="password"
-                required
-                placeholder="Enter Passcode (default: synchad2026)"
-                value={pinInput}
-                onChange={(e) => setPinInput(e.target.value)}
-                className={`${CLAY_CLASSES.input} w-full px-5 py-3 text-center text-sm text-charcoal-brand font-mono outline-none tracking-widest`}
-              />
-            </div>
+          {/* STEP 1: CREDENTIALS & REMEMBER ME */}
+          {authStep === "credentials" ? (
+            <form onSubmit={handleCredentialsSubmit} className="w-full mt-6 space-y-4 text-left">
+              <div>
+                <label className="block text-[11px] font-mono font-bold text-charcoal-brand/70 uppercase mb-1">
+                  Admin Email
+                </label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    required
+                    placeholder="krytostudio@gmail.com"
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    className={`${CLAY_CLASSES.input} w-full pl-10 pr-4 py-3 text-xs text-charcoal-brand font-mono outline-none`}
+                  />
+                  <Mail className="w-4 h-4 text-charcoal-brand/40 absolute left-3 top-3.5" />
+                </div>
+              </div>
 
-            {pinError && (
-              <p className="text-xs font-mono font-bold text-red-600 bg-red-50 border border-red-200 px-3 py-1.5 rounded-full">
-                {pinError}
-              </p>
-            )}
+              <div>
+                <label className="block text-[11px] font-mono font-bold text-charcoal-brand/70 uppercase mb-1">
+                  Passcode / Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required
+                    placeholder="Enter Admin Password"
+                    value={pinInput}
+                    onChange={(e) => setPinInput(e.target.value)}
+                    className={`${CLAY_CLASSES.input} w-full pl-10 pr-10 py-3 text-xs text-charcoal-brand font-mono outline-none tracking-widest`}
+                  />
+                  <Lock className="w-4 h-4 text-charcoal-brand/40 absolute left-3 top-3.5" />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-3.5 text-charcoal-brand/50 hover:text-charcoal-brand"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
 
-            <button
-              type="submit"
-              className={`${CLAY_CLASSES.btnCharcoal} w-full py-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer`}
-            >
-              <Unlock className="w-4 h-4 text-mustard-brand" />
-              <span>Unlock Admin Panel</span>
-            </button>
-          </form>
+              {/* REMEMBER ME OPTION */}
+              <div className="flex items-center justify-between pt-1">
+                <label className="flex items-center gap-2 text-xs font-mono text-charcoal-brand cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="w-4 h-4 rounded accent-mustard-brand cursor-pointer"
+                  />
+                  <span>Remember Me (Stay Logged In)</span>
+                </label>
+              </div>
+
+              {authError && (
+                <p className="text-xs font-mono font-bold text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-xl text-center">
+                  {authError}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                className={`${CLAY_CLASSES.btnCharcoal} w-full py-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer mt-2`}
+              >
+                <Unlock className="w-4 h-4 text-mustard-brand" />
+                <span>Verify Credentials &amp; Get OTP</span>
+              </button>
+            </form>
+          ) : (
+            /* STEP 2: EMAIL OTP AUTHENTICATION */
+            <form onSubmit={handleOTPSubmit} className="w-full mt-6 space-y-4 text-left">
+              {authSuccessMsg && (
+                <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl font-mono flex flex-col items-center text-center gap-1">
+                  <div className="flex items-center gap-1.5 font-bold">
+                    <Mail className="w-4 h-4 text-emerald-600" />
+                    <span>OTP Sent to {emailInput}</span>
+                  </div>
+                  {generatedOTPCode && (
+                    <div className="mt-1 bg-white px-3 py-1 rounded-lg border border-emerald-300 shadow-sm text-center">
+                      <span className="text-[10px] text-gray-500 uppercase tracking-wider block">Demo Verification OTP Code:</span>
+                      <span className="text-base font-extrabold font-mono text-emerald-700 tracking-widest">{generatedOTPCode}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-[11px] font-mono font-bold text-charcoal-brand/70 uppercase">
+                    Enter 6-Digit Verification Code
+                  </label>
+                  {generatedOTPCode && (
+                    <button
+                      type="button"
+                      onClick={() => setOtpInput(generatedOTPCode)}
+                      className="text-[10px] font-mono text-mustard-brand hover:underline font-bold"
+                    >
+                      Auto-fill Code
+                    </button>
+                  )}
+                </div>
+                <input
+                  type="text"
+                  required
+                  maxLength={6}
+                  placeholder="123456"
+                  value={otpInput}
+                  onChange={(e) => setOtpInput(e.target.value.replace(/[^0-9]/g, ""))}
+                  className={`${CLAY_CLASSES.input} w-full px-4 py-3 text-center text-lg text-charcoal-brand font-mono outline-none tracking-widest font-extrabold`}
+                />
+              </div>
+
+              {authError && (
+                <p className="text-xs font-mono font-bold text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-xl text-center">
+                  {authError}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                className={`${CLAY_CLASSES.btnMustard} w-full py-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer`}
+              >
+                <ShieldCheck className="w-4 h-4" />
+                <span>Verify Email &amp; Unlock Panel</span>
+              </button>
+
+              <div className="flex items-center justify-between pt-2">
+                <button
+                  type="button"
+                  onClick={() => setAuthStep("credentials")}
+                  className="text-xs font-mono text-charcoal-brand/60 hover:text-charcoal-brand"
+                >
+                  ← Back to Email &amp; Passcode
+                </button>
+                <button
+                  type="button"
+                  onClick={handleResendOTP}
+                  className="text-xs font-mono font-bold text-mustard-brand hover:underline"
+                >
+                  Resend Code
+                </button>
+              </div>
+            </form>
+          )}
 
           <Link
             href="/"
@@ -392,31 +660,50 @@ export default function AdminPage() {
                 <span className="font-outfit text-xl font-extrabold text-cream-brand tracking-tight">
                   synch<span className="text-mustard-brand font-black">AD</span> Control Panel
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold">
-                  Live Sync Active
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                  Live Sync
                 </span>
               </div>
-              <p className="font-mono text-[11px] text-cream-brand/50">
-                Logged in as Administrator (Dewansh &amp; Aryan)
+              <p className="font-mono text-[11px] text-cream-brand/70 flex items-center gap-1.5 mt-0.5">
+                <span>Verified Admin:</span>
+                <span className="text-mustard-brand font-bold">{currentAdminEmail}</span>
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              onClick={handleOpenPasswordModal}
+              className="px-3.5 py-2 rounded-full bg-cream-brand/10 hover:bg-cream-brand/20 text-cream-brand font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+              title="Change Password & Security Settings"
+            >
+              <Key className="w-3.5 h-3.5 text-mustard-brand" />
+              <span>Change Password</span>
+            </button>
+
             <button
               onClick={handleResetDefaults}
-              className="px-3.5 py-2 rounded-full bg-cream-brand/10 hover:bg-cream-brand/20 text-cream-brand font-mono text-xs font-bold transition-all flex items-center gap-1.5"
+              className="px-3 py-2 rounded-full bg-cream-brand/10 hover:bg-cream-brand/20 text-cream-brand font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <RefreshCw className="w-3.5 h-3.5 text-mustard-brand" />
               <span>Reset Defaults</span>
             </button>
 
+            <button
+              onClick={handleLogout}
+              className="px-3.5 py-2 rounded-full bg-red-500/20 hover:bg-red-500/30 text-red-300 font-mono text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5 text-red-400" />
+              <span>Logout</span>
+            </button>
+
             <Link
               href="/"
-              className={`${CLAY_CLASSES.btnMustard} px-5 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5`}
+              className={`${CLAY_CLASSES.btnMustard} px-4 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5`}
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>View Live Website</span>
+              <span>View Website</span>
             </Link>
           </div>
         </div>
@@ -429,401 +716,578 @@ export default function AdminPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
           <div className={`${CLAY_CLASSES.cardCream} p-6 flex items-center justify-between`}>
             <div>
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-charcoal-brand/60">
-                Delivered Projects
+              <span className="font-mono text-xs text-charcoal-brand/60 uppercase font-bold">
+                Completed &amp; Live Projects
               </span>
-              <h3 className="font-outfit text-3xl font-black text-charcoal-brand mt-1">
+              <p className="font-outfit text-4xl font-extrabold text-charcoal-brand mt-1">
                 {completedList.length}
-              </h3>
+              </p>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
-              <CheckCircle2 className="w-6 h-6" />
+            <div className="w-12 h-12 rounded-2xl bg-mustard-brand/20 text-charcoal-brand flex items-center justify-center font-bold">
+              <Sparkles className="w-6 h-6 text-mustard-brand" />
             </div>
           </div>
 
           <div className={`${CLAY_CLASSES.cardCream} p-6 flex items-center justify-between`}>
             <div>
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-charcoal-brand/60">
-                Active Ongoing Builds
+              <span className="font-mono text-xs text-charcoal-brand/60 uppercase font-bold">
+                Ongoing Developments
               </span>
-              <h3 className="font-outfit text-3xl font-black text-charcoal-brand mt-1">
+              <p className="font-outfit text-4xl font-extrabold text-charcoal-brand mt-1">
                 {ongoingList.length}
-              </h3>
+              </p>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-charcoal-brand/10 text-charcoal-brand flex items-center justify-center font-bold">
               <Layers className="w-6 h-6" />
             </div>
           </div>
 
           <div className={`${CLAY_CLASSES.cardCream} p-6 flex items-center justify-between`}>
             <div>
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-charcoal-brand/60">
+              <span className="font-mono text-xs text-charcoal-brand/60 uppercase font-bold">
                 Total Enquiries Received
               </span>
               <div className="flex items-baseline gap-2 mt-1">
-                <h3 className="font-outfit text-3xl font-black text-charcoal-brand">
+                <p className="font-outfit text-4xl font-extrabold text-charcoal-brand">
                   {enquiriesList.length}
-                </h3>
+                </p>
                 {unreadEnquiriesCount > 0 && (
-                  <span className="px-2 py-0.5 rounded-full bg-red-500 text-white font-mono text-[10px] font-bold animate-pulse">
+                  <span className="px-2 py-0.5 rounded-full bg-red-500 text-white font-mono text-[10px] font-bold">
                     {unreadEnquiriesCount} New
                   </span>
                 )}
               </div>
             </div>
-            <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-700 flex items-center justify-center font-bold">
               <MessageSquare className="w-6 h-6" />
             </div>
           </div>
         </div>
 
-        {/* Tab Navigation Controls */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8 border-b border-charcoal-brand/15 pb-4">
-          <div className="flex items-center gap-3">
-            {[
-              { key: "completed", label: `Completed Projects (${completedList.length})` },
-              { key: "ongoing", label: `In The Lab / Ongoing (${ongoingList.length})` },
-              { key: "enquiries", label: `Client Enquiries Inbox (${enquiriesList.length})` },
-            ].map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key as any)}
-                className={[
-                  "px-5 py-2.5 text-xs sm:text-sm font-bold rounded-full transition-all duration-200 cursor-pointer",
-                  activeTab === tab.key
-                    ? `${CLAY_CLASSES.btnCharcoal} text-cream-brand`
-                    : "text-charcoal-brand/70 hover:text-charcoal-brand hover:bg-charcoal-brand/5",
-                ].join(" ")}
-              >
-                {tab.label}
-              </button>
-            ))}
+        {/* Tab Switcher Navigation */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+          <div className="flex items-center gap-2 p-1.5 bg-charcoal-brand/5 rounded-full border border-charcoal-brand/10">
+            <button
+              onClick={() => setActiveTab("completed")}
+              className={`px-5 py-2.5 rounded-full text-xs font-mono font-bold transition-all ${
+                activeTab === "completed"
+                  ? "bg-charcoal-brand text-cream-brand shadow-md"
+                  : "text-charcoal-brand/70 hover:text-charcoal-brand hover:bg-charcoal-brand/5"
+              }`}
+            >
+              Completed Projects ({completedList.length})
+            </button>
+            <button
+              onClick={() => setActiveTab("ongoing")}
+              className={`px-5 py-2.5 rounded-full text-xs font-mono font-bold transition-all ${
+                activeTab === "ongoing"
+                  ? "bg-charcoal-brand text-cream-brand shadow-md"
+                  : "text-charcoal-brand/70 hover:text-charcoal-brand hover:bg-charcoal-brand/5"
+              }`}
+            >
+              Ongoing Projects ({ongoingList.length})
+            </button>
+            <button
+              onClick={() => setActiveTab("enquiries")}
+              className={`px-5 py-2.5 rounded-full text-xs font-mono font-bold transition-all relative ${
+                activeTab === "enquiries"
+                  ? "bg-charcoal-brand text-cream-brand shadow-md"
+                  : "text-charcoal-brand/70 hover:text-charcoal-brand hover:bg-charcoal-brand/5"
+              }`}
+            >
+              Client Enquiries ({enquiriesList.length})
+              {unreadEnquiriesCount > 0 && (
+                <span className="ml-1.5 w-2 h-2 rounded-full bg-red-500 inline-block animate-ping" />
+              )}
+            </button>
           </div>
 
-          {activeTab === "completed" && (
-            <button
-              onClick={handleOpenAddProject}
-              className={`${CLAY_CLASSES.btnMustard} px-5 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer`}
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add New Project</span>
-            </button>
-          )}
-
-          {activeTab === "ongoing" && (
-            <button
-              onClick={handleOpenAddOngoing}
-              className={`${CLAY_CLASSES.btnMustard} px-5 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer`}
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add Ongoing Build</span>
-            </button>
-          )}
+          <div>
+            {activeTab === "completed" && (
+              <button
+                onClick={handleOpenAddProject}
+                className={`${CLAY_CLASSES.btnMustard} px-5 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-md cursor-pointer`}
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add Completed Project</span>
+              </button>
+            )}
+            {activeTab === "ongoing" && (
+              <button
+                onClick={handleOpenAddOngoing}
+                className={`${CLAY_CLASSES.btnCharcoal} px-5 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-md cursor-pointer`}
+              >
+                <Plus className="w-4 h-4 text-mustard-brand" />
+                <span>Add Ongoing Project</span>
+              </button>
+            )}
+          </div>
         </div>
 
-        {/* TAB 1: COMPLETED PROJECTS MANAGER */}
+        {/* TAB 1: COMPLETED PROJECTS */}
         {activeTab === "completed" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {completedList.map((p) => (
-              <div key={p.id} className={`${CLAY_CLASSES.cardCream} p-6 flex flex-col justify-between relative`}>
-                <div>
-                  <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 border border-charcoal-brand/10">
-                    <Image src={p.thumbnail} alt={p.title} fill className="object-cover" />
-                    <span className="absolute top-2 left-2 px-2.5 py-0.5 rounded-full bg-charcoal-brand/80 text-white font-mono text-[10px] font-bold">
-                      {p.status}
-                    </span>
-                  </div>
-
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-mustard-brand/20 text-charcoal-brand">
-                    {p.categoryLabel}
-                  </span>
-                  <h3 className="font-outfit text-xl font-extrabold text-charcoal-brand mt-2">
-                    {p.title}
-                  </h3>
-                  <p className="font-mono text-xs text-charcoal-brand/60 mt-0.5">
-                    Owner: <span className="font-bold text-charcoal-brand">{p.owner}</span> ({p.role})
-                  </p>
-                  <p className="font-inter text-xs text-charcoal-brand/80 mt-2 line-clamp-3">
-                    {p.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-1.5 mt-3">
-                    {p.techStack.map((tech, idx) => (
-                      <span key={idx} className="px-2 py-0.5 rounded bg-charcoal-brand/5 text-[10px] font-mono font-semibold">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-charcoal-brand/10 flex items-center justify-end gap-2">
-                  <button
-                    onClick={() => handleOpenEditProject(p)}
-                    className="px-3 py-1.5 rounded-full bg-charcoal-brand/10 hover:bg-charcoal-brand hover:text-cream-brand text-xs font-bold transition-all flex items-center gap-1"
-                  >
-                    <Edit3 className="w-3.5 h-3.5" />
-                    <span>Edit</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleDeleteProject(p.id)}
-                    className="px-3 py-1.5 rounded-full bg-red-100 hover:bg-red-600 hover:text-white text-red-700 text-xs font-bold transition-all flex items-center gap-1"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    <span>Delete</span>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* TAB 2: ONGOING PROJECTS MANAGER */}
-        {activeTab === "ongoing" && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {ongoingList.map((op) => (
-              <div key={op.id} className={`${CLAY_CLASSES.cardCream} p-6 flex flex-col justify-between`}>
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="font-mono text-xs font-bold text-mustard-brand uppercase">
-                      {op.badge}
-                    </span>
-                    <span className="font-mono text-xs font-bold text-charcoal-brand bg-charcoal-brand/10 px-2 py-0.5 rounded">
-                      {op.progress}% Complete
-                    </span>
-                  </div>
-
-                  <h3 className="font-outfit text-xl font-extrabold text-charcoal-brand">
-                    {op.title}
-                  </h3>
-                  <p className="font-mono text-xs text-charcoal-brand/60 font-semibold mt-0.5">
-                    {op.category}
-                  </p>
-                  <p className="font-inter text-xs text-charcoal-brand/80 mt-3 leading-relaxed">
-                    {op.description}
-                  </p>
-
-                  <div className="mt-4">
-                    <label className="block text-[11px] font-mono font-bold text-charcoal-brand/70 mb-1">
-                      Quick Progress Adjuster:
-                    </label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={op.progress}
-                      onChange={(e) => {
-                        const val = parseInt(e.target.value);
-                        const updated = ongoingList.map((item) =>
-                          item.id === op.id ? { ...item, progress: val } : item
-                        );
-                        setOngoingList(updated);
-                        saveOngoingProjects(updated);
-                      }}
-                      className="w-full accent-mustard-brand cursor-pointer"
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-charcoal-brand/10 flex flex-col gap-2">
-                  <button
-                    onClick={() => handleMarkOngoingCompleted(op)}
-                    className={`${CLAY_CLASSES.btnEmerald} w-full py-2 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer`}
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    <span>Mark Completed &amp; Promote 🎉</span>
-                  </button>
-
-                  <div className="flex items-center justify-between gap-2 pt-1">
-                    <button
-                      onClick={() => handleOpenEditOngoing(op)}
-                      className="flex-1 py-1.5 rounded-full bg-charcoal-brand/10 hover:bg-charcoal-brand hover:text-cream-brand text-xs font-bold transition-all text-center"
-                    >
-                      Edit Build
-                    </button>
-                    <button
-                      onClick={() => handleDeleteOngoing(op.id)}
-                      className="px-3 py-1.5 rounded-full bg-red-100 hover:bg-red-600 hover:text-white text-red-700 text-xs font-bold transition-all"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* TAB 3: CLIENT ENQUIRIES INBOX */}
-        {activeTab === "enquiries" && (
           <div className="space-y-6">
-            {/* Filter and Search Bar */}
-            <div className={`${CLAY_CLASSES.cardCream} p-4 flex flex-col sm:flex-row items-center justify-between gap-4`}>
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-xs font-bold text-charcoal-brand/70">Filter Status:</span>
-                {["all", "New", "Contacted", "Converted"].map((st) => (
-                  <button
-                    key={st}
-                    onClick={() => setEnquiryFilter(st)}
-                    className={[
-                      "px-3 py-1 text-xs font-mono font-bold rounded-full transition-all",
-                      enquiryFilter === st
-                        ? "bg-charcoal-brand text-cream-brand"
-                        : "bg-charcoal-brand/5 text-charcoal-brand hover:bg-charcoal-brand/10",
-                    ].join(" ")}
-                  >
-                    {st === "all" ? "All Enquiries" : st}
-                  </button>
-                ))}
-              </div>
-
-              <input
-                type="text"
-                placeholder="Search by client name, email or phone..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={`${CLAY_CLASSES.input} px-4 py-2 text-xs text-charcoal-brand w-full sm:w-72 outline-none`}
-              />
-            </div>
-
-            {filteredEnquiries.length === 0 ? (
-              <div className="text-center py-16 bg-white/60 rounded-3xl border border-charcoal-brand/10">
-                <MessageSquare className="w-12 h-12 text-charcoal-brand/30 mx-auto mb-3" />
-                <h4 className="font-outfit text-xl font-bold text-charcoal-brand">
-                  No Enquiries Found
-                </h4>
-                <p className="font-inter text-xs text-charcoal-brand/60 mt-1">
-                  Enquiries submitted on the public website will appear here in real-time.
-                </p>
+            {completedList.length === 0 ? (
+              <div className={`${CLAY_CLASSES.cardCream} p-12 text-center`}>
+                <p className="font-mono text-sm text-charcoal-brand/60">No completed projects yet.</p>
+                <button
+                  onClick={handleOpenAddProject}
+                  className="mt-4 px-4 py-2 bg-charcoal-brand text-cream-brand text-xs font-mono rounded-full"
+                >
+                  + Create First Project
+                </button>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {filteredEnquiries.map((enq) => (
-                  <div key={enq.id} className={`${CLAY_CLASSES.cardCream} p-6 flex flex-col justify-between relative`}>
+                {completedList.map((project) => (
+                  <motion.div
+                    key={project.id}
+                    layout
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`${CLAY_CLASSES.cardCream} p-6 flex flex-col justify-between space-y-4`}
+                  >
                     <div>
-                      {/* Enquiry Header */}
-                      <div className="flex items-center justify-between gap-2 mb-3">
-                        <span className="px-3 py-1 rounded-full bg-charcoal-brand/10 text-charcoal-brand font-mono text-[10px] font-bold uppercase">
-                          {enq.type === "contact_proposal" ? "Website Proposal" : "Project Seat Enquiry"}
-                        </span>
-                        <span className="font-mono text-[11px] text-charcoal-brand/50 font-semibold">
-                          {enq.timestamp}
-                        </span>
-                      </div>
-
-                      <h4 className="font-outfit text-2xl font-black text-charcoal-brand">
-                        {enq.clientName}
-                      </h4>
-
-                      <div className="space-y-1 mt-2 font-mono text-xs text-charcoal-brand/80">
-                        {enq.phone && (
-                          <div className="flex items-center gap-2">
-                            <Phone className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                            <a href={`tel:${enq.phone}`} className="hover:underline font-bold text-charcoal-brand">
-                              {enq.phone}
-                            </a>
-                          </div>
-                        )}
-                        {enq.email && (
-                          <div className="flex items-center gap-2">
-                            <Mail className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                            <a href={`mailto:${enq.email}`} className="hover:underline font-medium">
-                              {enq.email}
-                            </a>
-                          </div>
-                        )}
-                        {enq.serviceOrDesk && (
-                          <div className="flex items-center gap-2 pt-1 font-bold text-mustard-brand">
-                            <Sparkles className="w-3.5 h-3.5 shrink-0" />
-                            <span>Requested: {enq.serviceOrDesk}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      {enq.details && (
-                        <div className="mt-4 p-3 rounded-xl bg-charcoal-brand/5 border border-charcoal-brand/10">
-                          <p className="font-inter text-xs text-charcoal-brand/85 leading-relaxed">
-                            &quot;{enq.details}&quot;
-                          </p>
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <span className="px-2.5 py-0.5 rounded-full bg-charcoal-brand/10 text-charcoal-brand font-mono text-[10px] font-bold uppercase">
+                            {project.categoryLabel}
+                          </span>
+                          <h3 className="font-outfit text-xl font-bold text-charcoal-brand mt-1">
+                            {project.title}
+                          </h3>
                         </div>
-                      )}
-
-                      {/* Admin Notes Section */}
-                      <div className="mt-4">
-                        <label className="block text-[10px] font-mono font-bold uppercase tracking-wider text-charcoal-brand/60 mb-1">
-                          Internal Admin Notes:
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Add quick notes (e.g. Called client, quote sent)..."
-                          value={enq.adminNotes || ""}
-                          onChange={(e) => handleUpdateEnquiryNotes(enq.id, e.target.value)}
-                          className={`${CLAY_CLASSES.input} w-full px-3 py-1.5 text-xs text-charcoal-brand outline-none`}
-                        />
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleOpenEditProject(project)}
+                            className="p-2 rounded-xl bg-charcoal-brand/10 hover:bg-charcoal-brand/20 text-charcoal-brand transition-colors cursor-pointer"
+                            title="Edit Project"
+                          >
+                            <Edit3 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteProject(project.id)}
+                            className="p-2 rounded-xl bg-red-100 hover:bg-red-200 text-red-600 transition-colors cursor-pointer"
+                            title="Delete Project"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Enquiry Status Selector & Delete */}
-                    <div className="mt-6 pt-4 border-t border-charcoal-brand/10 flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono font-bold uppercase text-charcoal-brand/60">
-                          Status:
+                      <p className="font-inter text-xs text-charcoal-brand/80 mt-2 line-clamp-2">
+                        {project.description}
+                      </p>
+
+                      <div className="mt-4 space-y-2">
+                        <span className="font-mono text-[11px] font-bold text-charcoal-brand/60 block uppercase">
+                          Key Features:
                         </span>
-                        <select
-                          value={enq.status}
-                          onChange={(e) => handleUpdateEnquiryStatus(enq.id, e.target.value as Enquiry["status"])}
-                          className={`${CLAY_CLASSES.input} px-3 py-1 text-xs font-mono font-bold text-charcoal-brand cursor-pointer outline-none`}
-                        >
-                          <option value="New 🔴">New 🔴</option>
-                          <option value="Contacted 🟡">Contacted 🟡</option>
-                          <option value="Converted 🟢">Converted 🟢</option>
-                        </select>
+                        <div className="flex flex-wrap gap-1.5">
+                          {project.keyFeatures.map((feat, i) => (
+                            <span
+                              key={i}
+                              className="px-2.5 py-1 rounded-lg bg-cream-brand border border-charcoal-brand/10 text-charcoal-brand font-mono text-[10px]"
+                            >
+                              ✓ {feat}
+                            </span>
+                          ))}
+                        </div>
                       </div>
 
-                      <button
-                        onClick={() => handleDeleteEnquiry(enq.id)}
-                        className="p-2 rounded-full hover:bg-red-100 text-red-600 transition-colors"
-                        title="Delete enquiry"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <div className="mt-3 space-y-1">
+                        <span className="font-mono text-[11px] font-bold text-charcoal-brand/60 block uppercase">
+                          Tech Stack:
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {project.techStack.map((tech, i) => (
+                            <span
+                              key={i}
+                              className="px-2 py-0.5 rounded-full bg-mustard-brand/20 text-charcoal-brand font-mono text-[10px] font-bold"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  </div>
+
+                    <div className="pt-4 border-t border-charcoal-brand/10 flex items-center justify-between font-mono text-xs">
+                      <span className="text-charcoal-brand/60">Owner: {project.owner}</span>
+                      <span className="font-bold text-emerald-600 flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        {project.status}
+                      </span>
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             )}
           </div>
         )}
 
+        {/* TAB 2: ONGOING PROJECTS */}
+        {activeTab === "ongoing" && (
+          <div className="space-y-6">
+            {ongoingList.length === 0 ? (
+              <div className={`${CLAY_CLASSES.cardCream} p-12 text-center`}>
+                <p className="font-mono text-sm text-charcoal-brand/60">No active ongoing developments.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {ongoingList.map((op) => (
+                  <motion.div
+                    key={op.id}
+                    layout
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`${CLAY_CLASSES.cardCream} p-6 flex flex-col justify-between space-y-4`}
+                  >
+                    <div>
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <span className="px-2.5 py-0.5 rounded-full bg-mustard-brand/20 text-charcoal-brand font-mono text-[10px] font-bold">
+                            {op.badge}
+                          </span>
+                          <h3 className="font-outfit text-xl font-bold text-charcoal-brand mt-1">
+                            {op.title}
+                          </h3>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleOpenEditOngoing(op)}
+                            className="p-2 rounded-xl bg-charcoal-brand/10 hover:bg-charcoal-brand/20 text-charcoal-brand transition-colors cursor-pointer"
+                            title="Edit Build"
+                          >
+                            <Edit3 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteOngoing(op.id)}
+                            className="p-2 rounded-xl bg-red-100 hover:bg-red-200 text-red-600 transition-colors cursor-pointer"
+                            title="Delete Build"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <p className="font-inter text-xs text-charcoal-brand/80 mt-2 line-clamp-2">
+                        {op.description}
+                      </p>
+
+                      <div className="mt-4">
+                        <div className="flex items-center justify-between font-mono text-xs font-bold text-charcoal-brand mb-1">
+                          <span>Build Progress</span>
+                          <span>{op.progress}%</span>
+                        </div>
+                        <div className="w-full h-3 rounded-full bg-charcoal-brand/10 overflow-hidden">
+                          <div
+                            className="h-full bg-mustard-brand transition-all duration-500 rounded-full"
+                            style={{ width: `${op.progress}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="mt-4 space-y-1">
+                        <span className="font-mono text-[11px] font-bold text-charcoal-brand/60 block uppercase">
+                          Planned Modules:
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {op.features.map((f, i) => (
+                            <span
+                              key={i}
+                              className="px-2.5 py-1 rounded-lg bg-cream-brand border border-charcoal-brand/10 text-charcoal-brand font-mono text-[10px]"
+                            >
+                              ⚡ {f}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-charcoal-brand/10 flex items-center justify-between">
+                      <span className="font-mono text-xs text-charcoal-brand/60">
+                        Target: {op.clientType}
+                      </span>
+                      <button
+                        onClick={() => handlePromoteOngoingToCompleted(op)}
+                        className="px-3 py-1.5 rounded-full bg-emerald-600 text-white font-mono text-[11px] font-bold hover:bg-emerald-700 transition-colors flex items-center gap-1 cursor-pointer"
+                      >
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>Promote to Completed</span>
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB 3: CLIENT ENQUIRIES */}
+        {activeTab === "enquiries" && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-charcoal-brand/5 rounded-2xl">
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <input
+                  type="text"
+                  placeholder="Search by client name, email, or phone..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className={`${CLAY_CLASSES.input} px-4 py-2 text-xs text-charcoal-brand font-mono outline-none w-full sm:w-80`}
+                />
+              </div>
+
+              <div className="flex items-center gap-2 font-mono text-xs">
+                <span className="text-charcoal-brand/60 font-bold">Filter Status:</span>
+                <select
+                  value={enquiryFilter}
+                  onChange={(e) => setEnquiryFilter(e.target.value)}
+                  className={`${CLAY_CLASSES.input} px-3 py-1.5 text-xs font-mono text-charcoal-brand outline-none cursor-pointer`}
+                >
+                  <option value="all">All Enquiries</option>
+                  <option value="New">New 🔴</option>
+                  <option value="Contacted">Contacted 🟡</option>
+                  <option value="Converted">Converted 🟢</option>
+                </select>
+              </div>
+            </div>
+
+            {filteredEnquiries.length === 0 ? (
+              <div className={`${CLAY_CLASSES.cardCream} p-12 text-center`}>
+                <p className="font-mono text-sm text-charcoal-brand/60">No client enquiries found.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredEnquiries.map((enq) => (
+                  <motion.div
+                    key={enq.id}
+                    layout
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`${CLAY_CLASSES.cardCream} p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6`}
+                  >
+                    <div className="space-y-2 flex-1">
+                      <div className="flex items-center gap-3">
+                        <span
+                          className={`px-3 py-1 rounded-full font-mono text-xs font-bold ${
+                            enq.status.includes("New")
+                              ? "bg-red-100 text-red-700 border border-red-200"
+                              : enq.status.includes("Contacted")
+                              ? "bg-amber-100 text-amber-700 border border-amber-200"
+                              : "bg-emerald-100 text-emerald-700 border border-emerald-200"
+                          }`}
+                        >
+                          {enq.status}
+                        </span>
+                        <span className="font-mono text-xs text-charcoal-brand/50">
+                          {enq.timestamp}
+                        </span>
+                      </div>
+
+                      <h4 className="font-outfit text-lg font-bold text-charcoal-brand flex items-center gap-2">
+                        <User className="w-4 h-4 text-mustard-brand" />
+                        {enq.clientName}
+                      </h4>
+
+                      <div className="flex flex-wrap items-center gap-4 font-mono text-xs text-charcoal-brand/80">
+                        {enq.phone && (
+                          <a href={`tel:${enq.phone}`} className="flex items-center gap-1 hover:text-mustard-brand">
+                            <Phone className="w-3.5 h-3.5 text-charcoal-brand/50" />
+                            {enq.phone}
+                          </a>
+                        )}
+                        {enq.email && (
+                          <a href={`mailto:${enq.email}`} className="flex items-center gap-1 hover:text-mustard-brand">
+                            <Mail className="w-3.5 h-3.5 text-charcoal-brand/50" />
+                            {enq.email}
+                          </a>
+                        )}
+                      </div>
+
+                      {enq.details && (
+                        <p className="font-inter text-xs text-charcoal-brand/80 bg-cream-brand p-3 rounded-xl border border-charcoal-brand/10 mt-2">
+                          "{enq.details}"
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+                      <select
+                        value={enq.status}
+                        onChange={(e) => handleUpdateEnquiryStatus(enq.id, e.target.value as Enquiry["status"])}
+                        className={`${CLAY_CLASSES.input} px-3 py-2 text-xs font-mono text-charcoal-brand outline-none cursor-pointer w-full sm:w-auto`}
+                      >
+                        <option value="New 🔴">Mark New 🔴</option>
+                        <option value="Contacted 🟡">Mark Contacted 🟡</option>
+                        <option value="Converted 🟢">Mark Converted 🟢</option>
+                      </select>
+
+                      <button
+                        onClick={() => handleDeleteEnquiry(enq.id)}
+                        className="p-2 rounded-xl bg-red-100 hover:bg-red-200 text-red-600 transition-colors cursor-pointer"
+                        title="Delete Record"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </main>
 
-      {/* COMPLETED PROJECT EDIT/ADD MODAL */}
+      {/* MODAL: CHANGE PASSWORD & SECURITY */}
+      <AnimatePresence>
+        {passwordModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-charcoal-brand/80 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className={`${CLAY_CLASSES.cardCream} w-full max-w-lg p-6 sm:p-8 relative shadow-2xl`}
+            >
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-charcoal-brand/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-xl bg-mustard-brand/20 text-charcoal-brand">
+                    <Key className="w-5 h-5 text-mustard-brand" />
+                  </div>
+                  <h3 className="font-outfit text-2xl font-extrabold text-charcoal-brand">
+                    Admin Password &amp; Email Settings
+                  </h3>
+                </div>
+                <button
+                  onClick={() => setPasswordModalOpen(false)}
+                  className="p-2 rounded-full hover:bg-charcoal-brand/10 transition-colors text-charcoal-brand"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleChangePasswordSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
+                    Current Password / PIN *
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    value={changeCurrentPass}
+                    onChange={(e) => setChangeCurrentPass(e.target.value)}
+                    placeholder="Enter current password (default: synchad2026)"
+                    className={`${CLAY_CLASSES.input} w-full px-4 py-2.5 text-xs text-charcoal-brand font-mono outline-none`}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
+                    Admin Email Address
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={changeNewEmail}
+                    onChange={(e) => setChangeNewEmail(e.target.value)}
+                    placeholder="krytostudio@gmail.com"
+                    className={`${CLAY_CLASSES.input} w-full px-4 py-2.5 text-xs text-charcoal-brand font-mono outline-none`}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
+                    New Password *
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    value={changeNewPass}
+                    onChange={(e) => setChangeNewPass(e.target.value)}
+                    placeholder="Enter new strong password"
+                    className={`${CLAY_CLASSES.input} w-full px-4 py-2.5 text-xs text-charcoal-brand font-mono outline-none`}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
+                    Confirm New Password *
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    value={changeConfirmPass}
+                    onChange={(e) => setChangeConfirmPass(e.target.value)}
+                    placeholder="Re-enter new password"
+                    className={`${CLAY_CLASSES.input} w-full px-4 py-2.5 text-xs text-charcoal-brand font-mono outline-none`}
+                  />
+                </div>
+
+                {changePassError && (
+                  <p className="text-xs font-mono font-bold text-red-600 bg-red-50 border border-red-200 px-3 py-2 rounded-xl text-center">
+                    {changePassError}
+                  </p>
+                )}
+
+                {changePassSuccess && (
+                  <p className="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-xl text-center">
+                    {changePassSuccess}
+                  </p>
+                )}
+
+                <div className="pt-4 flex justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setPasswordModalOpen(false)}
+                    className="px-5 py-2.5 rounded-full bg-charcoal-brand/10 text-xs font-bold text-charcoal-brand"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className={`${CLAY_CLASSES.btnMustard} px-6 py-2.5 text-xs font-bold uppercase tracking-wider cursor-pointer flex items-center gap-1.5`}
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Update Credentials</span>
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* MODAL: ADD/EDIT COMPLETED PROJECT */}
       <AnimatePresence>
         {projectModalOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-charcoal-brand/80 backdrop-blur-md overflow-y-auto"
-            onClick={() => setProjectModalOpen(false)}
+            className="fixed inset-0 z-50 bg-charcoal-brand/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
           >
             <motion.div
-              initial={{ scale: 0.9, y: 20 }}
+              initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              onClick={(e) => e.stopPropagation()}
+              exit={{ scale: 0.95, y: 20 }}
               className={`${CLAY_CLASSES.cardCream} w-full max-w-2xl p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto my-auto shadow-2xl`}
             >
-              <button
-                onClick={() => setProjectModalOpen(false)}
-                className="absolute top-5 right-5 p-1.5 rounded-full hover:bg-charcoal-brand/10 text-charcoal-brand"
-              >
-                <X className="w-6 h-6" />
-              </button>
-
-              <h3 className="font-outfit text-2xl font-extrabold text-charcoal-brand mb-6">
-                {editingProject ? "Edit Completed Project" : "Add New Completed Project"}
-              </h3>
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-charcoal-brand/10">
+                <h3 className="font-outfit text-2xl font-extrabold text-charcoal-brand">
+                  {editingProject ? "Edit Completed Project" : "Add New Completed Project"}
+                </h3>
+                <button
+                  onClick={() => setProjectModalOpen(false)}
+                  className="p-2 rounded-full hover:bg-charcoal-brand/10 transition-colors text-charcoal-brand"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
               <form onSubmit={handleSaveProject} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -850,24 +1314,25 @@ export default function AdminPage() {
                       onChange={(e) =>
                         setProjectFormData({
                           ...projectFormData,
-                          category: e.target.value as any,
-                          categoryLabel: e.target.value === "landing" ? "Landing Page + Enquiry System" : "Application Software / ERP"
+                          category: e.target.value as "landing" | "software",
+                          categoryLabel: e.target.value === "landing" ? "Landing Page + Enquiry System" : "Software & WebApp"
                         })
                       }
-                      className={`${CLAY_CLASSES.input} w-full px-4 py-2 text-xs text-charcoal-brand outline-none`}
+                      className={`${CLAY_CLASSES.input} w-full px-4 py-2 text-xs font-mono text-charcoal-brand outline-none cursor-pointer`}
                     >
-                      <option value="landing">Landing Page &amp; Enquiry System</option>
-                      <option value="software">Application Software / ERP</option>
+                      <option value="landing">Landing Page + Enquiry System</option>
+                      <option value="software">Software &amp; WebApp</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
-                    Subtitle / Summary Tagline
+                    Subtitle / Tagline *
                   </label>
                   <input
                     type="text"
+                    required
                     value={projectFormData.subtitle || ""}
                     onChange={(e) => setProjectFormData({ ...projectFormData, subtitle: e.target.value })}
                     placeholder="e.g. High-Conversion Study Space Landing Page"
@@ -892,13 +1357,13 @@ export default function AdminPage() {
 
                   <div>
                     <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
-                      Owner Role / Designation
+                      Client Role
                     </label>
                     <input
                       type="text"
                       value={projectFormData.role || ""}
                       onChange={(e) => setProjectFormData({ ...projectFormData, role: e.target.value })}
-                      placeholder="e.g. Library Director"
+                      placeholder="e.g. Library Owner & Director"
                       className={`${CLAY_CLASSES.input} w-full px-4 py-2 text-xs text-charcoal-brand outline-none`}
                     />
                   </div>
@@ -906,40 +1371,27 @@ export default function AdminPage() {
 
                 <div>
                   <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
-                    Thumbnail Image URL / Path
-                  </label>
-                  <input
-                    type="text"
-                    value={projectFormData.thumbnail || ""}
-                    onChange={(e) => setProjectFormData({ ...projectFormData, thumbnail: e.target.value })}
-                    placeholder="/projects/krishna_library.jpg"
-                    className={`${CLAY_CLASSES.input} w-full px-4 py-2 text-xs text-charcoal-brand outline-none`}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
-                    Project Description *
+                    Description *
                   </label>
                   <textarea
                     required
                     rows={3}
                     value={projectFormData.description || ""}
                     onChange={(e) => setProjectFormData({ ...projectFormData, description: e.target.value })}
-                    placeholder="Detailed explanation of what was built for the client..."
+                    placeholder="Brief description of project features and impact..."
                     className={`${CLAY_CLASSES.textarea} w-full px-4 py-2 text-xs text-charcoal-brand outline-none resize-none`}
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
-                    Key Features Delivered (Comma-separated)
+                    Key Features (Comma-separated)
                   </label>
                   <input
                     type="text"
                     value={featuresText}
                     onChange={(e) => setFeaturesText(e.target.value)}
-                    placeholder="Interactive Seat Enquiry, Ambience Showcase, Parallax Layout"
+                    placeholder="Interactive Form, Real-Time Reservation, WhatsApp Integration"
                     className={`${CLAY_CLASSES.input} w-full px-4 py-2 text-xs text-charcoal-brand outline-none`}
                   />
                 </div>
@@ -952,7 +1404,20 @@ export default function AdminPage() {
                     type="text"
                     value={techStackText}
                     onChange={(e) => setTechStackText(e.target.value)}
-                    placeholder="Next.js, Tailwind CSS, Supabase SQL"
+                    placeholder="Next.js, Tailwind CSS, Supabase"
+                    className={`${CLAY_CLASSES.input} w-full px-4 py-2 text-xs text-charcoal-brand outline-none`}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
+                    Live Demo URL (Optional)
+                  </label>
+                  <input
+                    type="url"
+                    value={projectFormData.liveUrl || ""}
+                    onChange={(e) => setProjectFormData({ ...projectFormData, liveUrl: e.target.value })}
+                    placeholder="https://krishna-library.vercel.app/"
                     className={`${CLAY_CLASSES.input} w-full px-4 py-2 text-xs text-charcoal-brand outline-none`}
                   />
                 </div>
@@ -969,7 +1434,7 @@ export default function AdminPage() {
                     type="submit"
                     className={`${CLAY_CLASSES.btnMustard} px-6 py-2.5 text-xs font-bold uppercase tracking-wider cursor-pointer`}
                   >
-                    Save Project Changes
+                    Save Project
                   </button>
                 </div>
               </form>
@@ -978,45 +1443,44 @@ export default function AdminPage() {
         )}
       </AnimatePresence>
 
-      {/* ONGOING PROJECT EDIT/ADD MODAL */}
+      {/* MODAL: ADD/EDIT ONGOING PROJECT */}
       <AnimatePresence>
         {ongoingModalOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-charcoal-brand/80 backdrop-blur-md overflow-y-auto"
-            onClick={() => setOngoingModalOpen(false)}
+            className="fixed inset-0 z-50 bg-charcoal-brand/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
           >
             <motion.div
-              initial={{ scale: 0.9, y: 20 }}
+              initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              onClick={(e) => e.stopPropagation()}
-              className={`${CLAY_CLASSES.cardCream} w-full max-w-lg p-6 sm:p-8 relative shadow-2xl`}
+              exit={{ scale: 0.95, y: 20 }}
+              className={`${CLAY_CLASSES.cardCream} w-full max-w-xl p-6 sm:p-8 relative shadow-2xl`}
             >
-              <button
-                onClick={() => setOngoingModalOpen(false)}
-                className="absolute top-5 right-5 p-1.5 rounded-full hover:bg-charcoal-brand/10 text-charcoal-brand"
-              >
-                <X className="w-6 h-6" />
-              </button>
-
-              <h3 className="font-outfit text-2xl font-extrabold text-charcoal-brand mb-6">
-                {editingOngoing ? "Edit Ongoing Build" : "Add New Ongoing Build"}
-              </h3>
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-charcoal-brand/10">
+                <h3 className="font-outfit text-2xl font-extrabold text-charcoal-brand">
+                  {editingOngoing ? "Edit Ongoing Build" : "Add New Ongoing Development"}
+                </h3>
+                <button
+                  onClick={() => setOngoingModalOpen(false)}
+                  className="p-2 rounded-full hover:bg-charcoal-brand/10 transition-colors text-charcoal-brand"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
               <form onSubmit={handleSaveOngoing} className="space-y-4">
                 <div>
                   <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
-                    Build / Project Title *
+                    System Title *
                   </label>
                   <input
                     type="text"
                     required
                     value={ongoingFormData.title || ""}
                     onChange={(e) => setOngoingFormData({ ...ongoingFormData, title: e.target.value })}
-                    placeholder="e.g. Smart Cafe & Order Portal"
+                    placeholder="e.g. Srijan Institute Management System"
                     className={`${CLAY_CLASSES.input} w-full px-4 py-2 text-xs text-charcoal-brand outline-none`}
                   />
                 </div>
@@ -1024,30 +1488,29 @@ export default function AdminPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
-                      Category Type
+                      Client Type *
                     </label>
                     <input
                       type="text"
-                      value={ongoingFormData.category || ""}
-                      onChange={(e) => setOngoingFormData({ ...ongoingFormData, category: e.target.value })}
-                      placeholder="e.g. Cafe WebApp + POS"
+                      required
+                      value={ongoingFormData.clientType || ""}
+                      onChange={(e) => setOngoingFormData({ ...ongoingFormData, clientType: e.target.value })}
+                      placeholder="e.g. Commercial Institute"
                       className={`${CLAY_CLASSES.input} w-full px-4 py-2 text-xs text-charcoal-brand outline-none`}
                     />
                   </div>
 
                   <div>
                     <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
-                      Badge Label
+                      Status Badge
                     </label>
-                    <select
-                      value={ongoingFormData.badge || "In Active Development ⚡"}
+                    <input
+                      type="text"
+                      value={ongoingFormData.badge || ""}
                       onChange={(e) => setOngoingFormData({ ...ongoingFormData, badge: e.target.value })}
+                      placeholder="e.g. In Active Development ⚡"
                       className={`${CLAY_CLASSES.input} w-full px-4 py-2 text-xs text-charcoal-brand outline-none`}
-                    >
-                      <option value="In Active Development ⚡">In Active Development ⚡</option>
-                      <option value="Confidential Build 🔒">Confidential Build 🔒</option>
-                      <option value="Testing & Polishing 🚗">Testing &amp; Polishing 🚗</option>
-                    </select>
+                    />
                   </div>
                 </div>
 
