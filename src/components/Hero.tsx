@@ -364,61 +364,81 @@ export default function Hero() {
           We bridge software engineering and creative distribution under one roof. From production-grade web platforms to retention-focused media and growth campaigns.
         </motion.p>
 
-        {/* ── Handwritten Hero Pricing Showcase ── */}
+        {/* ── Handwritten Hero Pricing Showcase (Exact Image Replica) ── */}
         <motion.div
           initial={{ opacity: 0, y: 15, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.32 }}
-          className="mt-6 sm:mt-8 flex flex-col items-center justify-center text-center w-full"
+          className="mt-6 sm:mt-10 flex flex-col items-center justify-center text-center w-full"
         >
           <Link href="#packages" className="group flex flex-col items-center justify-center cursor-pointer select-none">
-            {/* Main Horizontal Pricing Row */}
-            <div className="flex items-center justify-center gap-2 xs:gap-3 sm:gap-6 md:gap-8 relative py-2">
+            <div className="flex items-center justify-center gap-2 xs:gap-3 sm:gap-5 md:gap-8 relative py-2 px-3">
               
-              {/* 1. Left Handwritten "Start as low as" with Curved Arrow */}
-              <div className="relative flex flex-col items-end pr-0.5 sm:pr-2">
-                <span className="font-bacley text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-charcoal-brand transform -rotate-6 leading-[1.1]">
-                  Start<br />
-                  <span className="pl-2">as low as</span>
-                </span>
+              {/* 1. Left Pricing Block: Top sparks + STARTS AT + ₹5,879 + Long Yellow Underline */}
+              <div className="relative flex flex-col items-start text-left">
                 
-                {/* Yellow/Orange Curved Arrow pointing to Price */}
-                <div className="relative w-16 xs:w-20 sm:w-28 md:w-32 h-5 sm:h-7 -mt-1 mr-1">
-                  <svg viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-mustard-brand">
-                    <path d="M10 5 C 45 15, 80 10, 102 20" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-                    <path d="M93 14 L 105 21 L 96 27" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                {/* Top-Left 3 Yellow Sparks */}
+                <div className="absolute -top-6 sm:-top-8 -left-4 sm:-left-6 text-mustard-brand pointer-events-none">
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8" viewBox="0 0 30 30" fill="none">
+                    <path d="M5 20 L 15 6 M 12 25 L 22 11 M 2 13 L 8 3" stroke="#f5b02e" strokeWidth="3.2" strokeLinecap="round" />
                   </svg>
                 </div>
-              </div>
 
-              {/* 2. Big Center Price ₹5,879* */}
-              <div className="relative flex items-center justify-center px-1 sm:px-2">
-                <h2 className="font-outfit text-4xl xs:text-5xl sm:text-7xl md:text-8xl font-black text-emerald-brand tracking-tighter drop-shadow-sm group-hover:scale-105 transition-transform duration-300">
-                  ₹5,879<span className="text-xl sm:text-3xl md:text-4xl align-top text-charcoal-brand font-bold">*</span>
+                {/* "STARTS AT" label + yellow underline */}
+                <div className="inline-block relative mb-0.5">
+                  <span className="font-bacley font-black text-sm xs:text-base sm:text-xl md:text-2xl uppercase tracking-widest text-charcoal-brand transform -rotate-3 block">
+                    STARTS AT
+                  </span>
+                  <div className="w-full h-1.5 -mt-1">
+                    <svg viewBox="0 0 100 8" fill="none" className="w-full h-full">
+                      <path d="M2 4 Q 50 1, 98 5" stroke="#f5b02e" strokeWidth="3.5" strokeLinecap="round" />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Big Price ₹5,879 */}
+                <h2 className="font-bacley font-black text-5xl xs:text-6xl sm:text-8xl md:text-[6.5rem] lg:text-[7.5rem] text-[#062c21] tracking-tighter leading-none transform -rotate-2 group-hover:scale-105 transition-transform duration-300">
+                  ₹5,879
                 </h2>
-                
-                {/* Orange Spark Accents on Top-Right of Price */}
-                <div className="absolute -top-3 -right-3 sm:-top-5 sm:-right-6 text-mustard-brand flex items-center gap-0.5 pointer-events-none">
-                  <svg className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 3L10 14h6l-3 7" />
+
+                {/* Long Yellow Underline underneath ₹5,879 */}
+                <div className="w-full h-3 sm:h-4 -mt-1 sm:-mt-2">
+                  <svg viewBox="0 0 200 12" fill="none" className="w-full h-full">
+                    <path d="M4 6 C 60 2, 140 10, 196 4" stroke="#f5b02e" strokeWidth="4.5" strokeLinecap="round" />
                   </svg>
                 </div>
               </div>
 
-              {/* 3. Vertical Divider Line */}
-              <div className="h-9 sm:h-16 md:h-20 w-[1.5px] bg-charcoal-brand/25 mx-1 sm:mx-2" />
+              {/* 2. Center Thin Black Curved Arrow pointing Right */}
+              <div className="relative w-10 xs:w-14 sm:w-20 md:w-24 h-6 sm:h-8 mx-1 sm:mx-3 flex items-center justify-center self-center mt-2">
+                <svg viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-charcoal-brand">
+                  <path d="M8 28 Q 50 6, 85 22" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                  <path d="M73 17 L 87 23 L 77 30" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
 
-              {/* 4. Right Handwritten "& even negotiable!" */}
-              <div className="relative flex flex-col items-start pl-0.5 sm:pl-2">
-                <span className="font-bacley text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-charcoal-brand transform rotate-3 leading-[1.1]">
-                  &amp; even<br />
-                  <span className="text-charcoal-brand">negotiable!</span>
+              {/* 3. Right Block: & EVEN NEGOTIABLE + Underline + Top-Right Sparks */}
+              <div className="relative flex flex-col items-start text-left self-center">
+                
+                {/* Top-Right 3 Yellow Sparks */}
+                <div className="absolute -top-6 sm:-top-8 -right-4 sm:-right-6 text-mustard-brand pointer-events-none">
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8" viewBox="0 0 30 30" fill="none">
+                    <path d="M10 6 L 20 20 M 16 3 L 26 17 M 22 1 L 28 11" stroke="#f5b02e" strokeWidth="3.2" strokeLinecap="round" />
+                  </svg>
+                </div>
+
+                <span className="font-bacley font-black text-xs xs:text-sm sm:text-lg md:text-xl uppercase tracking-wider text-charcoal-brand transform -rotate-3 leading-tight block">
+                  &amp; EVEN
                 </span>
                 
-                {/* Yellow/Orange Underline Flourish */}
-                <div className="w-16 xs:w-20 sm:w-28 md:w-32 h-3 -mt-1 ml-0.5">
-                  <svg viewBox="0 0 100 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-mustard-brand">
-                    <path d="M4 6 Q 50 1, 96 7" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+                <span className="font-bacley font-black text-lg xs:text-xl sm:text-3xl md:text-4xl uppercase tracking-widest text-charcoal-brand transform -rotate-3 leading-tight block mt-0.5">
+                  NEGOTIABLE
+                </span>
+
+                {/* Yellow Underline underneath NEGOTIABLE */}
+                <div className="w-full h-2.5 sm:h-3 -mt-0.5">
+                  <svg viewBox="0 0 120 10" fill="none" className="w-full h-full">
+                    <path d="M3 5 Q 60 1, 117 6" stroke="#f5b02e" strokeWidth="3.8" strokeLinecap="round" />
                   </svg>
                 </div>
               </div>
