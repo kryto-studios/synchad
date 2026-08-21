@@ -364,41 +364,65 @@ export default function Hero() {
           We bridge software engineering and creative distribution under one roof. From production-grade web platforms to retention-focused media and growth campaigns.
         </motion.p>
 
-        {/* ── Catchy Claymorphic Pricing Offer Ticket (Placed directly after Motto) ── */}
+        {/* ── Handwritten Hero Pricing Showcase ── */}
         <motion.div
           initial={{ opacity: 0, y: 15, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.32 }}
-          className="mt-6 w-full max-w-lg"
+          className="mt-6 sm:mt-8 flex flex-col items-center justify-center text-center w-full"
         >
-          <Link
-            href="#packages"
-            className="group relative flex items-center justify-between gap-3 p-3 sm:p-3.5 rounded-2xl bg-white border-2 border-charcoal-brand/15 shadow-[6px_6px_16px_rgba(26,26,26,0.06),_inset_-4px_-4px_8px_rgba(26,26,26,0.04),_inset_4px_4px_8px_rgba(255,255,255,0.95)] hover:border-emerald-brand hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer"
-          >
-            {/* Left side icon & pricing info */}
-            <div className="flex items-center gap-3 text-left">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-mustard-brand border border-charcoal-brand/20 flex items-center justify-center text-charcoal-brand shadow-sm flex-shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[9px] font-black uppercase tracking-widest text-emerald-brand bg-emerald-brand/10 px-2 py-0.5 rounded-full border border-emerald-brand/20">
-                    SPECIAL LOCAL OFFER
-                  </span>
-                  <span className="font-mono text-[9px] font-bold text-charcoal-brand/50 uppercase hidden sm:inline">
-                    Ambikapur / Surguja
-                  </span>
+          <Link href="#packages" className="group flex flex-col items-center justify-center cursor-pointer select-none">
+            {/* Main Horizontal Pricing Row */}
+            <div className="flex items-center justify-center gap-2 xs:gap-3 sm:gap-6 md:gap-8 relative py-2">
+              
+              {/* 1. Left Handwritten "Start as low as" with Curved Arrow */}
+              <div className="relative flex flex-col items-end pr-0.5 sm:pr-2">
+                <span className="font-bacley text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-charcoal-brand transform -rotate-6 leading-[1.1]">
+                  Start<br />
+                  <span className="pl-2">as low as</span>
+                </span>
+                
+                {/* Yellow/Orange Curved Arrow pointing to Price */}
+                <div className="relative w-16 xs:w-20 sm:w-28 md:w-32 h-5 sm:h-7 -mt-1 mr-1">
+                  <svg viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-mustard-brand">
+                    <path d="M10 5 C 45 15, 80 10, 102 20" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                    <path d="M93 14 L 105 21 L 96 27" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </div>
-                <h4 className="font-outfit text-sm sm:text-base font-black text-charcoal-brand tracking-tight mt-0.5">
-                  START AS LOW AS <span className="text-emerald-brand underline decoration-mustard-brand decoration-wavy">₹5,879/-</span> *
-                </h4>
               </div>
-            </div>
 
-            {/* Right side negotiable action badge */}
-            <div className="flex items-center gap-1.5 bg-charcoal-brand text-cream-brand font-outfit text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-xl group-hover:bg-emerald-brand transition-colors flex-shrink-0 shadow-sm">
-              <span>Negotiable Rate!</span>
-              <span className="text-mustard-brand font-bold">&rarr;</span>
+              {/* 2. Big Center Price ₹5,879* */}
+              <div className="relative flex items-center justify-center px-1 sm:px-2">
+                <h2 className="font-outfit text-4xl xs:text-5xl sm:text-7xl md:text-8xl font-black text-emerald-brand tracking-tighter drop-shadow-sm group-hover:scale-105 transition-transform duration-300">
+                  ₹5,879<span className="text-xl sm:text-3xl md:text-4xl align-top text-charcoal-brand font-bold">*</span>
+                </h2>
+                
+                {/* Orange Spark Accents on Top-Right of Price */}
+                <div className="absolute -top-3 -right-3 sm:-top-5 sm:-right-6 text-mustard-brand flex items-center gap-0.5 pointer-events-none">
+                  <svg className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 3L10 14h6l-3 7" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* 3. Vertical Divider Line */}
+              <div className="h-9 sm:h-16 md:h-20 w-[1.5px] bg-charcoal-brand/25 mx-1 sm:mx-2" />
+
+              {/* 4. Right Handwritten "& even negotiable!" */}
+              <div className="relative flex flex-col items-start pl-0.5 sm:pl-2">
+                <span className="font-bacley text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-charcoal-brand transform rotate-3 leading-[1.1]">
+                  &amp; even<br />
+                  <span className="text-charcoal-brand">negotiable!</span>
+                </span>
+                
+                {/* Yellow/Orange Underline Flourish */}
+                <div className="w-16 xs:w-20 sm:w-28 md:w-32 h-3 -mt-1 ml-0.5">
+                  <svg viewBox="0 0 100 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-mustard-brand">
+                    <path d="M4 6 Q 50 1, 96 7" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+                  </svg>
+                </div>
+              </div>
+
             </div>
           </Link>
         </motion.div>
