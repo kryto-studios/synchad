@@ -364,7 +364,7 @@ export default function Hero() {
           We bridge software engineering and creative distribution under one roof. From production-grade web platforms to retention-focused media and growth campaigns.
         </motion.p>
 
-        {/* ── Handwritten Hero Pricing Showcase (Exact Image Replica) ── */}
+        {/* ── Handwritten Hero Pricing Showcase (Exact Image Replica with Organic Tilts & Arrow) ── */}
         <motion.div
           initial={{ opacity: 0, y: 15, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -372,73 +372,73 @@ export default function Hero() {
           className="mt-6 sm:mt-10 flex flex-col items-center justify-center text-center w-full"
         >
           <Link href="#packages" className="group flex flex-col items-center justify-center cursor-pointer select-none">
-            <div className="flex items-center justify-center gap-2 xs:gap-3 sm:gap-5 md:gap-8 relative py-2 px-3">
+            <div className="flex items-center justify-center gap-2 xs:gap-3 sm:gap-6 md:gap-8 relative py-2 px-3">
               
               {/* 1. Left Pricing Block: Top sparks + STARTS AT + ₹5,879 + Long Yellow Underline */}
-              <div className="relative flex flex-col items-start text-left">
+              <div className="relative flex flex-col items-start text-left transform -rotate-3">
                 
                 {/* Top-Left 3 Yellow Sparks */}
-                <div className="absolute -top-6 sm:-top-8 -left-4 sm:-left-6 text-mustard-brand pointer-events-none">
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8" viewBox="0 0 30 30" fill="none">
-                    <path d="M5 20 L 15 6 M 12 25 L 22 11 M 2 13 L 8 3" stroke="#f5b02e" strokeWidth="3.2" strokeLinecap="round" />
+                <div className="absolute -top-7 sm:-top-9 -left-5 sm:-left-7 text-mustard-brand pointer-events-none transform -rotate-12">
+                  <svg className="w-7 h-7 sm:w-9 sm:h-9" viewBox="0 0 30 30" fill="none">
+                    <path d="M6 22 L 16 6 M 13 27 L 23 11 M 3 14 L 9 3" stroke="#f5b02e" strokeWidth="3.5" strokeLinecap="round" />
                   </svg>
                 </div>
 
                 {/* "STARTS AT" label + yellow underline */}
-                <div className="inline-block relative mb-0.5">
-                  <span className="font-bacley font-black text-sm xs:text-base sm:text-xl md:text-2xl uppercase tracking-widest text-charcoal-brand transform -rotate-3 block">
+                <div className="inline-block relative mb-0.5 transform -rotate-3">
+                  <span className="font-bacley font-black text-sm xs:text-base sm:text-xl md:text-2xl uppercase tracking-widest text-charcoal-brand block">
                     STARTS AT
                   </span>
-                  <div className="w-full h-1.5 -mt-1">
-                    <svg viewBox="0 0 100 8" fill="none" className="w-full h-full">
-                      <path d="M2 4 Q 50 1, 98 5" stroke="#f5b02e" strokeWidth="3.5" strokeLinecap="round" />
+                  <div className="w-full h-2 -mt-1">
+                    <svg viewBox="0 0 100 10" fill="none" className="w-full h-full">
+                      <path d="M2 5 Q 50 1, 98 6" stroke="#f5b02e" strokeWidth="4" strokeLinecap="round" />
                     </svg>
                   </div>
                 </div>
 
                 {/* Big Price ₹5,879 */}
-                <h2 className="font-bacley font-black text-5xl xs:text-6xl sm:text-8xl md:text-[6.5rem] lg:text-[7.5rem] text-[#062c21] tracking-tighter leading-none transform -rotate-2 group-hover:scale-105 transition-transform duration-300">
+                <h2 className="font-bacley font-black text-5xl xs:text-6xl sm:text-8xl md:text-[6.8rem] lg:text-[7.8rem] text-[#062c21] tracking-tighter leading-none transform -rotate-2 group-hover:scale-105 transition-transform duration-300">
                   ₹5,879
                 </h2>
 
                 {/* Long Yellow Underline underneath ₹5,879 */}
-                <div className="w-full h-3 sm:h-4 -mt-1 sm:-mt-2">
-                  <svg viewBox="0 0 200 12" fill="none" className="w-full h-full">
-                    <path d="M4 6 C 60 2, 140 10, 196 4" stroke="#f5b02e" strokeWidth="4.5" strokeLinecap="round" />
+                <div className="w-[108%] -ml-[4%] h-3.5 sm:h-5 -mt-1 sm:-mt-2 transform -rotate-1">
+                  <svg viewBox="0 0 210 14" fill="none" className="w-full h-full">
+                    <path d="M3 7 C 65 2, 145 11, 207 4" stroke="#f5b02e" strokeWidth="5.5" strokeLinecap="round" />
                   </svg>
                 </div>
               </div>
 
-              {/* 2. Center Thin Black Curved Arrow pointing Right */}
-              <div className="relative w-10 xs:w-14 sm:w-20 md:w-24 h-6 sm:h-8 mx-1 sm:mx-3 flex items-center justify-center self-center mt-2">
-                <svg viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-charcoal-brand">
-                  <path d="M8 28 Q 50 6, 85 22" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-                  <path d="M73 17 L 87 23 L 77 30" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              {/* 2. Center Hand-Drawn Thin Black Curved Arrow pointing Right */}
+              <div className="relative w-12 xs:w-16 sm:w-24 md:w-28 h-8 sm:h-10 mx-1 sm:mx-3 flex items-center justify-center self-center transform -rotate-2">
+                <svg viewBox="0 0 110 45" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-charcoal-brand">
+                  <path d="M6 32 C 35 8, 70 8, 96 24" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
+                  <path d="M82 17 L 98 25 L 87 33" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
 
               {/* 3. Right Block: & EVEN NEGOTIABLE + Underline + Top-Right Sparks */}
-              <div className="relative flex flex-col items-start text-left self-center">
+              <div className="relative flex flex-col items-start text-left self-center transform -rotate-4">
                 
                 {/* Top-Right 3 Yellow Sparks */}
-                <div className="absolute -top-6 sm:-top-8 -right-4 sm:-right-6 text-mustard-brand pointer-events-none">
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8" viewBox="0 0 30 30" fill="none">
-                    <path d="M10 6 L 20 20 M 16 3 L 26 17 M 22 1 L 28 11" stroke="#f5b02e" strokeWidth="3.2" strokeLinecap="round" />
+                <div className="absolute -top-7 sm:-top-9 -right-5 sm:-right-7 text-mustard-brand pointer-events-none transform rotate-12">
+                  <svg className="w-7 h-7 sm:w-9 sm:h-9" viewBox="0 0 30 30" fill="none">
+                    <path d="M10 6 L 20 22 M 16 3 L 26 17 M 22 1 L 28 11" stroke="#f5b02e" strokeWidth="3.5" strokeLinecap="round" />
                   </svg>
                 </div>
 
-                <span className="font-bacley font-black text-xs xs:text-sm sm:text-lg md:text-xl uppercase tracking-wider text-charcoal-brand transform -rotate-3 leading-tight block">
+                <span className="font-bacley font-black text-xs xs:text-sm sm:text-lg md:text-xl uppercase tracking-wider text-charcoal-brand leading-tight block">
                   &amp; EVEN
                 </span>
                 
-                <span className="font-bacley font-black text-lg xs:text-xl sm:text-3xl md:text-4xl uppercase tracking-widest text-charcoal-brand transform -rotate-3 leading-tight block mt-0.5">
+                <span className="font-bacley font-black text-lg xs:text-xl sm:text-3xl md:text-4xl uppercase tracking-widest text-charcoal-brand leading-tight block mt-0.5">
                   NEGOTIABLE
                 </span>
 
                 {/* Yellow Underline underneath NEGOTIABLE */}
-                <div className="w-full h-2.5 sm:h-3 -mt-0.5">
-                  <svg viewBox="0 0 120 10" fill="none" className="w-full h-full">
-                    <path d="M3 5 Q 60 1, 117 6" stroke="#f5b02e" strokeWidth="3.8" strokeLinecap="round" />
+                <div className="w-[106%] -ml-[3%] h-3 sm:h-4 -mt-0.5">
+                  <svg viewBox="0 0 120 12" fill="none" className="w-full h-full">
+                    <path d="M3 6 Q 60 1, 117 7" stroke="#f5b02e" strokeWidth="4.5" strokeLinecap="round" />
                   </svg>
                 </div>
               </div>
