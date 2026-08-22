@@ -45,5 +45,5 @@
 
 3. **Handover Integrations**:
    - **Tawk.to Script**: Embed in `layout.tsx` with hidden widget by default; unhide & maximize on handover.
-   - **WhatsApp Direct**: Generate pre-filled `https://wa.me/918223440812?text=...` deep link.
+   - **WhatsApp Direct**: Generate pre-filled `https://wa.me/919340411838?text=...` deep link.
    - **Telegram Push Alert**: Free Telegram Bot API webhook call on handover.

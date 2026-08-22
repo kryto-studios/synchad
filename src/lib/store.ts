@@ -1,4 +1,5 @@
 // Global Store & LocalStorage Manager for Projects & Enquiries
+import { supabase } from "./supabase";
 
 export interface ProjectScreenshot {
   id: string;
@@ -63,39 +64,67 @@ export const INITIAL_COMPLETED_PROJECTS: CompletedProject[] = [
     categoryLabel: "Landing Page + Enquiry System",
     status: "Delivered & Live",
     statusColor: "bg-emerald-500",
-    thumbnail: "/projects/krishna_library.jpg",
+    thumbnail: "/projects/KRISHNA LIBRARY/overview.png",
     liveUrl: "https://krishna-library.vercel.app/",
     description:
-      "A fully responsive, eye-catching landing page designed specifically for Krishna Library study space. Features a dynamic seat reservation preview, high-converting interactive enquiry modal, quiet ambience highlights, and custom micro-interactions.",
+      "A fully responsive, eye-catching landing page and study space management ERP designed specifically for Krishna Library. Features visual seat map reservation, automated dues tracking, instant receipt generation, and real-time student activity logging.",
     keyFeatures: [
-      "Interactive Seat Enquiry & Reservation Form",
-      "Real-Time Ambience & Amenity Showcase",
-      "Mobile-First Responsive Layout with Smooth Parallax",
-      "Instant WhatsApp & Direct Contact Integration"
+      "Interactive Seat Availability & Visual Floor Map Grid",
+      "Automated Student Monthly Dues Tracker & WhatsApp Reminders",
+      "Instant Cash & UPI Payment Logger with Digital Invoices",
+      "Live Member Activity Logs & Comprehensive Admin Settings"
     ],
     techStack: ["Next.js", "Tailwind CSS", "Framer Motion", "Supabase SQL"],
     hasEnquiryDemo: true,
     screenshots: [
       {
-        id: "kl-1",
-        title: "Desktop Hero & Seat Reservation Grid",
+        id: "kl-overview",
+        title: "Executive Dashboard & Analytics Overview",
+        type: "dashboard",
+        src: "/projects/KRISHNA LIBRARY/overview.png",
+        caption: "Main executive management overview showing total active members, seat occupancy, and revenue metrics."
+      },
+      {
+        id: "kl-seat-map",
+        title: "Interactive Floor Seat Map & Desk Grid",
         type: "desktop",
-        src: "/projects/krishna_library.jpg",
-        caption: "Main hero banner highlighting premium study spaces and instant seat booking."
+        src: "/projects/KRISHNA LIBRARY/seat map.png",
+        caption: "Visual seat map layout allowing real-time desk assignment, shift filtering, and seat status updates."
       },
       {
-        id: "kl-2",
-        title: "Interactive Enquiry Section View",
+        id: "kl-due-tracker",
+        title: "Student Fee & Monthly Dues Tracker",
+        type: "dashboard",
+        src: "/projects/KRISHNA LIBRARY/Due Tracker.png",
+        caption: "Automated dues manager highlighting pending fees, expiry dates, and automated reminder triggers."
+      },
+      {
+        id: "kl-invoice",
+        title: "Automated Student Invoice & Receipt Generator",
+        type: "desktop",
+        src: "/projects/KRISHNA LIBRARY/Invoice.png",
+        caption: "Professional printable invoice generator for student seat passes and membership fees."
+      },
+      {
+        id: "kl-payment",
+        title: "Instant Payment Entry & Receipt Register",
         type: "enquiry",
-        src: "/projects/krishna_library.jpg",
-        caption: "High-converting inquiry drawer allowing students to submit seat preferences."
+        src: "/projects/KRISHNA LIBRARY/record payement.png",
+        caption: "Fast cash & UPI payment logger with instant digital receipt generation and transaction logs."
       },
       {
-        id: "kl-3",
-        title: "Mobile Amenity & Feature Showcase",
-        type: "mobile",
-        src: "/projects/krishna_library.jpg",
-        caption: "Optimized mobile view showcasing high-speed Wi-Fi, 24/7 access, and ergonomic pods."
+        id: "kl-activity",
+        title: "Live Activity Log & Audit Trail",
+        type: "dashboard",
+        src: "/projects/KRISHNA LIBRARY/activity section.png",
+        caption: "Real-time activity log tracking member check-ins, payments, and system admin updates."
+      },
+      {
+        id: "kl-settings",
+        title: "Library Settings & Configuration Panel",
+        type: "desktop",
+        src: "/projects/KRISHNA LIBRARY/settings.png",
+        caption: "Library configuration panel for shift timings, seat pricing tiers, and notification templates."
       }
     ]
   },
@@ -274,16 +303,50 @@ export function getCompletedProjects(): CompletedProject[] {
   if (typeof window === "undefined") return INITIAL_COMPLETED_PROJECTS;
   try {
     const item = localStorage.getItem(STORAGE_KEYS.COMPLETED);
-    return item ? JSON.parse(item) : INITIAL_COMPLETED_PROJECTS;
+    if (!item) return INITIAL_COMPLETED_PROJECTS;
+    const parsed: CompletedProject[] = JSON.parse(item);
+    // Upgrade Krishna Library images if using old single thumbnail
+    const updated = parsed.map(p => {
+      if (p.id === "krishna-library" && (!p.screenshots || p.screenshots.length < 7 || p.thumbnail === "/projects/krishna_library.jpg")) {
+        const initial = INITIAL_COMPLETED_PROJECTS.find(i => i.id === "krishna-library");
+        return initial || p;
+      }
+      return p;
+    });
+    return updated;
   } catch (e) {
     return INITIAL_COMPLETED_PROJECTS;
   }
 }
 
+
 export function saveCompletedProjects(projects: CompletedProject[]) {
   if (typeof window === "undefined") return;
   localStorage.setItem(STORAGE_KEYS.COMPLETED, JSON.stringify(projects));
   dispatchUpdate();
+
+  // Async sync to Supabase if connected
+  if (supabase) {
+    const formatted = projects.map(p => ({
+      id: p.id,
+      title: p.title,
+      subtitle: p.subtitle,
+      owner: p.owner,
+      role: p.role,
+      category: p.category,
+      category_label: p.categoryLabel,
+      status: p.status,
+      status_color: p.statusColor,
+      thumbnail: p.thumbnail,
+      description: p.description,
+      key_features: p.keyFeatures,
+      tech_stack: p.techStack,
+      screenshots: p.screenshots,
+      has_enquiry_demo: p.hasEnquiryDemo || false,
+      live_url: p.liveUrl || null
+    }));
+    Promise.resolve(supabase.from("completed_projects").upsert(formatted)).catch((err: any) => console.warn("Supabase sync warning:", err));
+  }
 }
 
 // Ongoing Projects Accessors
@@ -301,6 +364,20 @@ export function saveOngoingProjects(projects: OngoingProject[]) {
   if (typeof window === "undefined") return;
   localStorage.setItem(STORAGE_KEYS.ONGOING, JSON.stringify(projects));
   dispatchUpdate();
+
+  if (supabase) {
+    const formatted = projects.map(p => ({
+      id: p.id,
+      title: p.title,
+      category: p.category,
+      client_type: p.clientType,
+      progress: p.progress,
+      badge: p.badge,
+      description: p.description,
+      features: p.features
+    }));
+    Promise.resolve(supabase.from("ongoing_projects").upsert(formatted)).catch((err: any) => console.warn("Supabase sync warning:", err));
+  }
 }
 
 // Enquiries Accessors
@@ -318,7 +395,24 @@ export function saveEnquiries(enquiries: Enquiry[]) {
   if (typeof window === "undefined") return;
   localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(enquiries));
   dispatchUpdate();
+
+  if (supabase) {
+    const formatted = enquiries.map(e => ({
+      id: e.id,
+      type: e.type,
+      client_name: e.clientName,
+      email: e.email || null,
+      phone: e.phone || null,
+      service_or_desk: e.serviceOrDesk || null,
+      details: e.details || null,
+      timestamp: e.timestamp,
+      status: e.status,
+      admin_notes: e.adminNotes || null
+    }));
+    Promise.resolve(supabase.from("enquiries").upsert(formatted)).catch((err: any) => console.warn("Supabase sync warning:", err));
+  }
 }
+
 
 export function addEnquiry(enquiry: Omit<Enquiry, "id" | "timestamp" | "status">) {
   const current = getEnquiries();
@@ -339,3 +433,74 @@ export function resetStoreToDefaults() {
   localStorage.removeItem(STORAGE_KEYS.ENQUIRIES);
   dispatchUpdate();
 }
+
+/**
+ * Async fetch from Supabase to update local store when available
+ */
+export async function syncFromSupabase() {
+  if (!supabase) return;
+  try {
+    const [compRes, ongRes, enqRes] = await Promise.all([
+      supabase.from("completed_projects").select("*"),
+      supabase.from("ongoing_projects").select("*"),
+      supabase.from("enquiries").select("*")
+    ]);
+
+    if (compRes.data && compRes.data.length > 0) {
+      const projects: CompletedProject[] = compRes.data.map(p => ({
+        id: p.id,
+        title: p.title,
+        subtitle: p.subtitle,
+        owner: p.owner,
+        role: p.role,
+        category: p.category,
+        categoryLabel: p.category_label,
+        status: p.status,
+        statusColor: p.status_color,
+        thumbnail: p.thumbnail,
+        description: p.description,
+        keyFeatures: p.key_features || [],
+        techStack: p.tech_stack || [],
+        screenshots: p.screenshots || [],
+        hasEnquiryDemo: p.has_enquiry_demo,
+        liveUrl: p.live_url
+      }));
+      localStorage.setItem(STORAGE_KEYS.COMPLETED, JSON.stringify(projects));
+    }
+
+    if (ongRes.data && ongRes.data.length > 0) {
+      const ongoing: OngoingProject[] = ongRes.data.map(p => ({
+        id: p.id,
+        title: p.title,
+        category: p.category,
+        clientType: p.client_type,
+        progress: p.progress,
+        badge: p.badge,
+        description: p.description,
+        features: p.features || []
+      }));
+      localStorage.setItem(STORAGE_KEYS.ONGOING, JSON.stringify(ongoing));
+    }
+
+    if (enqRes.data && enqRes.data.length > 0) {
+      const enquiries: Enquiry[] = enqRes.data.map(e => ({
+        id: e.id,
+        type: e.type,
+        clientName: e.client_name,
+        email: e.email,
+        phone: e.phone,
+        serviceOrDesk: e.service_or_desk,
+        details: e.details,
+        timestamp: e.timestamp,
+        status: e.status,
+        adminNotes: e.admin_notes
+      }));
+      localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(enquiries));
+    }
+
+    dispatchUpdate();
+  } catch (err) {
+    console.warn("Error fetching data from Supabase:", err);
+  }
+}
+

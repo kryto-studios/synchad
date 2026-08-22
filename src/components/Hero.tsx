@@ -364,85 +364,41 @@ export default function Hero() {
           We bridge software engineering and creative distribution under one roof. From production-grade web platforms to retention-focused media and growth campaigns.
         </motion.p>
 
-        {/* ── Handwritten Hero Pricing Showcase (Exact Image Replica with Organic Tilts & Arrow) ── */}
+        {/* ── Catchy Claymorphic Pricing Offer Ticket (Placed directly after Motto) ── */}
         <motion.div
           initial={{ opacity: 0, y: 15, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.32 }}
-          className="mt-6 sm:mt-10 flex flex-col items-center justify-center text-center w-full"
+          className="mt-6 w-full max-w-lg"
         >
-          <Link href="#packages" className="group flex flex-col items-center justify-center cursor-pointer select-none">
-            <div className="flex items-center justify-center gap-2 xs:gap-3 sm:gap-6 md:gap-8 relative py-2 px-3">
-              
-              {/* 1. Left Pricing Block: Top sparks + STARTS AT + ₹5,879 + Long Yellow Underline */}
-              <div className="relative flex flex-col items-start text-left transform -rotate-3">
-                
-                {/* Top-Left 3 Yellow Sparks */}
-                <div className="absolute -top-7 sm:-top-9 -left-5 sm:-left-7 text-mustard-brand pointer-events-none transform -rotate-12">
-                  <svg className="w-7 h-7 sm:w-9 sm:h-9" viewBox="0 0 30 30" fill="none">
-                    <path d="M6 22 L 16 6 M 13 27 L 23 11 M 3 14 L 9 3" stroke="#f5b02e" strokeWidth="3.5" strokeLinecap="round" />
-                  </svg>
-                </div>
-
-                {/* "STARTS AT" label + yellow underline */}
-                <div className="inline-block relative mb-0.5 transform -rotate-3">
-                  <span className="font-bacley font-black text-sm xs:text-base sm:text-xl md:text-2xl uppercase tracking-widest text-charcoal-brand block">
-                    STARTS AT
+          <Link
+            href="#packages"
+            className="group relative flex items-center justify-between gap-3 p-3 sm:p-3.5 rounded-2xl bg-white border-2 border-charcoal-brand/15 shadow-[6px_6px_16px_rgba(26,26,26,0.06),_inset_-4px_-4px_8px_rgba(26,26,26,0.04),_inset_4px_4px_8px_rgba(255,255,255,0.95)] hover:border-emerald-brand hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer"
+          >
+            {/* Left side icon & pricing info */}
+            <div className="flex items-center gap-3 text-left">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-mustard-brand border border-charcoal-brand/20 flex items-center justify-center text-charcoal-brand shadow-sm flex-shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[9px] font-black uppercase tracking-widest text-emerald-brand bg-emerald-brand/10 px-2 py-0.5 rounded-full border border-emerald-brand/20">
+                    SPECIAL LOCAL OFFER
                   </span>
-                  <div className="w-full h-2 -mt-1">
-                    <svg viewBox="0 0 100 10" fill="none" className="w-full h-full">
-                      <path d="M2 5 Q 50 1, 98 6" stroke="#f5b02e" strokeWidth="4" strokeLinecap="round" />
-                    </svg>
-                  </div>
+                  <span className="font-mono text-[9px] font-bold text-charcoal-brand/50 uppercase hidden sm:inline">
+                    Ambikapur / Surguja
+                  </span>
                 </div>
-
-                {/* Big Price ₹5,879 */}
-                <h2 className="font-bacley font-black text-5xl xs:text-6xl sm:text-8xl md:text-[6.8rem] lg:text-[7.8rem] text-[#062c21] tracking-tighter leading-none transform -rotate-2 group-hover:scale-105 transition-transform duration-300">
-                  ₹5,879
-                </h2>
-
-                {/* Long Yellow Underline underneath ₹5,879 */}
-                <div className="w-[108%] -ml-[4%] h-3.5 sm:h-5 -mt-1 sm:-mt-2 transform -rotate-1">
-                  <svg viewBox="0 0 210 14" fill="none" className="w-full h-full">
-                    <path d="M3 7 C 65 2, 145 11, 207 4" stroke="#f5b02e" strokeWidth="5.5" strokeLinecap="round" />
-                  </svg>
-                </div>
+                <h4 className="font-outfit text-sm sm:text-base font-black text-charcoal-brand tracking-tight mt-0.5">
+                  START AS LOW AS <span className="text-emerald-brand underline decoration-mustard-brand decoration-wavy">₹5,879/-</span> *
+                </h4>
               </div>
+            </div>
 
-              {/* 2. Center Hand-Drawn Thin Black Curved Arrow pointing Right */}
-              <div className="relative w-12 xs:w-16 sm:w-24 md:w-28 h-8 sm:h-10 mx-1 sm:mx-3 flex items-center justify-center self-center transform -rotate-2">
-                <svg viewBox="0 0 110 45" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-charcoal-brand">
-                  <path d="M6 32 C 35 8, 70 8, 96 24" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
-                  <path d="M82 17 L 98 25 L 87 33" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-
-              {/* 3. Right Block: & EVEN NEGOTIABLE + Underline + Top-Right Sparks */}
-              <div className="relative flex flex-col items-start text-left self-center transform -rotate-4">
-                
-                {/* Top-Right 3 Yellow Sparks */}
-                <div className="absolute -top-7 sm:-top-9 -right-5 sm:-right-7 text-mustard-brand pointer-events-none transform rotate-12">
-                  <svg className="w-7 h-7 sm:w-9 sm:h-9" viewBox="0 0 30 30" fill="none">
-                    <path d="M10 6 L 20 22 M 16 3 L 26 17 M 22 1 L 28 11" stroke="#f5b02e" strokeWidth="3.5" strokeLinecap="round" />
-                  </svg>
-                </div>
-
-                <span className="font-bacley font-black text-xs xs:text-sm sm:text-lg md:text-xl uppercase tracking-wider text-charcoal-brand leading-tight block">
-                  &amp; EVEN
-                </span>
-                
-                <span className="font-bacley font-black text-lg xs:text-xl sm:text-3xl md:text-4xl uppercase tracking-widest text-charcoal-brand leading-tight block mt-0.5">
-                  NEGOTIABLE
-                </span>
-
-                {/* Yellow Underline underneath NEGOTIABLE */}
-                <div className="w-[106%] -ml-[3%] h-3 sm:h-4 -mt-0.5">
-                  <svg viewBox="0 0 120 12" fill="none" className="w-full h-full">
-                    <path d="M3 6 Q 60 1, 117 7" stroke="#f5b02e" strokeWidth="4.5" strokeLinecap="round" />
-                  </svg>
-                </div>
-              </div>
-
+            {/* Right side negotiable action badge */}
+            <div className="flex items-center gap-1.5 bg-charcoal-brand text-cream-brand font-outfit text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-xl group-hover:bg-emerald-brand transition-colors flex-shrink-0 shadow-sm">
+              <span>Negotiable Rate!</span>
+              <span className="text-mustard-brand font-bold">&rarr;</span>
             </div>
           </Link>
         </motion.div>

@@ -8,6 +8,7 @@ import WhatsAppFloat from "@/components/WhatsAppFloat";
 import GoogleOneTap from "@/components/GoogleOneTap";
 import LocalSEO from "@/components/LocalSEO";
 import Navbar from "@/components/Navbar";
+import SupabaseSyncProvider from "@/components/SupabaseSyncProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -82,6 +83,9 @@ export default function RootLayout({
 
         {/* Local SEO JSON-LD Structured Data Schema */}
         <LocalSEO />
+
+        {/* Supabase Auto Database Sync */}
+        <SupabaseSyncProvider />
 
         {/* Microsoft Clarity Free Heatmaps & Session Recording */}
         <Script id="microsoft-clarity-init" strategy="afterInteractive">

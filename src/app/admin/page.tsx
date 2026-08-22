@@ -30,12 +30,14 @@ import {
   AlertCircle,
   ShieldCheck,
   Key,
-  LogOut
+  LogOut,
+  Image as ImageIcon
 } from "lucide-react";
 import {
   CompletedProject,
   OngoingProject,
   Enquiry,
+  ProjectScreenshot,
   getCompletedProjects,
   saveCompletedProjects,
   getOngoingProjects,
@@ -356,6 +358,45 @@ export default function AdminPage() {
       saveCompletedProjects(updated);
     }
   };
+
+  // Screenshot Management Handlers for Admin
+  const handleAddProjectScreenshot = () => {
+    const currentScreenshots = projectFormData.screenshots || [];
+    const newScreenshot: ProjectScreenshot = {
+      id: `s-${Date.now()}`,
+      title: "New Screenshot Preview",
+      type: "desktop",
+      src: "/projects/KRISHNA LIBRARY/overview.png",
+      caption: "Screenshot description"
+    };
+    setProjectFormData({
+      ...projectFormData,
+      screenshots: [...currentScreenshots, newScreenshot]
+    });
+  };
+
+  const handleUpdateProjectScreenshot = (index: number, field: keyof ProjectScreenshot, value: string) => {
+    const currentScreenshots = [...(projectFormData.screenshots || [])];
+    if (currentScreenshots[index]) {
+      currentScreenshots[index] = {
+        ...currentScreenshots[index],
+        [field]: value
+      };
+      setProjectFormData({
+        ...projectFormData,
+        screenshots: currentScreenshots
+      });
+    }
+  };
+
+  const handleDeleteProjectScreenshot = (index: number) => {
+    const currentScreenshots = (projectFormData.screenshots || []).filter((_, i) => i !== index);
+    setProjectFormData({
+      ...projectFormData,
+      screenshots: currentScreenshots
+    });
+  };
+
 
   // Ongoing Project CRUD Handlers
   const handleOpenAddOngoing = () => {
@@ -1435,6 +1476,132 @@ export default function AdminPage() {
                     className={`${CLAY_CLASSES.input} w-full px-4 py-2 text-xs text-charcoal-brand outline-none`}
                   />
                 </div>
+
+                {/* Screenshot & Gallery Management Section */}
+                <div className="pt-4 border-t border-charcoal-brand/10 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-outfit text-sm font-bold text-charcoal-brand flex items-center gap-1.5">
+                        <ImageIcon className="w-4 h-4 text-mustard-brand" />
+                        Project Screenshots &amp; Gallery Showcase ({projectFormData.screenshots?.length || 0})
+                      </h4>
+                      <p className="font-mono text-[11px] text-charcoal-brand/60">
+                        Add, remove, or edit screenshot paths, titles, and layout categories.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleAddProjectScreenshot}
+                      className="px-3 py-1.5 rounded-xl bg-mustard-brand/20 hover:bg-mustard-brand/30 text-charcoal-brand font-mono text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Add Screenshot</span>
+                    </button>
+                  </div>
+
+                  {(!projectFormData.screenshots || projectFormData.screenshots.length === 0) ? (
+                    <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl text-center">
+                      <p className="font-mono text-xs text-amber-800">
+                        No screenshots added yet. Click "+ Add Screenshot" to add image previews for this project.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
+                      {projectFormData.screenshots.map((sc, idx) => (
+                        <div
+                          key={sc.id || idx}
+                          className="p-3 bg-cream-brand/80 border border-charcoal-brand/15 rounded-xl flex flex-col sm:flex-row items-start gap-3 relative shadow-xs"
+                        >
+                          {/* Thumbnail preview */}
+                          <div className="w-20 h-14 relative rounded-lg overflow-hidden bg-charcoal-brand/10 shrink-0 border border-charcoal-brand/10 flex items-center justify-center">
+                            {sc.src ? (
+                              <img
+                                src={sc.src}
+                                alt={sc.title || `Screenshot ${idx + 1}`}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  (e.target as HTMLElement).style.display = "none";
+                                }}
+                              />
+                            ) : (
+                              <ImageIcon className="w-5 h-5 text-charcoal-brand/30" />
+                            )}
+                            <div className="absolute top-0.5 left-0.5 bg-charcoal-brand/70 text-white px-1 rounded text-[8px] font-mono pointer-events-none">
+                              #{idx + 1}
+                            </div>
+                          </div>
+
+                          <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                            <div>
+                              <label className="block font-mono text-[10px] font-bold text-charcoal-brand/70 mb-0.5">
+                                Screenshot Title
+                              </label>
+                              <input
+                                type="text"
+                                value={sc.title || ""}
+                                onChange={(e) => handleUpdateProjectScreenshot(idx, "title", e.target.value)}
+                                placeholder="e.g. Interactive Floor Seat Map"
+                                className={`${CLAY_CLASSES.input} w-full px-2.5 py-1 text-xs text-charcoal-brand outline-none`}
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block font-mono text-[10px] font-bold text-charcoal-brand/70 mb-0.5">
+                                Category Type
+                              </label>
+                              <select
+                                value={sc.type || "desktop"}
+                                onChange={(e) => handleUpdateProjectScreenshot(idx, "type", e.target.value as any)}
+                                className={`${CLAY_CLASSES.input} w-full px-2.5 py-1 text-xs font-mono text-charcoal-brand outline-none cursor-pointer`}
+                              >
+                                <option value="desktop">Desktop Preview 🖥️</option>
+                                <option value="dashboard">Admin Dashboard 📊</option>
+                                <option value="enquiry">Enquiry Form 📝</option>
+                                <option value="mobile">Mobile View 📱</option>
+                              </select>
+                            </div>
+
+                            <div>
+                              <label className="block font-mono text-[10px] font-bold text-charcoal-brand/70 mb-0.5">
+                                Image Path / URL
+                              </label>
+                              <input
+                                type="text"
+                                value={sc.src || ""}
+                                onChange={(e) => handleUpdateProjectScreenshot(idx, "src", e.target.value)}
+                                placeholder="/projects/KRISHNA LIBRARY/overview.png"
+                                className={`${CLAY_CLASSES.input} w-full px-2.5 py-1 text-xs font-mono text-charcoal-brand outline-none`}
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block font-mono text-[10px] font-bold text-charcoal-brand/70 mb-0.5">
+                                Caption
+                              </label>
+                              <input
+                                type="text"
+                                value={sc.caption || ""}
+                                onChange={(e) => handleUpdateProjectScreenshot(idx, "caption", e.target.value)}
+                                placeholder="Brief description of this screenshot..."
+                                className={`${CLAY_CLASSES.input} w-full px-2.5 py-1 text-xs text-charcoal-brand outline-none`}
+                              />
+                            </div>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteProjectScreenshot(idx)}
+                            className="p-1.5 rounded-lg bg-red-100 hover:bg-red-200 text-red-600 transition-colors shrink-0 self-start sm:self-center cursor-pointer"
+                            title="Remove Screenshot"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
 
                 <div className="pt-4 flex justify-end gap-3">
                   <button
