@@ -21,6 +21,12 @@ CREATE TABLE IF NOT EXISTS public.completed_projects (
     screenshots JSONB NOT NULL DEFAULT '[]'::jsonb,
     has_enquiry_demo BOOLEAN DEFAULT false,
     live_url TEXT,
+    milestones JSONB DEFAULT '[]'::jsonb,
+    client_notes TEXT,
+    share_token TEXT,
+    client_email TEXT,
+    client_phone TEXT,
+    deal_amount TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -35,9 +41,31 @@ CREATE TABLE IF NOT EXISTS public.ongoing_projects (
     badge TEXT NOT NULL,
     description TEXT NOT NULL,
     features JSONB NOT NULL DEFAULT '[]'::jsonb,
+    milestones JSONB DEFAULT '[]'::jsonb,
+    client_notes TEXT,
+    share_token TEXT,
+    client_email TEXT,
+    client_phone TEXT,
+    deal_amount TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Alter statements to upgrade existing tables if re-run
+ALTER TABLE public.completed_projects ADD COLUMN IF NOT EXISTS milestones JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE public.completed_projects ADD COLUMN IF NOT EXISTS client_notes TEXT;
+ALTER TABLE public.completed_projects ADD COLUMN IF NOT EXISTS share_token TEXT;
+ALTER TABLE public.completed_projects ADD COLUMN IF NOT EXISTS client_email TEXT;
+ALTER TABLE public.completed_projects ADD COLUMN IF NOT EXISTS client_phone TEXT;
+ALTER TABLE public.completed_projects ADD COLUMN IF NOT EXISTS deal_amount TEXT;
+
+ALTER TABLE public.ongoing_projects ADD COLUMN IF NOT EXISTS milestones JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE public.ongoing_projects ADD COLUMN IF NOT EXISTS client_notes TEXT;
+ALTER TABLE public.ongoing_projects ADD COLUMN IF NOT EXISTS share_token TEXT;
+ALTER TABLE public.ongoing_projects ADD COLUMN IF NOT EXISTS client_email TEXT;
+ALTER TABLE public.ongoing_projects ADD COLUMN IF NOT EXISTS client_phone TEXT;
+ALTER TABLE public.ongoing_projects ADD COLUMN IF NOT EXISTS deal_amount TEXT;
+
 
 -- 3. Enquiries Table
 CREATE TABLE IF NOT EXISTS public.enquiries (

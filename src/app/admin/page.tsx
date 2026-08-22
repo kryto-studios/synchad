@@ -31,13 +31,18 @@ import {
   ShieldCheck,
   Key,
   LogOut,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Share2,
+  Copy,
+  ExternalLink,
+  CheckSquare
 } from "lucide-react";
 import {
   CompletedProject,
   OngoingProject,
   Enquiry,
   ProjectScreenshot,
+  ProjectMilestone,
   getCompletedProjects,
   saveCompletedProjects,
   getOngoingProjects,
@@ -389,6 +394,35 @@ export default function AdminPage() {
     }
   };
 
+  const [copiedToken, setCopiedToken] = useState<string | null>(null);
+
+  const handleCopyPortalLink = (project: CompletedProject | OngoingProject) => {
+    const token = project.shareToken || project.id;
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://synchad.com";
+    const fullUrl = `${origin}/portal/${token}`;
+    navigator.clipboard.writeText(fullUrl);
+    setCopiedToken(token);
+    setTimeout(() => setCopiedToken(null), 2500);
+  };
+
+  const handleToggleOngoingMilestone = (project: OngoingProject, milestoneId: string) => {
+    const updatedMilestones = (project.milestones || []).map((m) =>
+      m.id === milestoneId ? { ...m, completed: !m.completed } : m
+    );
+    const completedCount = updatedMilestones.filter((m) => m.completed).length;
+    const newProgress = updatedMilestones.length > 0
+      ? Math.round((completedCount / updatedMilestones.length) * 100)
+      : project.progress;
+
+    const updated = ongoingList.map((op) =>
+      op.id === project.id
+        ? { ...op, milestones: updatedMilestones, progress: newProgress }
+        : op
+    );
+    setOngoingList(updated);
+    saveOngoingProjects(updated);
+  };
+
   const handleDeleteProjectScreenshot = (index: number) => {
     const currentScreenshots = (projectFormData.screenshots || []).filter((_, i) => i !== index);
     setProjectFormData({
@@ -396,6 +430,7 @@ export default function AdminPage() {
       screenshots: currentScreenshots
     });
   };
+
 
 
   // Ongoing Project CRUD Handlers
@@ -967,14 +1002,35 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    <div className="pt-4 border-t border-charcoal-brand/10 flex items-center justify-between font-mono text-xs">
-                      <span className="text-charcoal-brand/60">Owner: {project.owner}</span>
+                    <div className="pt-4 border-t border-charcoal-brand/10 flex flex-wrap items-center justify-between gap-2 font-mono text-xs">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleCopyPortalLink(project)}
+                          className="px-3 py-1.5 rounded-full bg-mustard-brand text-charcoal-brand font-mono text-[11px] font-bold hover:bg-amber-400 transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                          title="Copy shareable link for client"
+                        >
+                          <Share2 className="w-3.5 h-3.5" />
+                          <span>{copiedToken === (project.shareToken || project.id) ? "Copied! 🔗" : "Share Client Link"}</span>
+                        </button>
+
+                        <a
+                          href={`/portal/${project.shareToken || project.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1.5 rounded-full bg-charcoal-brand/10 hover:bg-charcoal-brand/20 text-charcoal-brand transition-colors"
+                          title="Open Client Portal View"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+
                       <span className="font-bold text-emerald-600 flex items-center gap-1">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         {project.status}
                       </span>
                     </div>
                   </motion.div>
+
                 ))}
               </div>
             )}
@@ -1043,6 +1099,56 @@ export default function AdminPage() {
                         </div>
                       </div>
 
+                      {/* Milestones & Checklist Section */}
+                      {op.milestones && op.milestones.length > 0 && (
+                        <div className="mt-4 p-3 rounded-xl bg-white/70 border border-charcoal-brand/10 space-y-2">
+                          <div className="flex items-center justify-between font-mono text-[11px] font-bold text-charcoal-brand">
+                            <span className="flex items-center gap-1">
+                              <CheckSquare className="w-3.5 h-3.5 text-mustard-brand" />
+                              Milestones Checklist ({op.milestones.filter(m => m.completed).length}/{op.milestones.length}):
+                            </span>
+                          </div>
+                          <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+                            {op.milestones.map((m) => (
+                              <button
+                                key={m.id}
+                                onClick={() => handleToggleOngoingMilestone(op, m.id)}
+                                className={`w-full text-left p-2 rounded-lg font-mono text-[11px] flex items-center justify-between gap-2 border transition-colors cursor-pointer ${
+                                  m.completed
+                                    ? "bg-emerald-50 border-emerald-200 text-emerald-900"
+                                    : "bg-cream-brand border-charcoal-brand/10 text-charcoal-brand hover:border-charcoal-brand/30"
+                                }`}
+                              >
+                                <span className="flex items-center gap-2">
+                                  <span
+                                    className={`w-3.5 h-3.5 rounded border flex items-center justify-center text-[9px] font-black ${
+                                      m.completed ? "bg-emerald-600 text-white border-emerald-600" : "border-charcoal-brand/40 bg-white"
+                                    }`}
+                                  >
+                                    {m.completed ? "✓" : ""}
+                                  </span>
+                                  <span className={m.completed ? "line-through opacity-70" : ""}>{m.title}</span>
+                                </span>
+                                {m.targetDate && (
+                                  <span className="text-[10px] text-charcoal-brand/50 shrink-0">{m.targetDate}</span>
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Internal Confidential Client Notes Preview */}
+                      {op.clientNotes && (
+                        <div className="mt-3 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-charcoal-brand font-mono text-[11px] flex items-start gap-2">
+                          <FileText className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+                          <div className="space-y-0.5">
+                            <span className="font-bold text-amber-700 block text-[10px] uppercase">Internal Admin Notes (Private):</span>
+                            <p className="text-[11px] text-charcoal-brand/80 line-clamp-2">{op.clientNotes}</p>
+                          </div>
+                        </div>
+                      )}
+
                       <div className="mt-4 space-y-1">
                         <span className="font-mono text-[11px] font-bold text-charcoal-brand/60 block uppercase">
                           Planned Modules:
@@ -1060,10 +1166,28 @@ export default function AdminPage() {
                       </div>
                     </div>
 
-                    <div className="pt-4 border-t border-charcoal-brand/10 flex items-center justify-between">
-                      <span className="font-mono text-xs text-charcoal-brand/60">
-                        Target: {op.clientType}
-                      </span>
+                    <div className="pt-4 border-t border-charcoal-brand/10 flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleCopyPortalLink(op)}
+                          className="px-3 py-1.5 rounded-full bg-mustard-brand text-charcoal-brand font-mono text-[11px] font-bold hover:bg-amber-400 transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                          title="Copy shareable link for client"
+                        >
+                          <Share2 className="w-3.5 h-3.5" />
+                          <span>{copiedToken === (op.shareToken || op.id) ? "Copied! 🔗" : "Share Client Link"}</span>
+                        </button>
+
+                        <a
+                          href={`/portal/${op.shareToken || op.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1.5 rounded-full bg-charcoal-brand/10 hover:bg-charcoal-brand/20 text-charcoal-brand transition-colors"
+                          title="Open Client Portal View"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+
                       <button
                         onClick={() => handlePromoteOngoingToCompleted(op)}
                         className="px-3 py-1.5 rounded-full bg-emerald-600 text-white font-mono text-[11px] font-bold hover:bg-emerald-700 transition-colors flex items-center gap-1 cursor-pointer"
@@ -1078,6 +1202,7 @@ export default function AdminPage() {
             )}
           </div>
         )}
+
 
         {/* TAB 3: CLIENT ENQUIRIES */}
         {activeTab === "enquiries" && (

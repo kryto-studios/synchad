@@ -9,6 +9,13 @@ export interface ProjectScreenshot {
   caption: string;
 }
 
+export interface ProjectMilestone {
+  id: string;
+  title: string;
+  completed: boolean;
+  targetDate?: string;
+}
+
 export interface CompletedProject {
   id: string;
   title: string;
@@ -26,6 +33,13 @@ export interface CompletedProject {
   screenshots: ProjectScreenshot[];
   hasEnquiryDemo?: boolean;
   liveUrl?: string;
+  // CRM & Client Portal Fields
+  milestones?: ProjectMilestone[];
+  clientNotes?: string;
+  shareToken?: string;
+  clientEmail?: string;
+  clientPhone?: string;
+  dealAmount?: string;
 }
 
 export interface OngoingProject {
@@ -37,7 +51,15 @@ export interface OngoingProject {
   badge: string;
   description: string;
   features: string[];
+  // CRM & Client Portal Fields
+  milestones?: ProjectMilestone[];
+  clientNotes?: string;
+  shareToken?: string;
+  clientEmail?: string;
+  clientPhone?: string;
+  dealAmount?: string;
 }
+
 
 export interface Enquiry {
   id: string;
@@ -231,7 +253,16 @@ export const INITIAL_ONGOING_PROJECTS: OngoingProject[] = [
     badge: "In Active Development ⚡",
     description:
       "A modern cafe landing page combined with a real-time table QR menu ordering system, kitchen order display (KDS), and inventory tracker.",
-    features: ["Digital QR Menu & Direct Ordering", "Live Kitchen Status Display", "Table Reservation & Bill Splitter"]
+    features: ["Digital QR Menu & Direct Ordering", "Live Kitchen Status Display", "Table Reservation & Bill Splitter"],
+    shareToken: "cafe-management",
+    clientNotes: "Client requested custom Kitchen KDS display integration. Contact: Rohit Verma (+91 98112 34567).",
+    dealAmount: "₹13,799",
+    milestones: [
+      { id: "m1", title: "UI Wireframes & Digital QR Menu Design", completed: true, targetDate: "Aug 10" },
+      { id: "m2", title: "Kitchen Order Display (KDS) & Order Pipeline", completed: true, targetDate: "Aug 18" },
+      { id: "m3", title: "Supabase Database & POS Billing Setup", completed: true, targetDate: "Aug 22" },
+      { id: "m4", title: "Final Staff Training & Deployment", completed: false, targetDate: "Aug 28" }
+    ]
   },
   {
     id: "hotel-management",
@@ -242,7 +273,16 @@ export const INITIAL_ONGOING_PROJECTS: OngoingProject[] = [
     badge: "Confidential Build 🔒",
     description:
       "An elegant hotel booking website coupled with an internal Property Management System (PMS) for room allocations, guest check-ins, and billing.",
-    features: ["Direct Room Reservation Engine", "Housekeeping & Room Status Matrix", "Automated Invoice & Identity Scan Integration"]
+    features: ["Direct Room Reservation Engine", "Housekeeping & Room Status Matrix", "Automated Invoice & Identity Scan Integration"],
+    shareToken: "hotel-management",
+    clientNotes: "Confidential resort project. Room allocation grid testing in progress.",
+    dealAmount: "₹18,500",
+    milestones: [
+      { id: "hm1", title: "Suite Showcase Landing Page", completed: true, targetDate: "Aug 12" },
+      { id: "hm2", title: "Property Management System (PMS) Matrix", completed: true, targetDate: "Aug 20" },
+      { id: "hm3", title: "Guest ID Scan & Invoice Generator", completed: false, targetDate: "Sep 02" },
+      { id: "hm4", title: "Payment Gateway & Production Deployment", completed: false, targetDate: "Sep 10" }
+    ]
   },
   {
     id: "car-rental",
@@ -253,9 +293,18 @@ export const INITIAL_ONGOING_PROJECTS: OngoingProject[] = [
     badge: "Testing & Polishing 🚗",
     description:
       "A sleek rental service website featuring real-time vehicle fleet filtering, hourly/daily cost estimator, document verification, and instant booking.",
-    features: ["Interactive Hourly Cost Calculator", "Vehicle Spec Comparison & Gallery", "Deposit & Booking Confirmation System"]
+    features: ["Interactive Hourly Cost Calculator", "Vehicle Spec Comparison & Gallery", "Deposit & Booking Confirmation System"],
+    shareToken: "car-rental",
+    clientNotes: "Fleet spec matrix complete. Document verification testing.",
+    dealAmount: "₹10,899",
+    milestones: [
+      { id: "cr1", title: "Vehicle Spec Filter Grid & Gallery", completed: true, targetDate: "Aug 14" },
+      { id: "cr2", title: "Hourly/Daily Cost Estimator Engine", completed: true, targetDate: "Aug 19" },
+      { id: "cr3", title: "Security Deposit & Identity Upload", completed: false, targetDate: "Aug 29" }
+    ]
   }
 ];
+
 
 export const INITIAL_ENQUIRIES: Enquiry[] = [
   {
@@ -321,6 +370,7 @@ export function getCompletedProjects(): CompletedProject[] {
 
 
 export function saveCompletedProjects(projects: CompletedProject[]) {
+
   if (typeof window === "undefined") return;
   localStorage.setItem(STORAGE_KEYS.COMPLETED, JSON.stringify(projects));
   dispatchUpdate();
@@ -343,7 +393,13 @@ export function saveCompletedProjects(projects: CompletedProject[]) {
       tech_stack: p.techStack,
       screenshots: p.screenshots,
       has_enquiry_demo: p.hasEnquiryDemo || false,
-      live_url: p.liveUrl || null
+      live_url: p.liveUrl || null,
+      milestones: p.milestones || [],
+      client_notes: p.clientNotes || null,
+      share_token: p.shareToken || p.id,
+      client_email: p.clientEmail || null,
+      client_phone: p.clientPhone || null,
+      deal_amount: p.dealAmount || null
     }));
     Promise.resolve(supabase.from("completed_projects").upsert(formatted)).catch((err: any) => console.warn("Supabase sync warning:", err));
   }
@@ -374,7 +430,13 @@ export function saveOngoingProjects(projects: OngoingProject[]) {
       progress: p.progress,
       badge: p.badge,
       description: p.description,
-      features: p.features
+      features: p.features,
+      milestones: p.milestones || [],
+      client_notes: p.clientNotes || null,
+      share_token: p.shareToken || p.id,
+      client_email: p.clientEmail || null,
+      client_phone: p.clientPhone || null,
+      deal_amount: p.dealAmount || null
     }));
     Promise.resolve(supabase.from("ongoing_projects").upsert(formatted)).catch((err: any) => console.warn("Supabase sync warning:", err));
   }
@@ -463,7 +525,13 @@ export async function syncFromSupabase() {
         techStack: p.tech_stack || [],
         screenshots: p.screenshots || [],
         hasEnquiryDemo: p.has_enquiry_demo,
-        liveUrl: p.live_url
+        liveUrl: p.live_url,
+        milestones: p.milestones || [],
+        clientNotes: p.client_notes,
+        shareToken: p.share_token || p.id,
+        clientEmail: p.client_email,
+        clientPhone: p.client_phone,
+        dealAmount: p.deal_amount
       }));
       localStorage.setItem(STORAGE_KEYS.COMPLETED, JSON.stringify(projects));
     }
@@ -477,7 +545,13 @@ export async function syncFromSupabase() {
         progress: p.progress,
         badge: p.badge,
         description: p.description,
-        features: p.features || []
+        features: p.features || [],
+        milestones: p.milestones || [],
+        clientNotes: p.client_notes,
+        shareToken: p.share_token || p.id,
+        clientEmail: p.client_email,
+        clientPhone: p.client_phone,
+        dealAmount: p.deal_amount
       }));
       localStorage.setItem(STORAGE_KEYS.ONGOING, JSON.stringify(ongoing));
     }
@@ -503,4 +577,5 @@ export async function syncFromSupabase() {
     console.warn("Error fetching data from Supabase:", err);
   }
 }
+
 
