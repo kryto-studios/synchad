@@ -45,8 +45,8 @@ export default function SpecialLocalOfferBadge({ className = "" }: SpecialLocalO
               <path d="M 26 14 L 30 6" />
             </svg>
 
-            {/* STARTS AT Label in Charcoal */}
-            <span className="font-outfit font-black tracking-widest text-xs xs:text-sm sm:text-base uppercase text-charcoal-brand/90 transform -rotate-3 leading-none ml-1">
+            {/* STARTS AT Label in Handwritten Font */}
+            <span className="font-bacley font-bold tracking-wider text-xs xs:text-sm sm:text-base md:text-lg uppercase text-charcoal-brand transform -rotate-4 leading-none ml-1">
               STARTS AT
             </span>
 
@@ -88,11 +88,11 @@ export default function SpecialLocalOfferBadge({ className = "" }: SpecialLocalO
             </svg>
           </div>
 
-          {/* ── RIGHT BLOCK: & EVEN NEGOTIABLE ── */}
-          <div className="relative flex flex-col items-start">
+          {/* ── RIGHT BLOCK: & EVEN NEGOTIABLE (Handwritten Font & Tilted) ── */}
+          <div className="relative flex flex-col items-start transform -rotate-6 sm:-rotate-8 group-hover:-rotate-3 transition-transform duration-300">
             {/* Mustard Yellow Doodle Sparks Top-Right */}
             <svg
-              className="absolute -top-4 -right-4 w-8 h-8 text-mustard-brand pointer-events-none transform rotate-12 group-hover:scale-110 transition-transform"
+              className="absolute -top-5 -right-4 w-8 h-8 text-mustard-brand pointer-events-none transform rotate-12 group-hover:scale-110 transition-transform"
               viewBox="0 0 40 40"
               fill="none"
               stroke="currentColor"
@@ -104,20 +104,20 @@ export default function SpecialLocalOfferBadge({ className = "" }: SpecialLocalO
               <path d="M 30 20 L 36 12" />
             </svg>
 
-            {/* & EVEN */}
-            <span className="font-outfit font-black text-xs xs:text-sm sm:text-lg md:text-xl text-charcoal-brand uppercase tracking-wider leading-none transform rotate-1">
+            {/* & EVEN in Handwritten Font */}
+            <span className="font-bacley font-bold text-sm xs:text-base sm:text-xl md:text-2xl text-charcoal-brand uppercase tracking-wider leading-none">
               &amp; EVEN
             </span>
 
-            {/* NEGOTIABLE in Parent Brand Charcoal */}
-            <div className="relative mt-1">
-              <span className="font-outfit font-black text-lg xs:text-xl sm:text-3xl md:text-4xl text-charcoal-brand uppercase tracking-tight leading-none inline-block transform -rotate-1">
+            {/* NEGOTIABLE in Handwritten Font */}
+            <div className="relative mt-0.5 sm:mt-1">
+              <span className="font-bacley font-black text-xl xs:text-2xl sm:text-4xl md:text-5xl text-charcoal-brand uppercase tracking-normal leading-none inline-block">
                 NEGOTIABLE
               </span>
 
               {/* Thick Mustard Yellow Underline Stroke under NEGOTIABLE */}
               <svg
-                className="w-[106%] -ml-[3%] h-4 sm:h-5 text-mustard-brand -mt-0.5 sm:-mt-1 pointer-events-none"
+                className="w-[108%] -ml-[4%] h-4 sm:h-5 text-mustard-brand -mt-1 sm:-mt-1.5 pointer-events-none"
                 viewBox="0 0 200 20"
                 fill="none"
               >
@@ -128,6 +128,7 @@ export default function SpecialLocalOfferBadge({ className = "" }: SpecialLocalO
               </svg>
             </div>
           </div>
+
 
         </div>
       </motion.div>
