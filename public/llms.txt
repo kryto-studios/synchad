@@ -1,0 +1,28 @@
+# synchAD Studios
+
+> Digitalizing The Local — Web Development & Custom Software Agency in Ambikapur, Surguja, Chhattisgarh, India.
+
+synchAD (synchAD Studios) is a full-stack web development and custom software agency co-founded by Dewansh Chatterjee (Front-End Architect) and Aryan Gupta (Backend Architect).
+
+## Core Offerings & Services
+- **High-Converting Landing Sites**: Ultra-fast, aesthetic single-page digital portals with real-time seat/enquiry reservation engines.
+- **Custom Application Software / ERP**: Full-stack Next.js + Supabase SQL web applications for Libraries, Coaching Institutes, Hospitals/Clinics, Gyms, Cafes, and Vehicle Rental Fleets.
+- **Motion Graphic Assets & Edits**: High-fidelity promotional video edits and motion design.
+
+## Pricing Tiers (Special Local Offer - Ambikapur / Surguja)
+- **Ultra-Basic Landing**: Starts at ₹5,879 (Negotiable)
+- **Starter Landing Pack**: Starts at ₹6,799 (Includes 1-Year Domain & Hosting setup)
+- **Custom WebApp Base**: Starts at ₹10,899 (Full-stack Next.js + Supabase DB)
+- **Niche WebApp + Landing Package**: Starts at ₹13,799 (Complete business automation ERP)
+
+## Founders & Contact Information
+- **Founders**: Dewansh Chatterjee & Aryan Gupta
+- **Location**: Ambikapur, Surguja, Chhattisgarh - 497001, India
+- **Phone**: +91 92946 25866 / +91 93404 11838
+- **Email**: synchad.studio@gmail.com / krytostudio@gmail.com
+- **Website**: https://synchad.com / https://synchad.vercel.app
+
+## Featured Delivered Client Projects
+- **Krishna Library**: High-conversion study space landing page & visual seat map reservation ERP (Live at https://krishna-library.vercel.app/).
+- **Mindspace Library**: Premium digital library landing page & desk availability engine (Live at https://mindspace-lib.vercel.app/).
+- **Srijan Institute**: Custom ERP & Educational Management application software.
