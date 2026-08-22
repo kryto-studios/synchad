@@ -16,8 +16,12 @@ import {
   Layers,
   Layers3,
   Coffee,
-  Check
+  Check,
+  FileText,
+  Receipt,
+  CreditCard
 } from "lucide-react";
+
 import {
   CompletedProject,
   OngoingProject,
@@ -212,6 +216,62 @@ export default function ClientPortalPage({ params }: PortalPageProps) {
             </div>
           </div>
         </motion.div>
+
+        {/* Transparent Deal & Investment Summary Card */}
+        {project.dealAmount && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="p-5 rounded-2xl bg-white border border-charcoal-brand/10 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-mustard-brand/20 text-charcoal-brand flex items-center justify-center font-bold shrink-0">
+                <Receipt className="w-5 h-5 text-charcoal-brand" />
+              </div>
+              <div>
+                <span className="font-mono text-[10px] font-bold text-charcoal-brand/60 uppercase block">
+                  Agreed Deal &amp; Investment Amount:
+                </span>
+                <h3 className="font-outfit text-2xl font-black text-emerald-brand">
+                  {project.dealAmount}
+                </h3>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 font-mono text-[11px] font-bold flex items-center gap-1.5">
+                <CreditCard className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Transparent Pricing Policy</span>
+              </span>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Official Engineering Notes & Status Updates (Read-Only) */}
+        {project.clientNotes && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.08 }}
+            className={`${CLAY_CLASSES.cardCream} p-6 sm:p-8 space-y-3 relative overflow-hidden`}
+          >
+            <div className="flex items-center justify-between">
+              <h2 className="font-outfit text-lg sm:text-xl font-bold text-charcoal-brand flex items-center gap-2">
+                <FileText className="w-5 h-5 text-amber-600" />
+                Official Status Notes &amp; Engineer Remarks
+              </h2>
+              <span className="font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+                Read-Only Update
+              </span>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-white/90 border border-charcoal-brand/10 font-mono text-xs sm:text-sm text-charcoal-brand leading-relaxed whitespace-pre-wrap">
+              {project.clientNotes}
+            </div>
+          </motion.div>
+        )}
+
 
         {/* Milestone & Phase Roadmap Checklist */}
         {milestones.length > 0 && (

@@ -433,6 +433,47 @@ export default function AdminPage() {
 
 
 
+  const [newMilestoneTitle, setNewMilestoneTitle] = useState("");
+  const [newMilestoneDate, setNewMilestoneDate] = useState("");
+
+  const handleAddMilestoneToOngoing = () => {
+    if (!newMilestoneTitle.trim()) return;
+    const currentMs = ongoingFormData.milestones || [];
+    const newMs: ProjectMilestone = {
+      id: `ms-${Date.now()}`,
+      title: newMilestoneTitle.trim(),
+      completed: false,
+      targetDate: newMilestoneDate.trim() || undefined
+    };
+    const updatedMs = [...currentMs, newMs];
+    setOngoingFormData({
+      ...ongoingFormData,
+      milestones: updatedMs
+    });
+    setNewMilestoneTitle("");
+    setNewMilestoneDate("");
+  };
+
+  const handleRemoveMilestoneFromOngoing = (index: number) => {
+    const currentMs = (ongoingFormData.milestones || []).filter((_, i) => i !== index);
+    setOngoingFormData({
+      ...ongoingFormData,
+      milestones: currentMs
+    });
+  };
+
+  const formatTimestamp = () => {
+    const now = new Date();
+    return now.toLocaleString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
   // Ongoing Project CRUD Handlers
   const handleOpenAddOngoing = () => {
     setEditingOngoing(null);
@@ -443,7 +484,10 @@ export default function AdminPage() {
       progress: 50,
       badge: "In Active Development ⚡",
       description: "",
-      features: []
+      features: [],
+      milestones: [],
+      clientNotes: "",
+      dealAmount: "₹13,799"
     });
     setOngoingFeaturesText("Real-Time Inventory, WhatsApp Alerts, Reports");
     setOngoingModalOpen(true);
@@ -460,16 +504,28 @@ export default function AdminPage() {
     e.preventDefault();
     const features = ongoingFeaturesText.split(",").map((s) => s.trim()).filter(Boolean);
 
+    // Auto timestamp client notes if edited
+    let notes = ongoingFormData.clientNotes || "";
+    if (notes.trim() && !notes.includes("Updated:")) {
+      notes = `${notes.trim()}\n\n⏱️ (Updated: ${formatTimestamp()})`;
+    }
+
+    const payload = {
+      ...ongoingFormData,
+      features,
+      clientNotes: notes,
+      shareToken: ongoingFormData.shareToken || ongoingFormData.id || `proj-${Date.now()}`
+    };
+
     let updated: OngoingProject[];
     if (editingOngoing) {
       updated = ongoingList.map((op) =>
-        op.id === editingOngoing.id ? ({ ...op, ...ongoingFormData, features } as OngoingProject) : op
+        op.id === editingOngoing.id ? ({ ...op, ...payload } as OngoingProject) : op
       );
     } else {
       const newOngoing: OngoingProject = {
-        ...(ongoingFormData as OngoingProject),
-        id: `ong-${Date.now()}`,
-        features
+        ...(payload as OngoingProject),
+        id: payload.id || `ongoing-${Date.now()}`
       };
       updated = [newOngoing, ...ongoingList];
     }
@@ -478,6 +534,7 @@ export default function AdminPage() {
     saveOngoingProjects(updated);
     setOngoingModalOpen(false);
   };
+
 
   const handlePromoteOngoingToCompleted = (op: OngoingProject) => {
     if (confirm(`Promote "${op.title}" to Delivered Completed Projects?`)) {
@@ -1848,18 +1905,132 @@ export default function AdminPage() {
                   />
                 </div>
 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
+                      Deal / Total Investment Amount (INR)
+                    </label>
+                    <input
+                      type="text"
+                      value={ongoingFormData.dealAmount || ""}
+                      onChange={(e) => setOngoingFormData({ ...ongoingFormData, dealAmount: e.target.value })}
+                      placeholder="e.g. ₹13,799"
+                      className={`${CLAY_CLASSES.input} w-full px-4 py-2 text-xs font-mono text-charcoal-brand outline-none`}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
+                      Custom Portal Token / URL Slug
+                    </label>
+                    <input
+                      type="text"
+                      value={ongoingFormData.shareToken || ""}
+                      onChange={(e) => setOngoingFormData({ ...ongoingFormData, shareToken: e.target.value })}
+                      placeholder="e.g. cafe-management"
+                      className={`${CLAY_CLASSES.input} w-full px-4 py-2 text-xs font-mono text-charcoal-brand outline-none`}
+                    />
+                  </div>
+                </div>
+
+                {/* Client Notes & Official Updates (Visible on Client Portal) */}
                 <div>
                   <label className="block text-xs font-mono font-bold text-charcoal-brand mb-1">
-                    Features List (Comma-separated)
+                    Client Notes &amp; Status Updates (Visible to Client - Auto Timestamped)
                   </label>
-                  <input
-                    type="text"
-                    value={ongoingFeaturesText}
-                    onChange={(e) => setOngoingFeaturesText(e.target.value)}
-                    placeholder="Digital QR Menu, Kitchen KDS Display, Table Booking"
-                    className={`${CLAY_CLASSES.input} w-full px-4 py-2 text-xs text-charcoal-brand outline-none`}
+                  <textarea
+                    rows={2}
+                    value={ongoingFormData.clientNotes || ""}
+                    onChange={(e) => setOngoingFormData({ ...ongoingFormData, clientNotes: e.target.value })}
+                    placeholder="e.g. Kitchen Display module completed. Testing POS printer connection."
+                    className={`${CLAY_CLASSES.textarea} w-full px-4 py-2 text-xs text-charcoal-brand outline-none resize-none font-mono`}
                   />
+                  <span className="font-mono text-[10px] text-charcoal-brand/50">
+                    * Client can read these notes on their portal page. Auto-stamps timestamp on save.
+                  </span>
                 </div>
+
+                {/* Milestones Add & Subtract Manager */}
+                <div className="p-4 rounded-2xl bg-white border border-charcoal-brand/10 space-y-3">
+                  <div className="flex items-center justify-between font-mono text-xs font-bold text-charcoal-brand">
+                    <span className="flex items-center gap-1.5">
+                      <CheckSquare className="w-4 h-4 text-mustard-brand" />
+                      Milestones Checklist (Add / Subtract Points)
+                    </span>
+                    <span>{(ongoingFormData.milestones || []).length} Points</span>
+                  </div>
+
+                  {/* Add New Milestone Input Row */}
+                  <div className="flex flex-col sm:flex-row items-center gap-2">
+                    <input
+                      type="text"
+                      value={newMilestoneTitle}
+                      onChange={(e) => setNewMilestoneTitle(e.target.value)}
+                      placeholder="New Milestone point (e.g. Database Schema Approved)"
+                      className={`${CLAY_CLASSES.input} flex-1 px-3 py-1.5 text-xs text-charcoal-brand outline-none w-full`}
+                    />
+                    <input
+                      type="text"
+                      value={newMilestoneDate}
+                      onChange={(e) => setNewMilestoneDate(e.target.value)}
+                      placeholder="Target (e.g. Aug 28)"
+                      className={`${CLAY_CLASSES.input} w-full sm:w-32 px-3 py-1.5 text-xs font-mono text-charcoal-brand outline-none`}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddMilestoneToOngoing}
+                      className={`${CLAY_CLASSES.btnMustard} px-4 py-1.5 text-xs font-bold whitespace-nowrap cursor-pointer shrink-0 w-full sm:w-auto`}
+                    >
+                      + Add Point
+                    </button>
+                  </div>
+
+                  {/* Existing Milestones List with Subtract/Delete */}
+                  {(ongoingFormData.milestones || []).length > 0 && (
+                    <div className="space-y-2 pt-2 border-t border-charcoal-brand/10 max-h-48 overflow-y-auto">
+                      {(ongoingFormData.milestones || []).map((ms, index) => (
+                        <div
+                          key={ms.id || index}
+                          className="flex items-center justify-between gap-2 p-2 rounded-xl bg-cream-brand border border-charcoal-brand/10 font-mono text-xs"
+                        >
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              checked={ms.completed}
+                              onChange={(e) => {
+                                const updated = (ongoingFormData.milestones || []).map((m, i) =>
+                                  i === index ? { ...m, completed: e.target.checked } : m
+                                );
+                                setOngoingFormData({ ...ongoingFormData, milestones: updated });
+                              }}
+                              className="accent-emerald-600 cursor-pointer w-4 h-4"
+                            />
+                            <span className={ms.completed ? "line-through opacity-60 text-charcoal-brand" : "text-charcoal-brand font-bold"}>
+                              {ms.title}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-2 shrink-0">
+                            {ms.targetDate && (
+                              <span className="text-[10px] text-charcoal-brand/60 bg-white px-2 py-0.5 rounded-full border border-charcoal-brand/10">
+                                {ms.targetDate}
+                              </span>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveMilestoneFromOngoing(index)}
+                              className="p-1 rounded-lg bg-red-100 hover:bg-red-200 text-red-600 transition-colors cursor-pointer"
+                              title="Subtract / Remove Point"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
 
                 <div className="pt-4 flex justify-end gap-3">
                   <button
