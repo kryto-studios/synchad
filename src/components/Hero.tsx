@@ -7,6 +7,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { CLAY_CLASSES } from "./ClayStyles";
 import { Sparkles } from "lucide-react";
+import SpecialLocalOfferBadge from "./SpecialLocalOfferBadge";
+
 
 /* ─── Cycling Words Data ────────────────────────────────────── */
 const DYNAMIC_WORDS = [
@@ -364,44 +366,16 @@ export default function Hero() {
           We bridge software engineering and creative distribution under one roof. From production-grade web platforms to retention-focused media and growth campaigns.
         </motion.p>
 
-        {/* ── Catchy Claymorphic Pricing Offer Ticket (Placed directly after Motto) ── */}
+        {/* ── Handwritten Doodle Special Local Offer Graphic ── */}
         <motion.div
           initial={{ opacity: 0, y: 15, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.32 }}
-          className="mt-6 w-full max-w-lg"
+          className="mt-6 sm:mt-8 w-full flex justify-center z-30"
         >
-          <Link
-            href="#packages"
-            className="group relative flex items-center justify-between gap-3 p-3 sm:p-3.5 rounded-2xl bg-white border-2 border-charcoal-brand/15 shadow-[6px_6px_16px_rgba(26,26,26,0.06),_inset_-4px_-4px_8px_rgba(26,26,26,0.04),_inset_4px_4px_8px_rgba(255,255,255,0.95)] hover:border-emerald-brand hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer"
-          >
-            {/* Left side icon & pricing info */}
-            <div className="flex items-center gap-3 text-left">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-mustard-brand border border-charcoal-brand/20 flex items-center justify-center text-charcoal-brand shadow-sm flex-shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-transform">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-[9px] font-black uppercase tracking-widest text-emerald-brand bg-emerald-brand/10 px-2 py-0.5 rounded-full border border-emerald-brand/20">
-                    SPECIAL LOCAL OFFER
-                  </span>
-                  <span className="font-mono text-[9px] font-bold text-charcoal-brand/50 uppercase hidden sm:inline">
-                    Ambikapur / Surguja
-                  </span>
-                </div>
-                <h4 className="font-outfit text-sm sm:text-base font-black text-charcoal-brand tracking-tight mt-0.5">
-                  START AS LOW AS <span className="text-emerald-brand underline decoration-mustard-brand decoration-wavy">₹5,879/-</span> *
-                </h4>
-              </div>
-            </div>
-
-            {/* Right side negotiable action badge */}
-            <div className="flex items-center gap-1.5 bg-charcoal-brand text-cream-brand font-outfit text-[10px] sm:text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-xl group-hover:bg-emerald-brand transition-colors flex-shrink-0 shadow-sm">
-              <span>Negotiable Rate!</span>
-              <span className="text-mustard-brand font-bold">&rarr;</span>
-            </div>
-          </Link>
+          <SpecialLocalOfferBadge />
         </motion.div>
+
 
         {/* ── Action Buttons (Dual CTAs - Optimized for Mobile Touch) ── */}
         <motion.div
