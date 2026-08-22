@@ -49,6 +49,11 @@ export const metadata: Metadata = {
   verification: {
     google: "WwpCXfiYdIaHH5uXCAmLB1H6PInsV1ZwBJPT-iPd4MQ",
   },
+  icons: {
+    icon: "/synchAD.png",
+    shortcut: "/synchAD.png",
+    apple: "/synchAD.png",
+  },
   openGraph: {
     title: "synchAD | Web & App Developers in Ambikapur, Surguja",
     description: "Digitalizing The Local — Custom full-stack platforms, client apps, and high-fidelity motion graphic assets by Dewansh Chatterjee & Aryan Gupta in Ambikapur.",
@@ -57,6 +62,7 @@ export const metadata: Metadata = {
     images: [{ url: "/synchAD.png" }],
   },
 };
+
 
 export default function RootLayout({
   children,
